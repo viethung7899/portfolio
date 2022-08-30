@@ -1,0 +1,63 @@
+---
+export interface Props {
+  title: string;
+}
+const {title} = Astro.props;
+---
+
+<style>
+  a {
+    @apply font-bold cursor-pointer;
+  }
+
+  .link:hover {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500;
+  }
+
+  .typescript:hover {
+    @apply text-blue-500;
+  }
+
+  .tailwind:hover {
+    @apply text-teal-500;
+  }
+
+  .astro:hover {
+    @apply text-orange-500;
+  }
+</style>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+    <script src="https://kit.fontawesome.com/7e04ce6a14.js" crossorigin="anonymous"></script>
+		<title>{title}</title>
+	</head>
+	<body class="flex flex-col w-screen min-h-screen">
+    <nav class="flex items-center justify-between p-4 border-b-2">
+      <a href="/" class="uppercase link">Viet Hung Nguyen</a>
+      <!-- Nav bar -->
+      <div class="space-x-4 hidden md:flex">
+        <a href="/" class="link">Home</a>
+        <a href="/projects" class="link">Projects</a>
+        <a href="/blogs" class="link">Blogs</a>
+        <a href="/blogs" class="link">Contacts</a>
+      </div>
+      <!-- Mobile nav bar -->
+      <div class="flex items-center justify-between md:hidden">
+        <button class="flex items-center justify-center p-2 rounded-md hover:bg-gray-200">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+    <main class="flex-1">
+      <slot />
+    </main>
+    <footer class="py-2 text-center border-t-2">
+      Built with <a class="typescript">TypeScript</a>, <a class="tailwind">TailwindCSS</a>, and <a class="astro">Astro</a><i class="ml-1 fas fa-heart hover:text-red-500"></i> 
+    </footer>
+	</body>
+</html>
