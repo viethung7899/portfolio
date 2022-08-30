@@ -1,5 +1,7 @@
 <script lang="ts">
   let show = false;
+
+  const handleClick = () => (show = false);
 </script>
 
 <button
@@ -7,18 +9,15 @@
   on:click={() => {
     show = !show;
   }}
-  on:blur={() => {
-    show = false;
-  }}
 >
-  <i class={`fas fa-bars text-2xl`} />
+  <i class={`fa-solid fa-bars text-2xl`} />
 </button>
 <div class={`links sm:flex ${!show ? 'hidden' : ''}`}>
   <ul class="flex gap-4">
     <li><a href="/">Home</a></li>
     <li><a href="/projects">Projects</a></li>
     <li><a href="/blogs">Blogs</a></li>
-    <li><a href="/contacts">Contacts</a></li>
+    <li><a href="/contact">Contacts</a></li>
   </ul>
 </div>
 
@@ -31,7 +30,8 @@
     @apply text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500;
   }
 
-  .toggle:hover, .toggle:focus {
+  .toggle:hover,
+  .toggle:focus {
     @apply text-orange-500;
   }
 
