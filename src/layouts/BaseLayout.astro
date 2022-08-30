@@ -3,14 +3,15 @@ export interface Props {
   title: string;
 }
 const {title} = Astro.props;
+import Menu from "./Menu.svelte";
 ---
 
 <style>
-  a {
-    @apply font-bold cursor-pointer;
+  .brand {
+    @apply cursor-pointer;
   }
 
-  .link:hover {
+  .brand:hover {
     @apply text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-yellow-500;
   }
 
@@ -37,21 +38,10 @@ const {title} = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body class="flex flex-col w-screen min-h-screen">
-    <nav class="flex items-center justify-between p-4 border-b-2">
-      <a href="/" class="uppercase link">Viet Hung Nguyen</a>
+    <nav class="flex flex-col sm:flex-row items-center justify-between p-4 border-b-2 relative gap-4">
+      <a href="/" class="uppercase brand">Viet Hung Nguyen</a>
       <!-- Nav bar -->
-      <div class="space-x-4 hidden md:flex">
-        <a href="/" class="link">Home</a>
-        <a href="/projects" class="link">Projects</a>
-        <a href="/blogs" class="link">Blogs</a>
-        <a href="/blogs" class="link">Contacts</a>
-      </div>
-      <!-- Mobile nav bar -->
-      <div class="flex items-center justify-between md:hidden">
-        <button class="flex items-center justify-center p-2 rounded-md hover:bg-gray-200">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
+      <Menu client:only />
     </nav>
     <main class="flex-1">
       <slot />
