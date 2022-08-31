@@ -1,7 +1,12 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import About from "@components/home/About.astro";
+import ProjectHightlight from "@components/home/ProjectHighlight.astro";
+import RecentBlogs from "@components/home/RecentBlogs.astro";
+import BaseLayout from "@layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Viet Hung Nguyen | Home">
-	
+	<About />
+  <ProjectHightlight />
+  <RecentBlogs />
 </BaseLayout>
