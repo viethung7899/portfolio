@@ -49,14 +49,10 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
 		<title>{title}</title>
 	</head>
 	<body class="flex flex-col w-screen min-h-screen bg-white dark:bg-gray-800 items-stretch">
-    <header class="flex flex-row items-center justify-between p-4 sticky top-0">
+    <header class="flex flex-row items-center justify-between p-4 sticky top-0 bg-white dark:bg-gray-800">
       <!-- Mobile menu -->
       <MobileMenu client:visible />
-      <a href="/" class="
-        uppercase font-medium 
-        hover:text-transparent hover:bg-gradient-to-r hover:bg-clip-text 
-        hover:from-red-500 hover:to-yellow-500 
-        hover:dark:from-blue-500 hover:dark:to-green-500">Viet Hung Nguyen</a>
+      <a href="/" class="uppercase font-medium hover:text-orange-500 hover:dark:text-teal-500 transition-colors">Viet Hung Nguyen</a>
       <!-- Desktop links -->
       <nav class="flex gap-4 items-center">
         <Link path="/" title="Home" />
@@ -70,8 +66,12 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
       <slot />
     </main>
     <footer class="py-2 text-center text-sm border-t-2 border-slate-500/25">
-      Built with <a class="typescript hover:text-blue-500">TypeScript</a>, <a class="tailwind hover:text-teal-500">TailwindCSS</a>, and <a class="astro hover:text-orange-500">Astro</a>
-      <i class="ml-1 fas fa-heart hover:text-red-500"></i> 
+      Built with
+      <a class="typescript hover:text-blue-500" href="https://www.typescriptlang.org/">TypeScript</a>,
+      <a class="tailwind hover:text-teal-500" href="https://tailwindcss.com/">TailwindCSS</a>, and
+      <a class="astro hover:text-orange-500" href="https://astro.build/">Astro</a>
+      <i class="ml-1 fas fa-heart hover:text-red-500">
+      </i> 
     </footer>
 	</body>
 </html>

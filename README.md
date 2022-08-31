@@ -12,8 +12,7 @@ This is the source code for my personal portfolio
 
 ### Home page
 
-- [ ] About section
+- [x] About section
 - [ ] Skill section
-- [ ] Recent work
-- [ ] Recent side projects
+- [ ] Side projects
 - [ ] Recent blog

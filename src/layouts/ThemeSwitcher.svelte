@@ -24,11 +24,11 @@
 {#if mounted}
   {#if isDark}
     <button on:click={() => (theme = 'light')}>
-      <i class="fas fa-moon hover:text-teal-500 w-6" />
+      <i class="fas fa-moon hover:text-teal-500 w-6 transition" />
     </button>
   {:else}
     <button on:click={() => (theme = 'dark')}>
-      <i class="fas fa-sun hover:text-orange-500 w-6" />
+      <i class="fas fa-sun hover:text-orange-500 w-6 transition" />
     </button>
   {/if}
 {/if}

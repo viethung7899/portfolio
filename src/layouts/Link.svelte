@@ -12,7 +12,9 @@
     hover:underline-offset-4
     hover:text-orange-500
     hover:dark:text-teal-500
-    transition-colors
-    ${isMobile ? "" : "hidden sm:block"}`}
-  >{title}</a
+    transition
+    ${isMobile ? '' : 'hidden sm:block'}`}
+  on:mousedown|preventDefault
 >
+  {title}
+</a>
