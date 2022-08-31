@@ -8,13 +8,11 @@
   href={path}
   class={`
     font-bold
-    hover:text-transparent 
-    hover:bg-clip-text 
-    hover:bg-gradient-to-r 
-    hover:from-red-600 
-    hover:to-yellow-600 
-    hover:dark:from-blue-400 
-    hover:dark:to-green-400
+    hover:underline
+    hover:underline-offset-4
+    hover:text-orange-500
+    hover:dark:text-teal-500
+    transition-colors
     ${isMobile ? "" : "hidden sm:block"}`}
   >{title}</a
 >

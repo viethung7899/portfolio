@@ -1,17 +1,27 @@
-<div class="flex px-4 py-10 items-center gap-6">
+<style>
+  span {
+    @apply font-semibold;
+  }
+
+  a {
+    @apply text-2xl cursor-pointer transition hover:scale-[1.1];
+  }
+</style>
+
+<div class="flex px-4 py-10 items-center gap-6 justify-between">
   <div class="flex flex-col space-y-2">
     <p class="font-bold text-5xl">Hello! I am Viet.</p>
     <p class="py-2">I'm an international student at <span>Simon Fraser University</span>.
-      I enjoy creating simple, beautiful and user-friendly web applications and I'm passionate to learn new web technology.</p>
+      I enjoy creating simple, beautiful and user-friendly web applications and I'm passionate to learn full-stack web technology.</p>
       
       <p>I'm currently looking for a role as a developer.</p>
       
       <div class="flex items-center space-x-4 py-2">
-        <button class="p-2 rounded-lg text-white bg-orange-500 dark:bg-blue-600 hover:bg-orange-600 hover:dark:bg-blue-700">Resumé</button>
-        <a><i class="fa-brands fa-github text-2xl hover:text-orange-600 hover:dark:text-blue-400 cursor-pointer"></i></a>
-        <a><i class="fa-brands fa-linkedin text-2xl hover:text-orange-600 hover:dark:text-blue-400 cursor-pointer"></i></a>
+        <button class="p-2 rounded-lg text-white bg-orange-500 dark:bg-teal-600 hover:show-md hover:dark:bg-teal-700 transition hover:scale-[1.05]">View my Resumé</button>
+        <a class="hover:text-orange-500 hover:dark:text-teal-600"><i class="fa-brands fa-github"></i></a>
+        <a class="hover:text-orange-500 hover:dark:text-teal-600"><i class="fa-brands fa-linkedin"></i></a>
       </div>
     </div>
 
-    <img alt="My photo" width="600px" class="hidden md:block" />
+    <img alt="My photo" width="300px" class="hidden md:block rounded-xl shadow-xl shadow-orange-500 dark:shadow-teal-500" src="/assets/profile.jpg" />
   </div>
