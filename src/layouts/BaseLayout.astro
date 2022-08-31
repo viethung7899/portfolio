@@ -33,11 +33,19 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
 </style>
 
 <style>
-  .link, footer a {
-    @apply cursor-pointer font-bold;
+  a {
+    @apply cursor-pointer;
   }
 
-  .link {
+  .link:hover {
+    @apply text-transparent bg-clip-text bg-gradient-to-r;
+  }
+
+  nav a, footer a {
+    @apply font-bold;
+  }
+
+  nav a {
     @apply hidden sm:block;
   }
 </style>
@@ -55,13 +63,13 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
     <header class="flex flex-row items-center justify-between border-b-2 p-4 sticky top-0">
       <!-- Mobile menu -->
       <MobileMenu client:visible />
-      <a href="/" class="uppercase brand">Viet Hung Nguyen</a>
+      <a href="/" class="link uppercase font-medium hover:from-red-500 hover:to-yellow-500 hover:dark:from-blue-500 hover:dark:to-green-500">Viet Hung Nguyen</a>
       <!-- Desktop links -->
       <nav class="flex gap-4 items-center">
-        <a href="/" class="link hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-red-400 hover:to-yellow-400 hover:dark:from-blue-600 hover:dark:to-green-600">Home</a>
-        <a href="/projects" class="link hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-red-400 hover:to-yellow-400 hover:dark:from-blue-600 hover:dark:to-green-600">Projects</a>
-        <a href="/blogs" class="link hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-red-400 hover:to-yellow-400 hover:dark:from-blue-600 hover:dark:to-green-600">Blogs</a>
-        <a href="/contact" class="link hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-red-400 hover:to-yellow-400 hover:dark:from-blue-600 hover:dark:to-green-600">Contact</a>
+        <a href="/" class="link hover:from-red-500 hover:to-yellow-500 hover:dark:from-blue-500 hover:dark:to-green-500">Home</a>
+        <a href="/projects" class="link hover:from-red-500 hover:to-yellow-500 hover:dark:from-blue-500 hover:dark:to-green-500">Projects</a>
+        <a href="/blogs" class="link hover:from-red-500 hover:to-yellow-500 hover:dark:from-blue-500 hover:dark:to-green-500">Blogs</a>
+        <a href="/contact" class="link hover:from-red-500 hover:to-yellow-500 hover:dark:from-blue-500 hover:dark:to-green-500">Contact</a>
         <!-- Theme toggle -->
         <ThemeSwitcher client:load />
       </nav>
@@ -69,11 +77,9 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
     <main class="flex-1">
       <slot />
     </main>
-    <footer class="py-2 text-center border-t-2">
-      Built with <a class="typescript hover:text-blue-500">TypeScript</a>, <a class="tailwind hover:text-teal-500">TailwindCSS</a>, and <a class="astro hover:text-orange-500">Astro</a><i class="ml-1 fas fa-heart hover:text-red-500"></i> 
+    <footer class="py-2 text-center border-t-2 text-sm">
+      Built with <a class="typescript hover:text-blue-500">TypeScript</a>, <a class="tailwind hover:text-teal-500">TailwindCSS</a>, and <a class="astro hover:text-orange-500">Astro</a>
+      <i class="ml-1 fas fa-heart hover:text-red-500"></i> 
     </footer>
-    <button>
-      <i class="fa-solid fa-arrow-up fixed bottom-12 right-4 text-2xl rounded-full bg-gradient-to-r from-red-400 to-yellow-400 p-2 aspect-square dark:from-blue-600 dark:to-green-600" />
-    </button>
 	</body>
 </html>

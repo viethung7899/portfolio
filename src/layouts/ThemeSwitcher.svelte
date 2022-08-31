@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
 
   let theme = localStorage.getItem('theme') || 'light';
-  $: isDark = theme === "dark";
+  $: isDark = theme === 'dark';
   let mounted = false;
 
   onMount(() => {
@@ -23,12 +23,12 @@
 
 {#if mounted}
   {#if isDark}
-  <button on:click={() => theme = "light"}>
-    <i class="fas fa-moon hover:text-teal-500" />
-  </button>
+    <button on:click={() => (theme = 'light')}>
+      <i class="fas fa-moon hover:text-teal-500" />
+    </button>
   {:else}
-  <button on:click={() => theme = "dark"}>
-    <i class="fas fa-sun hover:text-orange-500" />
-  </button>
+    <button on:click={() => (theme = 'dark')}>
+      <i class="fas fa-sun hover:text-orange-500" />
+    </button>
   {/if}
 {/if}
