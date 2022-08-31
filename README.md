@@ -6,9 +6,9 @@ This is the source code for my personal portfolio
 
 ### Base Layout
 
-- [ ] Navigation bar
-- [ ] Footer
-- [ ] Support dark mode
+- [x] Navigation bar
+- [x] Footer
+- [x] Support dark mode
 
 ### Home page
 

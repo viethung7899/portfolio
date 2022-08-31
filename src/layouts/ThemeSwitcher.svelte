@@ -1,7 +1,8 @@
 <script>
   import { onMount } from 'svelte';
 
-  $: theme = localStorage.getItem('theme') || 'light';
+  let theme = localStorage.getItem('theme') || 'light';
+  $: isDark = theme === "dark";
   let mounted = false;
 
   onMount(() => {
@@ -10,7 +11,7 @@
 
   $: {
     if (mounted) {
-      if (theme === 'dark') {
+      if (isDark) {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
@@ -21,7 +22,13 @@
 </script>
 
 {#if mounted}
-  <button on:click={() => (theme = theme === 'light' ? 'dark' : 'light')}>
-    <i class="fa-solid fa-sun" />
+  {#if isDark}
+  <button on:click={() => theme = "light"}>
+    <i class="fas fa-moon hover:text-teal-500" />
   </button>
+  {:else}
+  <button on:click={() => theme = "dark"}>
+    <i class="fas fa-sun hover:text-orange-500" />
+  </button>
+  {/if}
 {/if}
