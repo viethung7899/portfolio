@@ -1,0 +1,18 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+export interface Props {
+  frontmatter: {
+    title: string;
+    date: string;
+  };
+}
+const {frontmatter: {title, date}} = Astro.props;
+---
+
+<BaseLayout title={title}>
+  <div class="flex flex-col px-4 py-8 gap-6">
+    <h1 class="text-3xl font-bold">{title}</h1>
+    <h5 class="text-black/50 dark:text-white/50 italic">{new Date(date).toDateString()}</h5>
+    <slot />
+  </div>
+</BaseLayout>

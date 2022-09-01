@@ -10,9 +10,14 @@
     "astro": "astro"
   },
   "devDependencies": {
+    "@astrojs/mdx": "^0.11.0",
+    "@astrojs/react": "^1.1.1",
     "@astrojs/svelte": "^1.0.0",
     "@astrojs/tailwind": "^1.0.0",
+    "@types/react": "^18.0.18",
     "astro": "^1.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "svelte": "^3.49.0"
   }
 }
