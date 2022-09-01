@@ -21,8 +21,8 @@
   ];
 </script>
 
-<nav class="sticky top-0 backdrop-blur-lg">
-  <div class="flex flex-row items-center justify-between p-4">
+<nav class="sticky top-0 backdrop-blur-lg flex flex-col items-center">
+  <div class="flex flex-row items-center justify-between p-4 w-full max-w-screen-lg">
     <button
       class="block sm:hidden"
       on:click={() => (show = !show)}
@@ -46,7 +46,7 @@
     </div>
   </div>
   {#if show}
-  <div class="flex flex-col p-4 gap-4" transition:slide>
+  <div class="flex flex-col p-4 gap-4 w-full" transition:slide>
     {#each links as { title, path }}
         <Link {path} {title} isMobile />
       {/each}
