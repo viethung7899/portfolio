@@ -1,19 +1,14 @@
 ---
+import {} from "astro/app"
 import BaseLayout from "@layouts/BaseLayout.astro";
+const posts = await Astro.glob('../../content/posts/**/*.mdx');
+const post = posts.find(post => post.frontmatter.slug === Astro.params.slug);
 
-export async function getStaticPaths() {
-  const posts = await Astro.glob('../../content/posts/**/*.mdx');
-  return posts.map(post => ({
-    params: {
-      slug: post.frontmatter.slug
-    },
-    props: {
-      post
-    }
-  }))
+if (!post) {
+  return Astro.redirect('/');
 }
 
-const { Content, frontmatter } = Astro.props.post;
+const { Content, frontmatter } = post;
 ---
 
 <BaseLayout title={frontmatter.title}>
