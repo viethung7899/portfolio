@@ -1,24 +1,27 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 
-const slug = Astro.params.slug;
-const posts = await Astro.glob('../../content/posts/**/*.mdx');
-const post = posts.find((post) => post.frontmatter.slug === slug);
-
-if (!post) {
-  return new Response(null, {
-    status: 404,
-    statusText: 'Not found'
-  });
+export async function getStaticPaths() {
+  const posts = await Astro.glob('../../content/posts/**/*.mdx');
+  return posts.map(post => ({
+    params: {
+      slug: post.frontmatter.slug
+    },
+    props: {
+      post
+    }
+  }))
 }
 
-const { Content, frontmatter } = post;
+const { Content, frontmatter } = Astro.props.post;
 ---
 
 <BaseLayout title={frontmatter.title}>
-  <article class="flex flex-col px-4 py-8 gap-6">
-    <h1 class="text-3xl font-bold">{frontmatter.title}</h1>
+  <article class="px-4 py-8 items-center flex flex-col gap-4">
+    <h1 class="text-4xl md:text-6xl font-bold">{frontmatter.title}</h1>
     <h5 class="text-black/50 dark:text-white/50 italic">{new Date(frontmatter.date).toDateString()}</h5>
-    <Content />
+    <div class="w-full prose prose-sm md:prose-base prose-orange dark:prose-invert dark:prose-teal">
+      <Content />
+    </div>
   </article>
 </BaseLayout>

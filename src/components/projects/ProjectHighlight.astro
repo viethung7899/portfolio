@@ -1,17 +1,15 @@
 ---
-import { FaArrowUp } from "react-icons/fa";
-import ProjectCard from "./ProjectCard.tsx";
+import Icon from "@iconify/svelte";
 import meteo from "@images/projects/meteo.png";
 import wordle from "@images/projects/wordle.png";
+import ProjectCard from "./ProjectCard.svelte";
+import Link from "../common/UnderlineLink.svelte";
 ---
 
 <div class="px-4 py-12 flex flex-col gap-4">
   <h2 class="font-bold text-3xl">Projects</h2>
   <p class="text-black/50 dark:text-white/50">Some of my most highlighted side projects. 
-    <a href="/projects" class="text-black dark:text-white text-current hover:text-orange-500 hover:dark:text-teal-500 inline-flex items-center space-x-1">
-      <span class="underline underline-offset-4">View all projects</span>
-      <FaArrowUp className="rotate-45" />
-    </a>
+    <Link path="/projects" title="View all projects" client:visible />
   </p>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6">
     <ProjectCard 
@@ -21,12 +19,14 @@ import wordle from "@images/projects/wordle.png";
       where its background color can change based on the tempurature of the day."
       link="https://meteo-gradient.vercel.app/"
       repo="https://github.com/viethung7899/meteo"
+      client:visible
        />
     <ProjectCard 
       title="Solid Wordle" 
       image={wordle}
       description="A clone from a famous game Wordle, built with SolidJS"
       link="https://wordle-solid.vercel.app/"
-      repo="https://github.com/viethung7899/wordle-solid" />
+      repo="https://github.com/viethung7899/wordle-solid"
+      client:visible />
   </div>
 </div>
