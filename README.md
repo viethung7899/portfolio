@@ -14,5 +14,12 @@ This is the source code for my personal portfolio
 
 - [x] About section
 - [ ] Skill section
-- [ ] Side projects
-- [ ] Recent blog
+- [x] Side project highlight
+- [ ] Recent blogs
+
+### Blogs
+
+- [ ] List all blog
+- [ ] Making a portfolio website with my most favourite UI framworks
+- [ ] Create a database to store blog metadata (ie. view count)
+- [ ] Create a API route to update metadata
