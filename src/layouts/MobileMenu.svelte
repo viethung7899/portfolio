@@ -1,5 +1,6 @@
 <script lang="ts">
   import { slide } from 'svelte/transition';
+  import Icon from '@iconify/svelte'
   import Link from './Link.svelte';
   let show = false;
 </script>
@@ -9,7 +10,7 @@
   on:click={() => (show = !show)}
   on:blur|preventDefault={() => (show = false)}
 >
-  <i class="fa-solid fa-bars hover:text-orange-400 hover:dark:text-teal-500" />
+  <Icon icon={show ? "fa6-solid:xmark" : "fa6-solid:bars"} class="w-6 h-6 hover:text-orange-400 hover:dark:text-teal-500" />
 </button>
 {#if show}
   <nav

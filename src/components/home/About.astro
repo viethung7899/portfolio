@@ -1,5 +1,5 @@
 ---
-import { FaGithub,FaLinkedin } from "react-icons/fa/index";
+import ProfileIcons from "./ProfileIcons.svelte";
 ---
 
 <style>
@@ -19,12 +19,7 @@ import { FaGithub,FaLinkedin } from "react-icons/fa/index";
       I enjoy creating simple, beautiful and user-friendly web applications and I'm passionate to learn full-stack web technology.</p>
       
       <p>I'm currently looking for a role as a developer.</p>
-      
-      <div class="flex items-center space-x-4 py-2">
-        <button class="p-2 rounded-lg text-white bg-orange-500 dark:bg-teal-600 hover:show-md hover:dark:bg-teal-700 transition hover:scale-[1.05]">View my Resumé</button>
-        <a class="hover:text-orange-500 hover:dark:text-teal-600"><FaGithub /></a>
-        <a class="hover:text-orange-500 hover:dark:text-teal-600"><FaLinkedin /></a>
-      </div>
+      <ProfileIcons client:visible />
     </div>
 
     <img alt="My photo" width="300px" class="hidden md:block rounded-xl shadow-xl shadow-orange-500 dark:shadow-teal-500" src="/assets/profile.jpg" />

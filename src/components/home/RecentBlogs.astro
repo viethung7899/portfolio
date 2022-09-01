@@ -1,13 +1,11 @@
 ---
-import { FaArrowUp } from "react-icons/fa/index";
-
+import { Icon } from "astro-icon";
+import Link from "../common/UnderlineLink.svelte";
 ---
 
 <div class="px-4 py-12">
   <h2 class="text-3xl font-bold mb-4">Recent Blogs</h2>
   <p class="text-black/50 dark:text-white/50">A records of my learning journey into coding.
-    <a href="/projects" class="text-black dark:text-white text-current hover:text-orange-500 hover:dark:text-teal-500 inline-flex items-center space-x-1">
-      <span class="underline underline-offset-4">View all posts</span>
-      <FaArrowUp className="rotate-45" />
-    </a></p>
+    <Link path="/blogs" title="View all blogs" client:visible />
+  </p>
 </div>
