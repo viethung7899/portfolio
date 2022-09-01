@@ -26,7 +26,7 @@
   }
 </script>
 
-<button on:click={toggle} class="w-6 text-right">
+<button on:click={toggle} class="w-6 h-6 text-right">
   <Icon
     icon={!isMounted || theme === 'light' ? 'fa6-solid:sun' : 'fa6-solid:moon'}
     class="hover:text-orange-500 hover:dark:text-teal-500 transition-colors"
