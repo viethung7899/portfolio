@@ -6,7 +6,7 @@
   <h2 class="font-bold text-3xl mb-4">Contact.</h2>
   <p class="mb-4 text-black/50 dark:text-white/50">
     You can fill out the form below and directly email email me at 
-    <a 
+    <a href="#"
       class="font-medium text-transparent bg-gradient-to-r bg-clip-text 
       from-red-500 to-yellow-500 dark:from-blue-500 dark:to-green-500">
       email@example.com.
