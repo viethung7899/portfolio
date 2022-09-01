@@ -1,14 +1,11 @@
 ---
-import ProfileIcons from "./ProfileIcons.svelte";
+import Icon from "astro-icon";
+const aStyle = "w-6 h-6 hover:text-orange-500 hover:dark:text-teal-600 transition"
 ---
 
 <style>
   span {
     @apply font-semibold;
-  }
-
-  a {
-    @apply text-2xl transition hover:scale-[1.1];
   }
 </style>
 
@@ -19,7 +16,19 @@ import ProfileIcons from "./ProfileIcons.svelte";
       I enjoy creating simple, beautiful and user-friendly web applications and I'm passionate to learn full-stack web technology.</p>
       
       <p>I'm currently looking for a role as a developer.</p>
-      <ProfileIcons client:visible />
+      <div class="flex items-center space-x-4 py-2">
+        <button
+          class="p-2 rounded-lg text-white bg-orange-500 dark:bg-teal-600 hover:show-md hover:dark:bg-teal-700 transition"
+        >
+          Resumé
+        </button>
+        <a href="Github">
+          <Icon class={aStyle} name="fa-brands:github" />
+        </a>
+        <a href="Linkedin">
+          <Icon class={aStyle} name="fa-brands:linkedin" />
+        </a>
+      </div>
     </div>
 
     <img alt="My photo" width="300px" class="hidden md:block rounded-xl shadow-xl shadow-orange-500 dark:shadow-teal-500" src="/assets/profile.jpg" />

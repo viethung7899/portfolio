@@ -1,13 +1,17 @@
-<script lang="ts">
-  export let path: string;
-  export let title: string;
-  import Icon from '@iconify/svelte';
-</script>
+---
+import Icon from "astro-icon";
+export interface Props {
+  path: string;
+  title: string;
+}
+
+const {path, title} = Astro.props;
+---
 
 <a
   href={path}
   class="text-black dark:text-white text-current hover:text-orange-500 hover:dark:text-teal-500 inline-flex items-center space-x-1"
 >
   <span class="underline underline-offset-4">{title}</span>
-  <Icon icon="fa6-solid:arrow-up" class="rotate-45" />
+  <Icon name="fa-solid:arrow-up" class="rotate-45 w-4 h-4 -z-10" />
 </a>
