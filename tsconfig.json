@@ -7,7 +7,7 @@
       "@layouts/*": ["src/layouts/*"],
       "@interactives/*": ["src/interactives/*"],
       "@posts/*": ["src/content/posts/*"],
-      "@iamges/*": ["src/content/iamges/*"],
+      "@images/*": ["src/content/images/*"],
     }
   }
 }

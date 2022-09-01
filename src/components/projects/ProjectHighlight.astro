@@ -1,6 +1,8 @@
 ---
 import { FaArrowUp } from "react-icons/fa";
-
+import ProjectCard from "./ProjectCard.tsx";
+import meteo from "@images/projects/meteo.png";
+import wordle from "@images/projects/wordle.png";
 ---
 
 <div class="px-4 py-12 flex flex-col gap-4">
@@ -11,4 +13,20 @@ import { FaArrowUp } from "react-icons/fa";
       <FaArrowUp className="rotate-45" />
     </a>
   </p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6">
+    <ProjectCard 
+      title="Meteo"
+      image={meteo}
+      description="A simple single-page weather application built with Svelte and TailwindCSS,\
+      where its background color can change based on the tempurature of the day."
+      link="https://meteo-gradient.vercel.app/"
+      repo="https://github.com/viethung7899/meteo"
+       />
+    <ProjectCard 
+      title="Solid Wordle" 
+      image={wordle}
+      description="A clone from a famous game Wordle, built with SolidJS"
+      link="https://wordle-solid.vercel.app/"
+      repo="https://github.com/viethung7899/wordle-solid" />
+  </div>
 </div>

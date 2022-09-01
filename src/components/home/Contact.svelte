@@ -3,9 +3,9 @@
 </script>
 
 <div class="px-4 py-12">
-  <h2 class="font-bold text-3xl mb-4">Contact.</h2>
+  <h2 class="font-bold text-3xl mb-4">Contact me</h2>
   <p class="mb-4 text-black/50 dark:text-white/50">
-    You can fill out the form below and directly email email me at 
+    You can fill out the form below and directly email me at 
     <a href="#"
       class="font-medium text-transparent bg-gradient-to-r bg-clip-text 
       from-red-500 to-yellow-500 dark:from-blue-500 dark:to-green-500">
@@ -16,7 +16,7 @@
     <input placeholder="Name" type="text" class={inputStyle} />
     <input placeholder="Email" type="email" class={inputStyle} />
     <textarea placeholder="Message" type="email" rows={5} class={inputStyle} />
-    <button class="p-2 rounded-md text-white bg-orange-500 hover:bg-orange-600 dark:bg-teal-600 hover:dark:bg-teal-500">Send Message</button>
+    <button class="p-2 rounded-md text-white bg-orange-500 hover:bg-orange-600 dark:bg-teal-600 hover:dark:bg-teal-700 hover:scale-[1.05] transition">Send Message</button>
   </form>
 </div>
 
