@@ -5,7 +5,7 @@ export interface Props {
 const {title} = Astro.props;
 import Link from "./Link.svelte";
 import MobileMenu from "./MobileMenu.svelte";
-import ThemeSwitcher from "./ThemeSwitcher.svelte";
+import ThemeSwitcher from "./ThemeSwitcher";
 ---
 
 <script is:inline>
@@ -45,7 +45,6 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-    <script src="https://kit.fontawesome.com/7e04ce6a14.js" crossorigin="anonymous"></script>
 		<title>{title}</title>
 	</head>
 	<body class="flex flex-col w-screen min-h-screen bg-white dark:bg-gray-800 items-stretch">
