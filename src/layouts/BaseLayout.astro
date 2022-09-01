@@ -3,9 +3,7 @@ export interface Props {
   title: string;
 }
 const {title} = Astro.props;
-import Link from "./Link.svelte";
-import MobileMenu from "./MobileMenu.svelte";
-import ThemeSwitcher from "./ThemeSwitcher.svelte";
+import NavigationBar from "./NavigationBar.svelte";
 ---
 
 <script is:inline>
@@ -48,19 +46,7 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
 		<title>{title}</title>
 	</head>
 	<body class="flex flex-col w-screen min-h-screen bg-white dark:bg-gray-800 items-stretch">
-    <header class="flex flex-row items-center justify-between p-4 sticky top-0 bg-white dark:bg-gray-800">
-      <!-- Mobile menu -->
-      <MobileMenu client:load />
-      <a href="/" class="uppercase font-medium hover:text-orange-500 hover:dark:text-teal-500 transition-colors">Viet Hung Nguyen</a>
-      <!-- Desktop links -->
-      <nav class="flex gap-4 items-center">
-        <Link path="/" title="Home" />
-        <Link path="/projects" title="Projects" />
-        <Link path="/blogs" title="Blogs" />
-        <!-- Theme toggle -->
-        <ThemeSwitcher client:load />
-      </nav>
-    </header>
+    <NavigationBar client:load />
     <main class="flex-1 w-full max-w-screen-lg self-center">
       <slot />
     </main>
