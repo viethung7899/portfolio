@@ -6,6 +6,8 @@
       "@components/*": ["src/components/*"],
       "@layouts/*": ["src/layouts/*"],
       "@interactives/*": ["src/interactives/*"],
+      "@posts/*": ["src/content/posts/*"],
+      "@iamges/*": ["src/content/iamges/*"],
     }
   }
 }

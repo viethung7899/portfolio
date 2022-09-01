@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 
-const ThemeSwitch = () => {
+function ThemeSwitch() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [isMounted, setIsMounted] = useState(false);
 

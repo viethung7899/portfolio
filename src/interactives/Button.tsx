@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Button = () => {
+function Button() {
   const [number, setNumber] = useState(0);
 
   return <button
