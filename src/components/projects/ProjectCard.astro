@@ -9,8 +9,10 @@
     link?: string;
   }
 
-  const hover =
+  const linkStyles =
     'hover:text-orange-500 hover:dark:text-teal-500 transition-colors';
+  
+  const imgStyles = 'transition-all duration-300 w-full aspect-[16/9] rounded-lg hover:shadow-lg hover:shadow-orange-500 hover:dark:shadow-teal-500'
 
   const {title, description, image, repo, link} = Astro.props;
 ---
@@ -20,21 +22,21 @@
     ? <img
       src={image}
       alt={title}
-      class="border-[1px] border-black/30 dark:border-white/30 w-full aspect-[16/9] rounded-lg"
+      class={imgStyles}
     />
   
     : <div
-      class="border-[1px] border-black/30 dark:border-white/30 w-full aspect-[16/9] rounded-lg"
+      class={imgStyles}
     />
   }
   <div class="flex items-center justify-between pt-6 pb-2">
-    <a href={link} class={`text-xl font-bold ${hover}`}>{title}</a>
+    <a href={link} class={`text-xl font-bold ${linkStyles}`}>{title}</a>
     <div class="gap-4 flex text-xl">
-      {repo && <a href={repo} class={hover}>
+      {repo && <a href={repo} class={linkStyles}>
           <Icon class="w-6 h-6" name="fa-solid:code" />
         </a>
       }
-      {link && <a href={link} class={hover}>
+      {link && <a href={link} class={linkStyles}>
           <Icon class="w-6 h-6" name="fa-solid:window-maximize" />
         </a>
       }
