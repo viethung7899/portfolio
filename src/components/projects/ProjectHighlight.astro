@@ -1,6 +1,6 @@
 ---
 import Link from "../common/UnderlineLink.astro";
-import ProjectItem from "./ProjectItem.astro";
+import ProjectCard from "./ProjectCard.astro";
 import type { ProjectMeta } from "src/types";
 
 const projects = await Astro.glob<ProjectMeta>("../../content/projects/*.md");
@@ -13,7 +13,7 @@ const projects = await Astro.glob<ProjectMeta>("../../content/projects/*.md");
   </p>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6">
     {projects.map(project => {
-      return <ProjectItem project={project} />
+      return <ProjectCard project={project} />
     })}
   </div>
 </div>
