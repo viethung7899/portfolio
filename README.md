@@ -15,7 +15,7 @@ This is the source code for my personal portfolio
 - [x] About section
 - [ ] Skill section
 - [x] Side project highlight
-- [ ] Recent blogs
+- [x] Recent blogs
 
 ### Blogs
 
