@@ -3,6 +3,7 @@ export type ProjectMeta = {
   github?: string;
   demo?: string;
   imageURL?: string;
+  important?: boolean;
 }
 
 export type PostMeta = {

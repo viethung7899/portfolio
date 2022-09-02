@@ -3,6 +3,7 @@ title: Meteo
 imageURL: "../../content/images/projects/meteo.png"
 github: https://github.com/viethung7899/meteo
 demo: https://meteo-gradient.vercel.app
+important: true
 ---
 
 A weather app whose design is inspired by an iOS app, built with [Svelte](https://svelte.dev/) and [Tailwind](https://tailwindcss.com/),
