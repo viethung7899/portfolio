@@ -9,5 +9,12 @@ import image from "@astrojs/image";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), svelte(), mdx(), react()],
+  output: 'server',
+  adapter: vercel(),
+  integrations: [tailwind(), svelte(), mdx(), react(), image()],
+  vite: {
+    ssr: {
+      external: ["svgo"]
+    }
+  }
 });
