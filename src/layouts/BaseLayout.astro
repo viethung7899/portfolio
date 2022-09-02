@@ -3,29 +3,8 @@ export interface Props {
   title: string;
 }
 const {title} = Astro.props;
-import Link from "./Link.svelte";
-import MobileMenu from "./MobileMenu.svelte";
-import ThemeSwitcher from "./ThemeSwitcher.svelte";
+import NavigationBar from "./NavigationBar.svelte";
 ---
-
-<script is:inline>
-  const theme = (() => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-      return localStorage.getItem("theme") || "light";
-    }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  })();
-
-  if (theme === "light") {
-    document.documentElement.classList.remove("dark");
-  } else {
-    document.documentElement.classList.add("dark");
-  }
-  window.localStorage.setItem("theme", theme);
-</script>
 
 <style is:global>
   body {
@@ -48,19 +27,25 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
 		<title>{title}</title>
 	</head>
 	<body class="flex flex-col w-screen min-h-screen bg-white dark:bg-gray-800 items-stretch">
-    <header class="flex flex-row items-center justify-between p-4 sticky top-0 bg-white dark:bg-gray-800">
-      <!-- Mobile menu -->
-      <MobileMenu client:load />
-      <a href="/" class="uppercase font-medium hover:text-orange-500 hover:dark:text-teal-500 transition-colors">Viet Hung Nguyen</a>
-      <!-- Desktop links -->
-      <nav class="flex gap-4 items-center">
-        <Link path="/" title="Home" />
-        <Link path="/projects" title="Projects" />
-        <Link path="/blogs" title="Blogs" />
-        <!-- Theme toggle -->
-        <ThemeSwitcher client:load />
-      </nav>
-    </header>
+    <script is:inline>
+      const theme = (() => {
+        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      })();
+    
+      if (theme === "light") {
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+      }
+      window.localStorage.setItem("theme", theme);
+    </script>
+    <NavigationBar client:load />
     <main class="flex-1 w-full max-w-screen-lg self-center">
       <slot />
     </main>
@@ -69,8 +54,6 @@ import ThemeSwitcher from "./ThemeSwitcher.svelte";
       <a class="typescript hover:text-blue-500" href="https://www.typescriptlang.org/">TypeScript</a>,
       <a class="tailwind hover:text-teal-500" href="https://tailwindcss.com/">TailwindCSS</a>, and
       <a class="astro hover:text-orange-500" href="https://astro.build/">Astro</a>
-      <i class="ml-1 fas fa-heart hover:text-red-500">
-      </i> 
     </footer>
 	</body>
 </html>

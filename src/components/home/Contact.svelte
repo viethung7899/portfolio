@@ -1,5 +1,5 @@
 <script>
-  const inputStyle = "border-black/50 dark:border-white/50 focus:border-orange-500 focus:dark:border-teal-600"
+  const inputStyle = "focus:border-orange-500 focus:dark:border-teal-600"
 </script>
 
 <div class="px-4 py-12">
@@ -16,12 +16,12 @@
     <input placeholder="Name" type="text" class={inputStyle} />
     <input placeholder="Email" type="email" class={inputStyle} />
     <textarea placeholder="Message" type="email" rows={5} class={inputStyle} />
-    <button class="p-2 rounded-md text-white bg-orange-500 hover:bg-orange-600 dark:bg-teal-600 hover:dark:bg-teal-700 hover:scale-[1.05] transition">Send Message</button>
+    <button class="p-2 rounded-md text-white bg-orange-500 hover:bg-orange-600 dark:bg-teal-600 hover:dark:bg-teal-700 transition">Send Message</button>
   </form>
 </div>
 
 <style>
   input, textarea {
-    @apply border-2 placeholder:opacity-40 rounded-md bg-transparent py-2 px-4 focus:outline-none w-full;
+    @apply border-slate-500/30 border-2 placeholder:opacity-40 rounded-md bg-transparent py-2 px-4 focus:outline-none w-full;
   }
 </style>

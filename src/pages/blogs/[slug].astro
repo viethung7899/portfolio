@@ -1,21 +1,23 @@
 ---
-import {} from "astro/app"
 import BaseLayout from "@layouts/BaseLayout.astro";
-const posts = await Astro.glob('../../content/posts/**/*.mdx');
+import dayjs from "dayjs";
+import type { PostMeta } from "src/types";
+const posts = await Astro.glob<PostMeta>('../../content/posts/**/*.mdx');
 const post = posts.find(post => post.frontmatter.slug === Astro.params.slug);
 
 if (!post) {
   return Astro.redirect('/');
 }
 
-const { Content, frontmatter } = post;
+const { frontmatter, Content } = post;
+const date = dayjs(frontmatter.date).format("D MMMM YYYY")
 ---
 
 <BaseLayout title={frontmatter.title}>
-  <article class="px-4 py-8 items-center flex flex-col gap-4">
+  <article class="px-4 py-8 md:items-center flex flex-col gap-4">
     <h1 class="text-4xl md:text-6xl font-bold">{frontmatter.title}</h1>
-    <h5 class="text-black/50 dark:text-white/50 italic">{new Date(frontmatter.date).toDateString()}</h5>
-    <div class="w-full prose prose-sm md:prose-base prose-orange dark:prose-invert dark:prose-teal">
+    <h5 class="text-black/50 dark:text-white/50">{date}</h5>
+    <div class="w-full prose max-w-none prose-sm md:prose-base prose-orange dark:prose-invert dark:prose-teal">
       <Content />
     </div>
   </article>
