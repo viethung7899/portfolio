@@ -1,0 +1,17 @@
+---
+export interface Props {
+  title: string;
+  date: Date;
+  slug: string;
+}
+
+const {title, date, slug} = Astro.props;
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime"
+dayjs.extend(relativeTime)
+---
+
+<div class="border rounded-md border-slate-500/50 p-4 hover:shadow-lg hover:shadow-orange-500 hover:dark:shadow-teal-500 transition-shadow duration-300">
+  <a href={`/blogs/${slug}`} class="text-xl font-bold hover:text-orange-500 hover:dark:text-teal-500 transition">{title}</a>
+  <p class="py-2">{dayjs(date).fromNow()}</p>
+</div>
