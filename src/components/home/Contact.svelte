@@ -16,7 +16,7 @@
     <input placeholder="Name" type="text" class={inputStyle} />
     <input placeholder="Email" type="email" class={inputStyle} />
     <textarea placeholder="Message" type="email" rows={5} class={inputStyle} />
-    <button class="p-2 rounded-md text-white bg-orange-500 hover:bg-orange-600 dark:bg-teal-600 hover:dark:bg-teal-700 hover:scale-[1.05] transition">Send Message</button>
+    <button class="p-2 rounded-md text-white bg-orange-500 hover:bg-orange-600 dark:bg-teal-600 hover:dark:bg-teal-700 transition">Send Message</button>
   </form>
 </div>
 
