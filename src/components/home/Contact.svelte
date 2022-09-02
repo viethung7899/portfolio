@@ -1,5 +1,5 @@
 <script>
-  const inputStyle = "border-black/50 dark:border-white/50 focus:border-orange-500 focus:dark:border-teal-600"
+  const inputStyle = "focus:border-orange-500 focus:dark:border-teal-600"
 </script>
 
 <div class="px-4 py-12">
@@ -22,6 +22,6 @@
 
 <style>
   input, textarea {
-    @apply border-2 placeholder:opacity-40 rounded-md bg-transparent py-2 px-4 focus:outline-none w-full;
+    @apply border-slate-500/30 border-2 placeholder:opacity-40 rounded-md bg-transparent py-2 px-4 focus:outline-none w-full;
   }
 </style>

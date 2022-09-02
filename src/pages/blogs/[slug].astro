@@ -14,12 +14,15 @@ export async function getStaticPaths() {
 }
 
 const { Content, frontmatter } = Astro.props.post;
+
+import dayjs from "dayjs";
+const date = dayjs(frontmatter.date).format("D MMMM YYYY")
 ---
 
 <BaseLayout title={frontmatter.title}>
   <article class="px-4 py-8 md:items-center flex flex-col gap-4">
     <h1 class="text-4xl md:text-6xl font-bold">{frontmatter.title}</h1>
-    <h5 class="text-black/50 dark:text-white/50 italic">{new Date(frontmatter.date).toDateString()}</h5>
+    <h5 class="text-black/50 dark:text-white/50">{date}</h5>
     <div class="w-full prose max-w-none prose-sm md:prose-base prose-orange dark:prose-invert dark:prose-teal">
       <Content />
     </div>

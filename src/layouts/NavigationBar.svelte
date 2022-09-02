@@ -21,7 +21,7 @@
   ];
 </script>
 
-<nav class="sticky top-0 backdrop-blur-lg flex flex-col items-center border-b-2 border-slate-500/25">
+<nav class="sticky top-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg flex flex-col items-center border-b-2 border-slate-500/25">
   <div class="flex flex-row items-center justify-between p-4 w-full max-w-screen-lg">
     <button
       class="block sm:hidden"
