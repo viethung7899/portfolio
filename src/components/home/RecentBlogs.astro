@@ -1,7 +1,8 @@
 ---
-import Link from "../common/UnderlineLink.astro";
-const posts = await Astro.glob('../../content/posts/*.mdx');
+import type { PostMeta } from "src/types";
 import BlogCard from "../blogs/BlogCard.astro";
+import Link from "../common/UnderlineLink.astro";
+const posts = await Astro.glob<PostMeta>('../../content/posts/*.mdx');
 ---
 
 <div class="px-4 py-12">
@@ -11,8 +12,7 @@ import BlogCard from "../blogs/BlogCard.astro";
   </p>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
     {posts.map((post) => {
-      const {title, date, slug} = post.frontmatter;
-      return <BlogCard title={title} date={date} slug={slug} />
+      return <BlogCard {...post.frontmatter} />
     })}
   </div>
 </div>
