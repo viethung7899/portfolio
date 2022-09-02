@@ -4,3 +4,9 @@ export type ProjectMeta = {
   demo?: string;
   imageURL?: string;
 }
+
+export type PostMeta = {
+  title: string;
+  date: Date;
+  slug: string;
+}
