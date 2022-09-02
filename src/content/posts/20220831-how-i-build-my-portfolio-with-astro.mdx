@@ -1,28 +1,65 @@
 ---
-title: How I build my portfolio with Astro
+title: How I built my portfolio with Astro
 date: 2022-08-30
-slug: "how-i-build-my-portfolio-with-astro"
+slug: "how-i-built-my-portfolio-with-astro"
 ---
 
-## Prelude
-
-As you can see from my frontpage, I'm passionate about web developement, escapacially the frontend tools.
-I spent a lot of time doing some experiement with some of the most popular UI tools. 
+I'm passionate about web developement, especially the frontend tools.
+I spent a lot of time doing some experiement with some of the most popular frontend UI frameworks. 
 Among of those, my favorite cloices are so far React and Svelte.
 
 After playing with code, I decided to make a portfolio website to advertise myself to potential employers. 
-Now, I have to pick one of two my favourite framework to build a simple multi-page application for my website. 
-React has NextJS and Svelte has SvelteKit. It was a tough choice.
+Now, I have to **pick only one** of two my favourite framework. 
+I like React because of its powerful community with many third-party packages, 
+but and I also love the fun and simplicity of Svelte. 
+It was a tough decision. What if I can use both of them in the same application? Luckily, I found **Astro**.
 
-What if I can use both React and Svelte in the same application? Luckily, I found Astro.
+---
 
-## What is Astro?
+## Why Astro?
 
-[Astro](https://astro.build)
+[Astro](https://astro.build) is a perfect candiate for my portfolio project, 
+and here some reasons:
 
-## The folder structure
+- It is a *static site generator* (SSG), suitable for building portfolio 
+since I may not update the content very often
+- It allows to ship a website with *no or little JavaScript*,
+which means websites building with Astro is blazingly fast
+- It is compatible with many existing UI frameworks like React or Svelte
+- It has a lot of itergration tools, where you can quickly install with Astro CLI
 
-```
+## Other tools
 
-```
+Alongside with Astro, I also use other tools 
 
+### Tailwind
+
+Tailwind is a ultility-first CSS framework where you can quickly style
+the component with predefined class names. 
+Normally, I found styling components is a slow and painful experience. 
+However, Tailwind is easy to learn and can quickly speed up the developement process.
+Tailwind also provides more benefits such as
+
+- **Unopinionated**: Tailwind can work with any exisiting UI platforms. I can style the document
+everywhere in plain HTML, React, or Svelte.
+- **Great documentation**: navigation around the docs is easy
+- **Smooth DX**: Tailwind also provide VSCode extension called Tailwind CSS Intellisense
+- **Integration with Astro** with `@astrojs/tailwind`
+
+### MDX
+
+MDX format allows us to use JSX elements in mardown. 
+MDX also integrate with Astro via `@astrojs/mdx`
+
+Markdown is great format to quickly compose a blog post, but sometimes I want to
+include some interactivity within the blog post, like my favourite website Brillant.
+The JSX supports for MDX allows me to add visulization for better explaning the concepts
+and make the post more unique and compelling.
+
+### Vercel
+
+Vercel is a deployment platform for frontend developers.
+
+Recently, I migrated all my side projects to Vercel, and love how easy it is to deploy my apps.
+Whenever I push the code the main branch, Vercel will automatically deploy my apps with the Github integration tool.
+This helps me focus more building the app while Vercel is taking care the complexity of deployment pipeline.
