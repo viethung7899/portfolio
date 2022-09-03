@@ -2,7 +2,6 @@
 import type { MarkdownInstance } from 'astro';
 import Icon from 'astro-icon';
 import type { ProjectMeta } from 'src/types';
-import {Image} from '@astrojs/image/components';
 export interface Props {
   project: MarkdownInstance<ProjectMeta>;
 }
@@ -23,25 +22,27 @@ const image = !imageURL ? undefined : await images[imageURL]() as Record<string,
 ---
 
 <div class="flex flex-col">
-  {image
+  <a href={demo || github}>
+    {image
     ? <img
-      {...image.default}
-      class={imgStyles}
-      alt={title}
+    {...image.default}
+    class={imgStyles}
+    alt={title}
     />
-  
+    
     : <div
-      class={imgStyles}
+    class={imgStyles}
     />
   }
+  </a>
   <div class="flex items-center justify-between pt-6 pb-2">
     <a href={demo} class={`text-xl font-bold ${linkStyles}`}>{title}</a>
     <div class="gap-4 flex text-xl">
-      {github && <a href={github} class={linkStyles}>
+      {github && <a href={github} class={linkStyles} target="_blank">
           <Icon class="w-6 h-6" name="fa-solid:code" />
         </a>
       }
-      {demo && <a href={demo} class={linkStyles}>
+      {demo && <a href={demo} class={linkStyles} target="_blank">
           <Icon class="w-6 h-6" name="fa-solid:window-maximize" />
         </a>
       }

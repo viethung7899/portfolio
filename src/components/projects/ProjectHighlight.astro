@@ -12,7 +12,7 @@ const projects = await Astro.glob<ProjectMeta>("../../content/projects/*.md");
     <Link path="/projects" title="View all projects" />
   </p>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6">
-    {projects.map(project => {
+    {projects.filter(p => p.frontmatter.important).map(project => {
       return <ProjectCard project={project} />
     })}
   </div>
