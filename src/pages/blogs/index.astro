@@ -1,8 +1,18 @@
 ---
+import BlogCard from "@components/blogs/BlogCard.astro";
 import Construction from "@components/common/Construction.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import type { PostMeta } from "src/types";
+const posts = await Astro.glob<PostMeta>('../../content/posts/*.mdx');
+
 ---
 
 <BaseLayout title="Viet Hung Nguyen | Blogs">
-  <Construction />
+  <h2 class="text-4xl font-bold py-6">Blogs</h2>
+  <p class="text-black/50 dark:text-white/50">A collection of thoughts about my journey into coding. </p>
+  <div class="space-y-6 my-6 max-w-screen-sm">
+    {posts.map((post) => {
+      return <BlogCard {...post.frontmatter} />
+    })}
+  </div>
 </BaseLayout>

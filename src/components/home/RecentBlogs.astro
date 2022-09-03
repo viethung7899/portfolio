@@ -11,7 +11,7 @@ const posts = await Astro.glob<PostMeta>('../../content/posts/*.mdx');
     <Link path="/blogs" title="View all blogs" />
   </p>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-    {posts.map((post) => {
+    {posts.slice(0, 4).map((post) => {
       return <BlogCard {...post.frontmatter} />
     })}
   </div>
