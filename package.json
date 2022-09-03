@@ -7,6 +7,7 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "format": "prettier --write src/*",
     "astro": "astro"
   },
   "devDependencies": {
@@ -19,6 +20,8 @@
     "@iconify/svelte": "^2.2.1",
     "@types/react": "^18.0.18",
     "astro": "^1.1.1",
+    "prettier": "^2.7.1",
+    "prettier-plugin-astro": "^0.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "svelte": "^3.49.0"
