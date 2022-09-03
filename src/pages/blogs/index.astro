@@ -1,6 +1,5 @@
 ---
 import BlogCard from "@components/blogs/BlogCard.astro";
-import Construction from "@components/common/Construction.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { PostMeta } from "src/types";
 const posts = await Astro.glob<PostMeta>('../../content/posts/*.mdx');
