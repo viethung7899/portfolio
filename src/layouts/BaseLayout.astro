@@ -46,9 +46,7 @@ import NavigationBar from "./NavigationBar.svelte";
       window.localStorage.setItem("theme", theme);
     </script>
     <NavigationBar client:load />
-    <main class="flex-1 w-full max-w-screen-lg self-center">
-      <slot />
-    </main>
+    <slot />
     <footer class="py-2 text-center text-sm border-t-2 border-slate-500/25">
       Built with
       <a class="typescript hover:text-blue-500" href="https://www.typescriptlang.org/">TypeScript</a>,

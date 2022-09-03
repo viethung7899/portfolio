@@ -2,6 +2,8 @@
 title: How I built my portfolio with Astro
 date: 2022-08-30
 slug: "how-i-built-my-portfolio-with-astro"
+tags:
+  - astro
 ---
 
 I'm passionate about web developement, especially the frontend tools.
@@ -34,7 +36,7 @@ Alongside with Astro, I also use other tools
 
 ### Tailwind
 
-Tailwind is a ultility-first CSS framework where you can quickly style
+[Tailwind](https://tailwindcss.com) is a ultility-first CSS framework where you can quickly style
 the component with predefined class names. 
 Normally, I found styling components is a slow and painful experience. 
 However, Tailwind is easy to learn and can quickly speed up the developement process.
@@ -42,14 +44,14 @@ Tailwind also provides more benefits such as
 
 - **Unopinionated**: Tailwind can work with any exisiting UI platforms. I can style the document
 everywhere in plain HTML, React, or Svelte.
-- **Great documentation**: navigation around the docs is easy
+- **Great documentation**: navigation around the [docs](https://tailwindcss.com/docs/) is easy
 - **Smooth DX**: Tailwind also provide VSCode extension called Tailwind CSS Intellisense
-- **Integration with Astro** with `@astrojs/tailwind`
+- **Integration with Astro** with [`@astrojs/tailwind`](https://docs.astro.build/en/guides/integrations-guide/tailwind/)
 
 ### MDX
 
-MDX format allows us to use JSX elements in mardown. 
-MDX also integrate with Astro via `@astrojs/mdx`
+[MDX](https://mdxjs.com/) is the extension of markdown file, allows us to use JSX elements in mardown. 
+MDX also integrate with Astro via [`@astrojs/mdx`](https://docs.astro.build/en/guides/integrations-guide/mdx/)
 
 Markdown is great format to quickly compose a blog post, but sometimes I want to
 include some interactivity within the blog post, like my favourite website Brillant.
@@ -58,8 +60,8 @@ and make the post more unique and compelling.
 
 ### Vercel
 
-Vercel is a deployment platform for frontend developers.
+[Vercel](https://vercel.com/) is a deployment platform for frontend developers.
 
-Recently, I migrated all my side projects to Vercel, and love how easy it is to deploy my apps.
-Whenever I push the code the main branch, Vercel will automatically deploy my apps with the Github integration tool.
+Recently, I migrated all my web projects to Vercel, and love how easy it is to deploy my apps.
+Whenever I push the code the main branch, Vercel will automatically deploy my apps with the [Github integration tool](https://vercel.com/docs/concepts/git/vercel-for-github).
 This helps me focus more building the app while Vercel is taking care the complexity of deployment pipeline.
