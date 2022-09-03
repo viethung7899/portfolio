@@ -4,33 +4,28 @@
   export let headings: MarkdownHeading[];
 </script>
 
-<aside
-  class="w-60 flex flex-col gap-3 sticky top-24 bg-slate-500/10 p-4 rounded-md items-start"
->
-  <h3 class="uppercase font-bold opacity-50">On this page</h3>
-  {#each headings as heading}
-    {@const styles = heading.depth <= 2 ? 'text-md' : 'text-sm ml-4'}
-    {@const href = `#${heading.slug}`}
-    <a 
-      {href} 
-      class={`${styles} hover:text-orange-500 hover:dark:text-teal-500`}
-      on:click|preventDefault={() => {
-        const e = document.querySelector(href);
-        e?.scrollIntoView({
-          behavior: "smooth",
-        })
-      }}
-      >{heading.text}</a
-    >
-  {/each}
-  <p
-    class="text-xs opacity-50 pt-4 cursor-pointer hover:text-orange-500 hover:dark:text-teal-500"
+<h3 class="uppercase font-bold opacity-50">On this page</h3>
+{#each headings as heading}
+  {@const styles = heading.depth <= 2 ? 'text-md' : 'text-sm ml-4'}
+  {@const href = `#${heading.slug}`}
+  <a
+    {href}
+    class={`${styles} hover:text-orange-500 hover:dark:text-teal-500`}
     on:click|preventDefault={() => {
-      document.body.scrollIntoView({
-        behavior: "smooth"
-      })
-    }}
+      const e = document.querySelector(href);
+      e?.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }}>{heading.text}</a
   >
-    Back to top
-  </p>
-</aside>
+{/each}
+<p
+  class="text-xs opacity-50 pt-4 cursor-pointer hover:text-orange-500 hover:dark:text-teal-500"
+  on:click|preventDefault={() => {
+    document.body.scrollIntoView({
+      behavior: 'smooth',
+    });
+  }}
+>
+  Back to top
+</p>
