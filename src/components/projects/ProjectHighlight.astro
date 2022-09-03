@@ -1,9 +1,9 @@
 ---
+import type { ProjectFrontMatter } from "src/types";
 import Link from "../common/UnderlineLink.astro";
 import ProjectCard from "./ProjectCard.astro";
-import type { ProjectMeta } from "src/types";
 
-const projects = await Astro.glob<ProjectMeta>("../../content/projects/*.md");
+const projects = await Astro.glob<ProjectFrontMatter>("../../content/projects/*.md");
 ---
 
 <div class="px-4 py-12 flex flex-col gap-4">

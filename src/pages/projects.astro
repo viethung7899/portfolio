@@ -1,9 +1,9 @@
 ---
 import ProjectCard from "@components/projects/ProjectCard.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import type { ProjectMeta } from "src/types";
+import type { ProjectFrontMatter } from "src/types";
 
-const projects = await Astro.glob<ProjectMeta>("../content/projects/*.md");
+const projects = await Astro.glob<ProjectFrontMatter>("../content/projects/*.md");
 ---
 
 <BaseLayout title="Viet Hung Nguyen | Projects">

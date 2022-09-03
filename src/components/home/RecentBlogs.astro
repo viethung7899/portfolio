@@ -1,8 +1,8 @@
 ---
-import type { PostMeta } from "src/types";
+import type { PostFrontMatter } from "src/types";
 import BlogCard from "../blogs/BlogCard.astro";
 import Link from "../common/UnderlineLink.astro";
-const posts = await Astro.glob<PostMeta>('../../content/posts/*.mdx');
+const posts = await Astro.glob<PostFrontMatter>('../../content/posts/*.mdx');
 ---
 
 <div class="px-4 py-12">

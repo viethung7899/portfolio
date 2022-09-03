@@ -2,10 +2,10 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { MDXInstance } from "astro";
 import dayjs from "dayjs";
-import type { PostMeta } from "src/types";
+import type { PostFrontMatter } from "src/types";
 
 export async function getStaticPaths() {
-  const posts = await Astro.glob<PostMeta>('../../content/posts/**/*.mdx');
+  const posts = await Astro.glob<PostFrontMatter>('../../content/posts/**/*.mdx');
   return posts.map(post => ({
     params: {
       slug: post.frontmatter.slug
@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 export type Props = {
-  post: MDXInstance<PostMeta>;
+  post: MDXInstance<PostFrontMatter>;
 }
 
 const { Content, frontmatter } = Astro.props.post;

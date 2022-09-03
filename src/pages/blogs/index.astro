@@ -1,8 +1,8 @@
 ---
 import BlogCard from "@components/blogs/BlogCard.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import type { PostMeta } from "src/types";
-const posts = await Astro.glob<PostMeta>('../../content/posts/*.mdx');
+import type { PostFrontMatter } from "src/types";
+const posts = await Astro.glob<PostFrontMatter>('../../content/posts/*.mdx');
 
 ---
 

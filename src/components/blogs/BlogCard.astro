@@ -1,8 +1,8 @@
 ---
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import type { PostMeta } from "src/types";
-export type Props = PostMeta;
+import type { PostFrontMatter } from "src/types";
+export type Props = PostFrontMatter;
 const {title, date, slug} = Astro.props;
 dayjs.extend(relativeTime)
 ---
