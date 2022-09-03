@@ -3,6 +3,7 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import type { MDXInstance } from "astro";
 import dayjs from "dayjs";
 import type { PostFrontMatter } from "src/types";
+import TableOfContent from "@components/blogs/TableOfContent.svelte";
 
 export async function getStaticPaths() {
   const posts = await Astro.glob<PostFrontMatter>('../../content/posts/**/*.mdx');
@@ -23,26 +24,20 @@ export type Props = {
 const { Content, frontmatter, getHeadings } = Astro.props.post;
 
 const date = dayjs(frontmatter.date).format("D MMMM YYYY")
-const headings = getHeadings().filter(heading => heading.depth <= 3);
 ---
 
 <BaseLayout title={frontmatter.title}>
-  <main class="flex flex-1 px-8 max-w-screen-lg mx-auto gap-4 items-start">
-    <article class="flex flex-col py-24 flex-1 mx-auto gap-4">
+  <main class="flex flex-1 px-8 max-w-screen-lg mx-auto gap-4 items-start py-24">
+    <article class="flex flex-col flex-1 mx-auto gap-4">
       <h1 class="text-4xl font-bold">{frontmatter.title}</h1>
       <h5 class="text-black/50 dark:text-white/50">{date}</h5>
       <div class="flex gap-4">
-        <div class="flex-1 prose prose-sm max-w-none prose-orange dark:prose-invert dark:prose-teal">
+        <div class="flex-1 prose prose-sm max-w-none prose-orange dark:prose-invert dark:prose-teal prose-headings:scroll-mt-16">
           <Content />
         </div>
       </div>
     </article>
-    <aside class="w-60 flex flex-col gap-3 mt-24 sticky top-24 bg-slate-500/10 p-4 rounded-md">
-      <h3 class="uppercase font-bold">On this page</h3>
-      {headings.map(heading => {
-        const styles = heading.depth <= 2 ? "text-md" : "text-sm ml-4"
-        return <a href={`#${heading.slug}`} class={styles}>{heading.text}</a>
-      })} 
-  </aside>
+    <!-- Table of content -->
+    <TableOfContent client:load headings={getHeadings().filter(heading => heading.depth <= 3)} />
 </main>
 </BaseLayout>
