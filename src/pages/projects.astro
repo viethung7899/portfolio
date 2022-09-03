@@ -3,16 +3,22 @@ import ProjectCard from "@components/projects/ProjectCard.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { ProjectFrontMatter } from "src/types";
 
-const projects = await Astro.glob<ProjectFrontMatter>("../content/projects/*.md");
+const projects = await Astro.glob<ProjectFrontMatter>(
+  "../content/projects/*.md"
+);
 ---
 
 <BaseLayout title="Viet Hung Nguyen | Projects">
   <main class="max-w-screen-lg flex-1 mx-auto">
     <h2 class="text-center text-4xl font-bold py-6">Project Gallery</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6">
-      {projects.map(project => {
-        return <ProjectCard project={project} />
-      })}
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6"
+    >
+      {
+        projects.map((project) => {
+          return <ProjectCard project={project} />;
+        })
+      }
     </div>
   </main>
 </BaseLayout>
