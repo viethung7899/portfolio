@@ -1,9 +1,9 @@
 ---
 import type { MarkdownInstance } from 'astro';
 import Icon from 'astro-icon';
-import type { ProjectMeta } from 'src/types';
+import type { ProjectFrontMatter } from 'src/types';
 export interface Props {
-  project: MarkdownInstance<ProjectMeta>;
+  project: MarkdownInstance<ProjectFrontMatter>;
 }
 
 const {frontmatter: {
