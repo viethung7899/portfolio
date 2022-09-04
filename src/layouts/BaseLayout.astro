@@ -2,7 +2,7 @@
 export interface Props {
   title: string;
 }
-const {title} = Astro.props;
+const { title } = Astro.props;
 import NavigationBar from "./NavigationBar.svelte";
 ---
 
@@ -18,40 +18,47 @@ import NavigationBar from "./NavigationBar.svelte";
   }
 </style>
 
-<html lang="en" class="scroll-smooth">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body class="flex flex-col w-screen min-h-screen bg-white dark:bg-gray-800 items-stretch">
-    <script is:inline>
-      const theme = (() => {
-        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-          return localStorage.getItem("theme");
-        }
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          return "dark";
-        }
-        return "light";
-      })();
-    
-      if (theme === "light") {
-        document.documentElement.classList.remove("dark");
-      } else {
-        document.documentElement.classList.add("dark");
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="viewport" content="width=device-width" />
+<meta name="generator" content={Astro.generator} />
+<title>{title}</title>
+
+<body
+  class="flex flex-col w-screen min-h-screen bg-white dark:bg-gray-900 items-stretch"
+>
+  <script is:inline>
+    const theme = (() => {
+      if (
+        typeof localStorage !== "undefined" &&
+        localStorage.getItem("theme")
+      ) {
+        return localStorage.getItem("theme");
       }
-      window.localStorage.setItem("theme", theme);
-    </script>
-    <NavigationBar client:load />
-    <slot />
-    <footer class="py-2 text-center text-sm border-t-2 border-slate-500/25">
-      Built with
-      <a class="typescript hover:text-blue-500" href="https://www.typescriptlang.org/">TypeScript</a>,
-      <a class="tailwind hover:text-teal-500" href="https://tailwindcss.com/">TailwindCSS</a>, and
-      <a class="astro hover:text-orange-500" href="https://astro.build/">Astro</a>
-    </footer>
-	</body>
-</html>
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+      }
+      return "light";
+    })();
+
+    if (theme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else {
+      document.documentElement.classList.add("dark");
+    }
+    window.localStorage.setItem("theme", theme);
+  </script>
+  <NavigationBar client:load />
+  <slot />
+  <footer class="py-2 text-center text-sm border-t-2 border-slate-500/25">
+    Built with
+    <a
+      class="typescript hover:text-blue-500"
+      href="https://www.typescriptlang.org/">TypeScript</a
+    >,
+    <a class="tailwind hover:text-teal-500" href="https://tailwindcss.com/"
+      >TailwindCSS</a
+    >, and
+    <a class="astro hover:text-orange-500" href="https://astro.build/">Astro</a>
+  </footer>
+</body>

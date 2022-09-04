@@ -4,10 +4,10 @@ export type ProjectFrontMatter = {
   demo?: string;
   imageURL?: string;
   important?: boolean;
-}
+};
 
 export type PostFrontMatter = {
   title: string;
   date: Date;
   slug: string;
-}
+};

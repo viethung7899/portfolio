@@ -3,17 +3,26 @@ import type { ProjectFrontMatter } from "src/types";
 import Link from "../common/UnderlineLink.astro";
 import ProjectCard from "./ProjectCard.astro";
 
-const projects = await Astro.glob<ProjectFrontMatter>("../../content/projects/*.md");
+const projects = await Astro.glob<ProjectFrontMatter>(
+  "../../content/projects/*.md"
+);
 ---
 
 <div class="px-4 py-12 flex flex-col gap-4">
   <h2 class="font-bold text-3xl">Projects</h2>
-  <p class="text-black/50 dark:text-white/50">Some of my most highlighted side projects. 
+  <p class="text-black/50 dark:text-white/50">
+    Some of my most highlighted side projects.
     <Link path="/projects" title="View all projects" />
   </p>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6">
-    {projects.filter(p => p.frontmatter.important).map(project => {
-      return <ProjectCard project={project} />
-    })}
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6"
+  >
+    {
+      projects
+        .filter((p) => p.frontmatter.important)
+        .map((project) => {
+          return <ProjectCard project={project} />;
+        })
+    }
   </div>
 </div>

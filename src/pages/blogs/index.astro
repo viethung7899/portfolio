@@ -2,18 +2,21 @@
 import BlogCard from "@components/blogs/BlogCard.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { PostFrontMatter } from "src/types";
-const posts = await Astro.glob<PostFrontMatter>('../../content/posts/*.mdx');
-
+const posts = await Astro.glob<PostFrontMatter>("../../content/posts/*.mdx");
 ---
 
 <BaseLayout title="Viet Hung Nguyen | Blogs">
   <main class="flex-1 max-w-screen-lg mx-auto w-full">
     <h2 class="text-4xl font-bold py-6">Blogs</h2>
-    <p class="text-black/50 dark:text-white/50">A collection of thoughts about my journey into coding. </p>
+    <p class="text-black/50 dark:text-white/50">
+      A collection of thoughts about my journey into coding.
+    </p>
     <div class="space-y-6 my-6 max-w-screen-sm">
-      {posts.map((post) => {
-        return <BlogCard {...post.frontmatter} />
-      })} 
+      {
+        posts.map((post) => {
+          return <BlogCard {...post.frontmatter} />;
+        })
+      }
     </div>
   </main>
 </BaseLayout>
