@@ -1,0 +1,42 @@
+---
+title: Visualizing sorting algorithms
+date: 2022-09-02
+slug: visualizing-sorting-algoriithms
+---
+import SortingVisualizer from "../interactives/SortingVisualizer.svelte";
+
+
+## Motivation
+
+Sorting problem are classic introductory topic for any first-year computer science.
+The algorithms are little bit intimidated at the first place, but they introduce a veriey
+of interesting concepts to guide students to think like programmers for better problem solving.
+
+My goal here is to create a tool to visualize sorting algorithms.
+I hope a clear visualization can aid student to understand these algorithms. There are a lot of
+website for visualizing algorithms. In fact, I already made a website for that purpose. Most of them
+are just standalone websites. However, my challenge is to integrate the visulization within the blog post.
+
+## Interactive integrations
+
+As mention on the [previous blog](/blogs/how-i-built-my-portfolio-with-astro), I use the MDX format compose the blog posts.
+MDX allow us to inject the JSX elements inside the markdown files, which means I can add some interactive
+elements for the users to play around within the blog post. 
+For the implementation, React components is the best option to embed interactivity within the blog post.
+
+---
+
+## The sorting visualizer
+
+The visualizer support these features below
+
+- You can change the number of elements in the array
+- You can change the sorting algorithms in the drop-down elements
+- You can change the speed of animation
+- Supported algorithms (more to update)
+  - Bubble sort
+  - Selection sort
+
+---
+
+<SortingVisualizer client:visible />
