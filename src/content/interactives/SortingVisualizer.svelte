@@ -31,7 +31,7 @@
     return new Promise((resolve) => setTimeout(resolve, speed));
   }
   let playing = false;
-  let algoName: keyof typeof algorithms = "Bubble sort";
+  let algoName: keyof typeof algorithms = "Quicksort";
   let state: SortingState | undefined;
   let generator: SortGenerator | undefined;
 
@@ -70,7 +70,7 @@
       id="count"
       type="range"
       min="10"
-      max="50"
+      max="100"
       step="1"
       bind:value={count}
       class="count rounded-full appearance-none w-full h-1 bg-slate-500/25 disabled:opacity-50"
@@ -91,7 +91,7 @@
   </div>
 
   <div
-    class="h-60 rounded-md border-2 border-slate-500/25 flex gap-1 md:gap-2 p-2 items-end"
+    class={`h-60 rounded-md border-2 border-slate-500/25 flex ${items.length <= 50 ? "gap-1" : "gap-[1px]"} p-2 items-end`}
   >
     {#each items as item}
       <SortingItem {item} />
