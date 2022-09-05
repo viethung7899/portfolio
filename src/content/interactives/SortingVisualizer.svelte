@@ -1,14 +1,18 @@
 <script lang="ts">
-  import { algorithms, randomizeArray, sleep, type Item } from "../lib/sort";
+  import {
+    algorithms,
+    type Item,
+    randomizeArray,
+    sleep,
+    type SortingState
+  } from "../lib/sort";
+import type { SortGenerator } from "../lib/sort/types";
   import SortingItem from "./SortingItem.svelte";
 
   let count = 25;
-  let items = [] as Item[];
-  let sorted = false;
-
+  let items: Item[] = [];
   $: {
-    items = randomizeArray(count);
-    sorted = false;
+    reset(count);
   }
 
   const speeds = [
@@ -20,20 +24,31 @@
   let speed = speeds[0].value;
   let playing = false;
   let algoName: keyof typeof algorithms = "Bubble sort";
+  let state: SortingState | undefined;
+  let generator: SortGenerator | undefined;
 
-  const sort = async () => {
-    const copy = [...items];
-    const generator = algorithms[algoName](copy);
-    playing = true;
-    while (true) {
-      const state = generator.next();
-      if (state.done) break;
-      else items = state.value;
-      await sleep(speed);
-    }
-    playing = false;
-    sorted = true;
+  const reset = (count: number) => {
+    items = randomizeArray(count);
+    generator = undefined;
+    state = undefined;
   };
+
+  const play = async () => {
+    playing = true;
+    if (!generator) generator = algorithms[algoName]([...items]);
+    while (playing) {
+      state = generator.next();
+      if (state.done) {
+        playing = false;
+      } else {
+        items = state.value;
+        await sleep(speed);
+      }
+    }
+  };
+
+  $: isSorting = state && !state.done;
+  $: isSorted = state?.done;
 </script>
 
 <div class="w-full my-8">
@@ -51,10 +66,10 @@
       step="1"
       bind:value={count}
       class="count rounded-full appearance-none w-full h-1 bg-slate-500/25 disabled:opacity-50"
-      disabled={playing}
+      disabled={playing || isSorting}
     />
     <label for="algos" class="flex">Sorting algorithm</label>
-    <select id="algos" disabled={playing} bind:value={algoName}>
+    <select id="algos" disabled={playing || isSorting} bind:value={algoName}>
       {#each Object.keys(algorithms) as name}
         <option value={name}>{name}</option>
       {/each}
@@ -80,27 +95,28 @@
       border-2
       border-orange-500 text-orange-500 hover:enabled:bg-orange-500/30
       dark:border-teal-500 dark:text-teal-500 dark:hover:enabled:bg-teal-500/30"
-      on:click={() => {
-        items = randomizeArray(count);
-        sorted = false;
-      }}
-      disabled={playing}
+      on:click={() => reset(count)}
+      disabled={isSorting}
     >
       Randomize
     </button>
-    <button
-      class="text-white dark:text-gray-900
-    bg-orange-500 hover:enabled:bg-orange-700
-    dark:bg-teal-500 hover:enabled:dark:bg-teal-700"
-      on:click={sort}
-      disabled={playing || sorted}
-    >
-      Sort
-    </button>
+    {#if playing}
+      <button class="fill" on:click={() => playing = false}>Pause</button>
+    {:else}
+      <button class="fill" disabled={isSorted} on:click={play}>{isSorting ? "Resume" : "Sort"}</button>
+    {/if}
   </div>
 </div>
 
 <style>
+  .fill {
+    @apply text-white bg-orange-500 hover:enabled:bg-orange-700;
+  }
+
+  :global(.dark) .fill {
+    @apply text-gray-900 bg-teal-500 hover:enabled:bg-teal-700;
+  }
+
   .count::-webkit-slider-thumb {
     @apply appearance-none w-3 h-3 rounded-full cursor-pointer bg-orange-500 disabled:bg-orange-700;
   }

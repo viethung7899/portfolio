@@ -39,10 +39,10 @@
   }
 
   .pivot {
-    @apply bg-orange-500/50 outline outline-[1.5px] outline-yellow-600;
+    @apply bg-orange-500/50 outline outline-[1.5px] outline-blue-600;
   }
 
   :global(.dark) .pivot {
-    @apply bg-teal-500/50;
+    @apply bg-teal-500/50 outline-yellow-600;
   }
 </style>

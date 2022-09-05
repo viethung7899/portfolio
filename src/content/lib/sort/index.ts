@@ -1,6 +1,6 @@
 import bubbleSort from "./bubbleSort";
 import { selectionSort } from "./selectionSort";
-import type { Item } from "./types";
+import type { Item, SortGenerator } from "./types";
 
 const randomizeArray = (count: number) => {
   return Array.from({ length: count }, () => ({
@@ -18,9 +18,12 @@ const algorithms = {
   "Selection sort": selectionSort
 }
 
+type SortingState = ReturnType<SortGenerator["next"]>
+
 export {
   type Item,
   randomizeArray,
   sleep,
   algorithms,
+  type SortingState
 };
