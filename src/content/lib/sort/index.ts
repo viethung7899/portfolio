@@ -1,4 +1,5 @@
 import bubbleSort from "./bubbleSort";
+import insertionSort from "./insertionSort";
 import { selectionSort } from "./selectionSort";
 import type { Item, SortGenerator } from "./types";
 
@@ -15,7 +16,8 @@ const sleep = async (ms: number) => {
 
 const algorithms = {
   "Bubble sort": bubbleSort,
-  "Selection sort": selectionSort
+  "Selection sort": selectionSort,
+  "Insertion sort": insertionSort
 }
 
 type SortingState = ReturnType<SortGenerator["next"]>
@@ -25,5 +27,6 @@ export {
   randomizeArray,
   sleep,
   algorithms,
+  type SortGenerator,
   type SortingState
 };

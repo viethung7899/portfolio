@@ -1,13 +1,18 @@
 <script lang="ts">
-  import {
-    algorithms,
-    type Item,
-    randomizeArray,
-    sleep,
-    type SortingState
-  } from "../lib/sort";
-import type { SortGenerator } from "../lib/sort/types";
+  import { algorithms, type Item, type SortingState, type SortGenerator } from "../lib/sort";
   import SortingItem from "./SortingItem.svelte";
+
+  // Randomize array
+  const randomizeArray = (count: number) => {
+    return Array.from(
+      { length: count },
+      () =>
+        ({
+          value: Math.ceil(Math.random() * 100),
+          status: "none"
+        } as Item)
+    );
+  };
 
   let count = 25;
   let items: Item[] = [];
@@ -22,6 +27,9 @@ import type { SortGenerator } from "../lib/sort/types";
   ];
 
   let speed = speeds[0].value;
+  $: sleep = () => {
+    return new Promise((resolve) => setTimeout(resolve, speed));
+  }
   let playing = false;
   let algoName: keyof typeof algorithms = "Bubble sort";
   let state: SortingState | undefined;
@@ -42,7 +50,7 @@ import type { SortGenerator } from "../lib/sort/types";
         playing = false;
       } else {
         items = state.value;
-        await sleep(speed);
+        await sleep();
       }
     }
   };
@@ -101,9 +109,11 @@ import type { SortGenerator } from "../lib/sort/types";
       Randomize
     </button>
     {#if playing}
-      <button class="fill" on:click={() => playing = false}>Pause</button>
+      <button class="fill" on:click={() => (playing = false)}>Pause</button>
     {:else}
-      <button class="fill" disabled={isSorted} on:click={play}>{isSorting ? "Resume" : "Sort"}</button>
+      <button class="fill" disabled={isSorted} on:click={play}
+        >{isSorting ? "Resume" : "Sort"}</button
+      >
     {/if}
   </div>
 </div>

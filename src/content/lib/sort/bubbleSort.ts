@@ -15,8 +15,8 @@ export function* bubbleSort(items: Item[]): SortGenerator {
         const temp = items[j];
         items[j] = items[j + 1];
         items[j + 1] = temp;
-        swapped = true;
         yield items;
+        swapped = true;
       }
 
       // Unpick elements
