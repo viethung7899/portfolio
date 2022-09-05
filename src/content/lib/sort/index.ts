@@ -1,5 +1,6 @@
 import bubbleSort from "./bubbleSort";
 import insertionSort from "./insertionSort";
+import mergeSort from "./mergeSort";
 import { selectionSort } from "./selectionSort";
 import type { Item, SortGenerator } from "./types";
 
@@ -17,7 +18,8 @@ const sleep = async (ms: number) => {
 const algorithms = {
   "Bubble sort": bubbleSort,
   "Selection sort": selectionSort,
-  "Insertion sort": insertionSort
+  "Insertion sort": insertionSort,
+  "Merge sort": mergeSort
 }
 
 type SortingState = ReturnType<SortGenerator["next"]>
