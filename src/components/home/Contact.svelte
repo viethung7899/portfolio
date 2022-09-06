@@ -2,7 +2,7 @@
   const inputStyle = "focus:border-orange-500 focus:dark:border-teal-600"
 </script>
 
-<div class="px-4 py-12">
+<div class="py-12">
   <h2 class="font-bold text-3xl mb-4">Contact me</h2>
   <p class="mb-4 text-black/50 dark:text-white/50">
     You can fill out the form below and directly email me at 
