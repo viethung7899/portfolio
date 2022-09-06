@@ -19,7 +19,7 @@ This is the source code for my personal portfolio
 
 ### Blogs
 
-- [ ] List all blog
-- [ ] Making a portfolio website with my most favourite UI framworks
+- [x] List all blog
+- [x] Making a portfolio website with my most favourite UI framworks
 - [ ] Create a database to store blog metadata (ie. view count)
 - [ ] Create a API route to update metadata

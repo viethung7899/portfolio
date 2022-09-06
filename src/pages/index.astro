@@ -2,13 +2,15 @@
 import About from "@components/home/About.astro";
 import Contact from "@components/home/Contact.svelte";
 import ProjectHightlight from "@components/projects/ProjectHighlight.astro";
-import RecentBlogs from "@components/home/RecentBlogs.astro";
+import RecentBlogs from "@components/blogs/RecentBlogs.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Viet Hung Nguyen | Home">
-	<About />
-  <ProjectHightlight />
-  <RecentBlogs />
-  <Contact />
+  <main class="max-w-screen-lg mx-auto px-4">
+    <About />
+    <ProjectHightlight />
+    <RecentBlogs />
+    <Contact />
+  </main>
 </BaseLayout>

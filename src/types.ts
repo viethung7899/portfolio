@@ -1,12 +1,13 @@
-export type ProjectMeta = {
+export type ProjectFrontMatter = {
   title: string;
   github?: string;
   demo?: string;
   imageURL?: string;
-}
+  important?: boolean;
+};
 
-export type PostMeta = {
+export type PostFrontMatter = {
   title: string;
   date: Date;
   slug: string;
-}
+};

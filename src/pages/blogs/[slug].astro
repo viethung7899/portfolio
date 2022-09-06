@@ -1,8 +1,9 @@
 ---
+import TableOfContent from "@components/blogs/TableOfContent.svelte";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import dayjs from "dayjs";
-import type { PostMeta } from "src/types";
-const posts = await Astro.glob<PostMeta>('../../content/posts/**/*.mdx');
+import type { PostFrontMatter } from "src/types";
+const posts = await Astro.glob<PostFrontMatter>('../../content/posts/**/*.mdx');
 const post = posts.find(post => post.frontmatter.slug === Astro.params.slug);
 
 if (!post) {
@@ -14,11 +15,27 @@ const date = dayjs(frontmatter.date).format("D MMMM YYYY")
 ---
 
 <BaseLayout title={frontmatter.title}>
-  <article class="px-4 py-8 md:items-center flex flex-col gap-4">
-    <h1 class="text-4xl md:text-6xl font-bold">{frontmatter.title}</h1>
-    <h5 class="text-black/50 dark:text-white/50">{date}</h5>
-    <div class="w-full prose max-w-none prose-sm md:prose-base prose-orange dark:prose-invert dark:prose-teal">
-      <Content />
-    </div>
-  </article>
+  <main
+    class="flex flex-1 px-4 w-full max-w-screen-lg mx-auto gap-4 items-start py-24"
+  >
+    <article class="flex flex-col flex-1 mx-auto gap-4">
+      <h1 class="text-4xl font-bold">{frontmatter.title}</h1>
+      <h5 class="text-black/50 dark:text-white/50">{date}</h5>
+      <div class="flex gap-4">
+        <div
+          class="flex-1 prose prose-sm max-w-none prose-orange dark:prose-invert dark:prose-teal prose-headings:scroll-mt-24"
+        >
+          <Content />
+        </div>
+      </div>
+    </article>
+    <aside
+      class="w-60 hidden md:flex flex-col gap-3 sticky top-24 bg-slate-500/10 p-4 rounded-md items-start"
+    >
+      <TableOfContent
+        client:load
+        headings={post.getHeadings().filter((heading) => heading.depth <= 3)}
+      />
+    </aside>
+  </main>
 </BaseLayout>

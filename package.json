@@ -7,25 +7,29 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "format": "prettier --write src/*",
     "astro": "astro"
   },
   "devDependencies": {
-    "@astrojs/image": "^0.4.0",
-    "@astrojs/mdx": "^0.11.0",
+    "@astrojs/image": "^0.5.0",
+    "@astrojs/mdx": "^0.11.1",
     "@astrojs/react": "^1.1.1",
     "@astrojs/svelte": "^1.0.0",
     "@astrojs/tailwind": "^1.0.0",
     "@iconify/react": "^3.2.2",
     "@iconify/svelte": "^2.2.1",
     "@types/react": "^18.0.18",
-    "astro": "^1.1.1",
+    "@types/react-dom": "^18.0.6",
+    "astro": "^1.1.5",
+    "prettier": "^2.7.1",
+    "prettier-plugin-astro": "^0.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "svelte": "^3.49.0"
+    "svelte": "^3.50.0"
   },
   "dependencies": {
     "@astrojs/vercel": "^1.0.2",
-    "@tailwindcss/typography": "^0.5.4",
+    "@tailwindcss/typography": "^0.5.7",
     "astro-icon": "^0.7.3",
     "dayjs": "^1.11.5"
   }
