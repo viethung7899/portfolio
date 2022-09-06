@@ -2,6 +2,7 @@
 import Icon from "astro-icon";
 const aStyle =
   "w-6 h-6 hover:text-orange-500 hover:dark:text-teal-600 transition";
+import {Image} from "@astrojs/image/components";
 ---
 
 <style>
@@ -37,10 +38,11 @@ const aStyle =
     </div>
   </div>
 
-  <img
+  <Image
     alt="My photo"
-    width="300px"
     class="hidden md:block rounded-xl shadow-xl shadow-orange-500 dark:shadow-teal-500"
     src="/assets/profile.jpg"
+    width={350}
+    aspectRatio={2/3}
   />
 </div>
