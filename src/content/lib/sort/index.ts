@@ -1,4 +1,5 @@
 import bubbleSort from "./bubbleSort";
+import heapSort from "./heapSort";
 import insertionSort from "./insertionSort";
 import mergeSort from "./mergeSort";
 import quickSort from "./quickSort";
@@ -21,7 +22,8 @@ const algorithms = {
   "Selection sort": selectionSort,
   "Insertion sort": insertionSort,
   "Merge sort": mergeSort,
-  "Quicksort": quickSort
+  "Quicksort": quickSort,
+  "Heap sort": heapSort
 }
 
 type SortingState = ReturnType<SortGenerator["next"]>
