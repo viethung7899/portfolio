@@ -6,10 +6,10 @@
   <h2 class="font-bold text-3xl mb-4">Contact me</h2>
   <p class="mb-4 text-black/50 dark:text-white/50">
     You can fill out the form below and directly email me at 
-    <a href="mailto:email@example.com"
+    <a href="mailto:viethung07081999"
       class="font-medium text-transparent bg-gradient-to-r bg-clip-text 
       from-red-500 to-yellow-500 dark:from-blue-500 dark:to-green-500">
-      email@example.com
+      viethung07081999@gmail.com
     </a>
   </p>
   <form class="flex flex-col items-start gap-y-6 w-full max-w-screen-sm">
