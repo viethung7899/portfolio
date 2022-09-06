@@ -1,31 +1,17 @@
 ---
 import TableOfContent from "@components/blogs/TableOfContent.svelte";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import type { MDXInstance } from "astro";
 import dayjs from "dayjs";
 import type { PostFrontMatter } from "src/types";
+const posts = await Astro.glob<PostFrontMatter>('../../content/posts/**/*.mdx');
+const post = posts.find(post => post.frontmatter.slug === Astro.params.slug);
 
-export async function getStaticPaths() {
-  const posts = await Astro.glob<PostFrontMatter>(
-    "../../content/posts/**/*.mdx"
-  );
-  return posts.map((post) => ({
-    params: {
-      slug: post.frontmatter.slug
-    },
-    props: {
-      post
-    }
-  }));
+if (!post) {
+  return Astro.redirect('/');
 }
 
-export type Props = {
-  post: MDXInstance<PostFrontMatter>;
-};
-
-const { Content, frontmatter, getHeadings } = Astro.props.post;
-
-const date = dayjs(frontmatter.date).format("D MMMM YYYY");
+const { frontmatter, Content } = post;
+const date = dayjs(frontmatter.date).format("D MMMM YYYY")
 ---
 
 <BaseLayout title={frontmatter.title}>
@@ -48,7 +34,7 @@ const date = dayjs(frontmatter.date).format("D MMMM YYYY");
     >
       <TableOfContent
         client:load
-        headings={getHeadings().filter((heading) => heading.depth <= 3)}
+        headings={post.getHeadings().filter((heading) => heading.depth <= 3)}
       />
     </aside>
   </main>
