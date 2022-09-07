@@ -1,5 +1,7 @@
 ---
 import TableOfContent from "@components/blogs/TableOfContent.svelte";
+import H2 from "@components/common/H2.astro";
+import H3 from "@components/common/H3.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import dayjs from "dayjs";
 import type { PostFrontMatter } from "src/types";
@@ -17,6 +19,10 @@ const date = dayjs(frontmatter.date).format("D MMMM YYYY")
   html {
     scroll-behavior: smooth;
   }
+
+  .content-container {
+    @apply prose prose-sm max-w-none prose-orange prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal;
+  }
 </style>
 
 <BaseLayout title={frontmatter.title}>
@@ -28,9 +34,12 @@ const date = dayjs(frontmatter.date).format("D MMMM YYYY")
       <h5 class="text-black/50 dark:text-white/50">{date}</h5>
       <div class="flex gap-4">
         <div
-          class="flex-1 prose prose-sm max-w-none prose-orange dark:prose-invert dark:prose-teal prose-headings:scroll-mt-24"
+          class="flex-1 content-container"
         >
-          <Content />
+          <Content components={{
+            h2: H2,
+            h3: H3
+          }} />
         </div>
       </div>
     </article>

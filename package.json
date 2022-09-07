@@ -31,6 +31,7 @@
     "@astrojs/vercel": "^1.0.2",
     "@tailwindcss/typography": "^0.5.7",
     "astro-icon": "^0.7.3",
-    "dayjs": "^1.11.5"
+    "dayjs": "^1.11.5",
+    "rehype-autolink-headings": "^6.1.1"
   }
 }
