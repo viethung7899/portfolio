@@ -15,13 +15,9 @@ if (!post) {
 const { frontmatter, Content } = post;
 const date = dayjs(frontmatter.date).format("D MMMM YYYY")
 ---
-<style is:global>
+<style>
   html {
     scroll-behavior: smooth;
-  }
-
-  .content-container {
-    @apply prose prose-sm max-w-none prose-orange prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal;
   }
 </style>
 
@@ -34,7 +30,10 @@ const date = dayjs(frontmatter.date).format("D MMMM YYYY")
       <h5 class="text-black/50 dark:text-white/50">{date}</h5>
       <div class="flex gap-4">
         <div
-          class="flex-1 content-container"
+          class="flex-1 prose max-w-none 
+          prose-orange prose-headings:scroll-mt-24 
+          dark:prose-invert dark:prose-teal
+          prose-code:before:content-none prose-code:after:content-none"
         >
           <Content components={{
             h2: H2,
