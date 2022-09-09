@@ -34,9 +34,8 @@ import "../../styles/prism.scss";
     <article class="flex flex-col flex-1 mx-auto gap-4">
       <h1 class="text-4xl font-bold">{frontmatter.title}</h1>
       <h5 class="text-black/50 dark:text-white/50">{date}</h5>
-      <div class="flex gap-4">
         <div
-          class="flex-1 prose max-w-none prose-orange prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal prose-code:before:content-none prose-code:after:content-none"
+          class="flex-1 prose max-w-none prose-orange prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal prose-code:before:content-none prose-code:after:content-none prose-pre:m-0 prose-pre:border-2 prose-pre:border-orange-500 prose-pre:dark:border-teal-500"
         >
           <Content
             components={{
@@ -45,7 +44,6 @@ import "../../styles/prism.scss";
             }}
           />
         </div>
-      </div>
     </article>
     <aside
       class="w-60 hidden md:flex flex-col gap-3 sticky top-24 bg-slate-500/10 p-4 rounded-md items-start"

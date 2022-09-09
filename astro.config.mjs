@@ -11,8 +11,7 @@ export default defineConfig({
   output: 'server',
   adapter: vercel(),
   markdown: {
-    syntaxHighlight: "prism",
-    
+    syntaxHighlight: "prism"
   },
   integrations: [tailwind(), svelte(), mdx(), react(), image()],
   vite: {
