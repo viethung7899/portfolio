@@ -25,11 +25,11 @@ export function* bubbleSort(items: Item[]): SortGenerator {
     }
     if (!swapped) break;
     else {
-      items[n - i - 1].status = "sorted"
+      items[n - i - 1].status = "sorted";
       yield items;
     }
   }
-  items.forEach(item => item.status = "sorted");
+  items.forEach((item) => (item.status = "sorted"));
   yield items;
 }
 

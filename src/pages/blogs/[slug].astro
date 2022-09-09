@@ -6,19 +6,20 @@ import BaseHead from "@layouts/BaseHead.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import dayjs from "dayjs";
 import type { PostFrontMatter } from "src/types";
-const posts = await Astro.glob<PostFrontMatter>('../../content/posts/**/*.mdx');
-const post = posts.find(post => post.frontmatter.slug === Astro.params.slug);
+const posts = await Astro.glob<PostFrontMatter>("../../content/posts/**/*.mdx");
+const post = posts.find((post) => post.frontmatter.slug === Astro.params.slug);
 
 if (!post) {
-  return Astro.redirect('/');
+  return Astro.redirect("/");
 }
 
 const { frontmatter, Content } = post;
-const date = dayjs(frontmatter.date).format("D MMMM YYYY")
+const date = dayjs(frontmatter.date).format("D MMMM YYYY");
 
 // Syntax highlight styles
 import "../../styles/prism.scss";
 ---
+
 <style is:global>
   html {
     scroll-behavior: smooth;
@@ -35,15 +36,14 @@ import "../../styles/prism.scss";
       <h5 class="text-black/50 dark:text-white/50">{date}</h5>
       <div class="flex gap-4">
         <div
-          class="flex-1 prose max-w-none 
-          prose-orange prose-headings:scroll-mt-24 
-          dark:prose-invert dark:prose-teal
-          prose-code:before:content-none prose-code:after:content-none"
+          class="flex-1 prose max-w-none prose-orange prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal prose-code:before:content-none prose-code:after:content-none"
         >
-          <Content components={{
-            h2: H2,
-            h3: H3
-          }} />
+          <Content
+            components={{
+              h2: H2,
+              h3: H3
+            }}
+          />
         </div>
       </div>
     </article>
