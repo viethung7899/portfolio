@@ -1,8 +1,8 @@
 ---
-import { Image } from "@astrojs/image/components";
 import Icon from "astro-icon";
 const aStyle =
   "w-6 h-6 hover:text-orange-500 hover:dark:text-teal-600 transition";
+import {Image} from "@astrojs/image/components";
 ---
 
 <style>
@@ -32,10 +32,7 @@ const aStyle =
       <a href="https://github.com/viethung7899" target="_blank">
         <Icon class={aStyle} name="fa-brands:github" />
       </a>
-      <a
-        href="https://www.linkedin.com/in/viet-hung-nguyen-58a3131ab/"
-        target="_blank"
-      >
+      <a href="https://www.linkedin.com/in/viet-hung-nguyen-58a3131ab/" target="_blank">
         <Icon class={aStyle} name="fa-brands:linkedin" />
       </a>
     </div>
@@ -46,6 +43,6 @@ const aStyle =
     class="hidden md:block rounded-xl shadow-xl shadow-orange-500 dark:shadow-teal-500"
     src="/assets/profile.jpg"
     width={350}
-    aspectRatio={2 / 3}
+    aspectRatio={2/3}
   />
 </div>

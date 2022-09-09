@@ -1,13 +1,11 @@
 ---
 import BlogCard from "@components/blogs/BlogCard.astro";
-import BaseHead from "@layouts/BaseHead.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { PostFrontMatter } from "src/types";
 const posts = await Astro.glob<PostFrontMatter>("../../content/posts/*.mdx");
 ---
 
-<BaseLayout>
-  <BaseHead title="Viet Hung Nguyen | Blogs" slot="head" />
+<BaseLayout title="Viet Hung Nguyen | Blogs">
   <main class="flex-1 max-w-screen-lg mx-auto w-full px-4">
     <h2 class="text-4xl font-bold py-6">Blogs</h2>
     <p class="text-black/50 dark:text-white/50">

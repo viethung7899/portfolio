@@ -24,9 +24,7 @@ function* heapSort(items: Item[]): SortGenerator {
 }
 
 function* heapify(items: Item[], size: number, root: number): SortGenerator {
-  let largest = root,
-    left = 2 * root + 1,
-    right = 2 * root + 2;
+  let largest = root, left = 2 * root + 1, right = 2 * root + 2;
 
   if (left < size && items[largest].value < items[left].value) {
     largest = left;
