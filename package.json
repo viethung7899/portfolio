@@ -25,6 +25,7 @@
     "prettier-plugin-astro": "^0.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "sass": "^1.54.9",
     "svelte": "^3.50.0"
   },
   "dependencies": {
@@ -32,6 +33,6 @@
     "@tailwindcss/typography": "^0.5.7",
     "astro-icon": "^0.7.3",
     "dayjs": "^1.11.5",
-    "rehype-autolink-headings": "^6.1.1"
+    "rehype-pretty-code": "^0.3.2"
   }
 }

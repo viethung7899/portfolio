@@ -13,15 +13,15 @@ if (!post) {
 }
 
 const { frontmatter, Content } = post;
-const date = dayjs(frontmatter.date).format("D MMMM YYYY")
+const date = dayjs(frontmatter.date).format("D MMMM YYYY");
+
+// Syntax highlight styles
+import "../../styles/syntax-highlight.scss";
 ---
+
 <style is:global>
   html {
     scroll-behavior: smooth;
-  }
-
-  .content-container {
-    @apply prose prose-sm max-w-none prose-orange prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal;
   }
 </style>
 
@@ -34,7 +34,9 @@ const date = dayjs(frontmatter.date).format("D MMMM YYYY")
       <h5 class="text-black/50 dark:text-white/50">{date}</h5>
       <div class="flex gap-4">
         <div
-          class="flex-1 content-container"
+          class="flex-1 prose max-w-none prose-orange prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal prose-code:before:content-none prose-code:after:content-none 
+          prose-pre:m-0 prose-pre:border-2 prose-pre:border-orange-500 prose-pre:dark:border-teal-500
+          prose-pre:bg-stone-100 prose-pre:dark:bg-stone-900"
         >
           <Content components={{
             h2: H2,
