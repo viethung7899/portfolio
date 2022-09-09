@@ -26,12 +26,14 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.54.9",
+    "shiki": "^0.11.1",
     "svelte": "^3.50.0"
   },
   "dependencies": {
     "@astrojs/vercel": "^1.0.2",
     "@tailwindcss/typography": "^0.5.7",
     "astro-icon": "^0.7.3",
-    "dayjs": "^1.11.5"
+    "dayjs": "^1.11.5",
+    "rehype-pretty-code": "^0.3.2"
   }
 }

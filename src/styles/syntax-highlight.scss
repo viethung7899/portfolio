@@ -1,0 +1,17 @@
+pre[data-theme="dark"] {
+  display: none;
+}
+
+pre[data-theme="light"] {
+  display: block;
+}
+
+html.dark {
+  pre[data-theme="light"] {
+    display: none;
+  }
+  
+  pre[data-theme="dark"] {
+    display: block;
+  }
+}
