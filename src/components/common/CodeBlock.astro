@@ -1,22 +1,20 @@
 ---
 export interface Props {
-  name: string;
+  title?: string;
+  lang?: string;
 }
 
-const {name} = Astro.props;
+const {title, lang} = Astro.props;
+const bannerStyle = ""
 ---
 
-<style>
-</style>
-
 <figure class="
-prose-pre:m-0 prose-pre:rounded-none prose-pre:rounded-b-md
-prose-pre:border-l-2 prose-pre:border-r-2 prose-pre:border-b-2
-prose-pre:border-orange-500 prose-pre:dark:border-teal-500">
-<figcaption class="bg-orange-500/20 dark:bg-teal-500/20 rounded-t-md
-border-t-2 border-l-2 border-r-2 border-orange-500 dark:border-teal-500 p-2">
-  <code class=
-  "text-orange-500 dark:text-teal-500">{name}</code>
-</figcaption>
+prose-pre:m-0 prose-pre:rounded-md
+prose-pre:border-2
+prose-pre:border-orange-500 prose-pre:dark:border-teal-500 relative -z-10">
+{(title || lang) && <figcaption class="flex translate-y-2 bg-orange-200 dark:bg-teal-900 rounded-t-md
+border-t-2 border-l-2 border-r-2 border-orange-500 dark:border-teal-500">
+  <code class={`flex-1 p-2 text-orange-500 dark:text-teal-500 ${lang ? "text-right" : ""}`}>{title || lang?.toUpperCase()}</code>
+</figcaption>}
   <slot />
 </figure>

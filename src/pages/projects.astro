@@ -1,5 +1,6 @@
 ---
 import ProjectCard from "@components/projects/ProjectCard.astro";
+import BaseHead from "@layouts/BaseHead.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { ProjectFrontMatter } from "src/types";
 
@@ -8,7 +9,8 @@ const projects = await Astro.glob<ProjectFrontMatter>(
 );
 ---
 
-<BaseLayout title="Viet Hung Nguyen | Projects">
+<BaseLayout>
+  <BaseHead title="Viet Hung Nguyen | Projects" slot="head" />
   <main class="max-w-screen-lg flex-1 mx-auto">
     <h2 class="text-center text-4xl font-bold py-6">Project Gallery</h2>
     <div
