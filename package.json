@@ -26,7 +26,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.54.9",
-    "shiki": "^0.11.1",
     "svelte": "^3.50.0"
   },
   "dependencies": {
