@@ -7,26 +7,30 @@ import { selectionSort } from "./selectionSort";
 import type { Item, SortGenerator } from "./types";
 
 const randomizeArray = (count: number) => {
-  return Array.from({ length: count }, () => ({
-    value: Math.ceil(Math.random() * 100),
-    status: "none"
-  }) as Item);
+  return Array.from(
+    { length: count },
+    () =>
+      ({
+        value: Math.ceil(Math.random() * 100),
+        status: "none"
+      } as Item)
+  );
 };
 
 const sleep = async (ms: number) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
 
 const algorithms = {
   "Bubble sort": bubbleSort,
   "Selection sort": selectionSort,
   "Insertion sort": insertionSort,
   "Merge sort": mergeSort,
-  "Quicksort": quickSort,
+  Quicksort: quickSort,
   "Heap sort": heapSort
-}
+};
 
-type SortingState = ReturnType<SortGenerator["next"]>
+type SortingState = ReturnType<SortGenerator["next"]>;
 
 export {
   type Item,

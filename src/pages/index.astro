@@ -4,9 +4,11 @@ import Contact from "@components/home/Contact.svelte";
 import ProjectHightlight from "@components/projects/ProjectHighlight.astro";
 import RecentBlogs from "@components/blogs/RecentBlogs.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import BaseHead from "@layouts/BaseHead.astro";
 ---
 
-<BaseLayout title="Viet Hung Nguyen | Home">
+<BaseLayout>
+  <BaseHead title="Viet Hung Nguyen | Home" slot="head" />
   <main class="max-w-screen-lg mx-auto px-4">
     <About />
     <ProjectHightlight />

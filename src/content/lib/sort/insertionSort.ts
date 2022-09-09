@@ -13,11 +13,11 @@ function* insertionSort(items: Item[]): SortGenerator {
     yield items;
 
     let j = i - 1;
-    while (j >= 0 && items[j].value > items[j+1].value) {
+    while (j >= 0 && items[j].value > items[j + 1].value) {
       // swap
       const temp = items[j];
-      items[j] = items[j+1];
-      items[j+1] = temp;
+      items[j] = items[j + 1];
+      items[j + 1] = temp;
       yield items;
       j--;
     }

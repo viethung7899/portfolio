@@ -1,8 +1,4 @@
 ---
-export interface Props {
-  title: string;
-}
-const { title } = Astro.props;
 import NavigationBar from "./NavigationBar.svelte";
 ---
 
@@ -18,11 +14,7 @@ import NavigationBar from "./NavigationBar.svelte";
   }
 </style>
 
-<meta charset="utf-8" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<meta name="viewport" content="width=device-width" />
-<meta name="generator" content={Astro.generator} />
-<title>{title}</title>
+<slot name="head" />
 
 <body
   class="flex flex-col w-screen min-h-screen bg-white dark:bg-gray-900 items-stretch"
