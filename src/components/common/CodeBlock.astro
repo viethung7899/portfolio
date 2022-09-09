@@ -5,14 +5,14 @@ export interface Props {
 }
 
 const {title, lang} = Astro.props;
-const bannerStyle = ""
+console.log(Astro.slots);
 ---
 
 <figure class="
 prose-pre:m-0 prose-pre:rounded-md
 prose-pre:border-2
 prose-pre:border-orange-500 prose-pre:dark:border-teal-500 relative -z-10">
-{(title || lang) && <figcaption class="flex translate-y-2 bg-orange-200 dark:bg-teal-900 rounded-t-md
+{(title || lang) && <figcaption class="flex translate-y-4 bg-orange-200 dark:bg-teal-900 rounded-t-md
 border-t-2 border-l-2 border-r-2 border-orange-500 dark:border-teal-500">
   <code class={`flex-1 p-2 text-orange-500 dark:text-teal-500 ${lang ? "text-right" : ""}`}>{title || lang?.toUpperCase()}</code>
 </figcaption>}

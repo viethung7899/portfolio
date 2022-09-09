@@ -15,6 +15,9 @@ if (!post) {
 
 const { frontmatter, Content } = post;
 const date = dayjs(frontmatter.date).format("D MMMM YYYY")
+
+// Syntax highlight styles
+import "../../styles/prism.scss";
 ---
 <style is:global>
   html {
@@ -23,9 +26,7 @@ const date = dayjs(frontmatter.date).format("D MMMM YYYY")
 </style>
 
 <BaseLayout>
-  <BaseHead slot="head" title={frontmatter.title}>
-    <link rel="stylesheet" href="/styles/syntax-highlighting.css"  />
-  </BaseHead>
+  <BaseHead slot="head" title={frontmatter.title} />
   <main
     class="flex flex-1 px-4 w-full max-w-screen-lg mx-auto gap-4 items-start py-24 scroll-smooth"
   >
@@ -37,7 +38,6 @@ const date = dayjs(frontmatter.date).format("D MMMM YYYY")
           class="flex-1 prose max-w-none 
           prose-orange prose-headings:scroll-mt-24 
           dark:prose-invert dark:prose-teal
-          prose-pre:bg-slate-100 prose-pre:dark:bg-stone-900
           prose-code:before:content-none prose-code:after:content-none"
         >
           <Content components={{
