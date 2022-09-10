@@ -1,16 +1,31 @@
 <script lang="ts">
+  import { convertLineNumbers, LineNumber } from "src/utils/line";
+
   export let title = "";
   export let lang = "";
   export let showLineNumbers = false;
+  export let highlight: LineNumber[] = [];
+  export let ins: LineNumber[] = [];
+  export let del: LineNumber[] = [];
 
   let figure: HTMLElement | null;
   $: {
-    if (figure && showLineNumbers) {
-      const codes = figure.querySelectorAll("code");
-      codes.forEach(code => {
-        code.setAttribute("data-line-numbers", "");
+    if (!figure) break $;
+    const codes = figure.querySelectorAll("code");
+    codes.forEach((code) => {
+      if (showLineNumbers) code.setAttribute("data-line-numbers", "");
+      const lines = code.querySelectorAll(".line");
+      convertLineNumbers(highlight).forEach(lineNumber => {
+        lines[lineNumber - 1].classList.add("highlight");
       })
-    }
+      convertLineNumbers(ins).forEach(lineNumber => {
+        lines[lineNumber - 1].classList.add("insert");
+      })
+      convertLineNumbers(del).forEach(lineNumber => {
+        lines[lineNumber - 1].classList.add("delete");
+      })
+    });
+
   }
 </script>
 
