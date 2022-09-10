@@ -1,9 +1,8 @@
-import nightOwlDark from "./theme/night-owl-dark.json";
-import nightOwlLight from "./theme/night-owl-light.json";
+import type {Options} from "rehype-pretty-code";
 
-export const rehypePrettyCodeOptions = {
+export const rehypePrettyCodeOptions: Partial<Options> = {
   theme: {
-    dark: nightOwlDark,
-    light: nightOwlLight
+    dark: "vitesse-dark",
+    light: "vitesse-light",
   }
 }
