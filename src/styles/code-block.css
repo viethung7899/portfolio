@@ -1,0 +1,15 @@
+code[data-line-numbers] {
+  counter-reset: lineNumber;
+}
+ 
+code[data-line-numbers] .line::before {
+  counter-increment: lineNumber;
+  content: counter(lineNumber);
+  display: inline-block;
+  text-align: right;
+ 
+  /* stylistic preferences */
+  margin-right: 0.75rem;
+  width: 1rem;
+  color: rgb(255 255 255 / 0.2);
+}
