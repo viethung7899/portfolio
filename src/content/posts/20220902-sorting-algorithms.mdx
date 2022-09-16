@@ -5,7 +5,7 @@ slug: visualizing-sorting-algoriithms
 ---
 
 import SortingVisualizer from "../interactives/SortingVisualizer.svelte";
-import CodeBlock from "@components/common/CodeBlock.astro";
+import CodeBlock from "@components/common/CodeBlock.svelte";
 
 <SortingVisualizer client:visible />
 
@@ -56,7 +56,7 @@ They can be defined with the `function*` keyword.
 
 Let's take a look a example below
 
-<CodeBlock title="foo.js">
+<CodeBlock title="foo.js" showLineNumbers client:visible>
 ```js
 function* foo() {
   console.log("To the foo land...");
@@ -73,7 +73,6 @@ const fooGen = foo();
 console.log(fooGen.next()) // Exit at line 3
 console.log(fooGen.next()) // Exit at line 5
 console.log(fooGen.next()) // Exit at line 6
-
 ```
 </CodeBlock>
 
@@ -130,7 +129,7 @@ By doing that, we can explore the state of arrray in every iteration.
 In addition, we place another `yield` statement at the end since we also need
 the final sorted array when the algorithm finishes execution.
 
-<CodeBlock title="bubbleSort.ts">
+<CodeBlock title="bubbleSort.ts" client:visible highlight={[1, 7, 17]}>
 ```ts
 function* bubbleSort(arr: numbers[]) {
   const n = arr.length;
