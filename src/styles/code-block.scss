@@ -1,0 +1,54 @@
+div[data-rehype-pretty-code-fragment] {
+  overflow: hidden;
+
+  code {
+    @apply grid;
+  }
+
+  code[data-line-numbers] {
+    counter-reset: lineNumber;
+
+    .line {
+      @apply pl-2;
+    }
+  
+    .line::before {
+      counter-increment: lineNumber;
+      content: counter(lineNumber);
+      width: 3ch;
+      @apply inline-block text-right mr-4 font-medium text-slate-500/50;
+    }
+
+    .line.highlight::before {
+      @apply text-yellow-600;
+    }
+
+    .line.insert::before {
+      @apply text-green-600;
+      counter-increment: unset;
+      content: '+';
+    }
+
+    .line.delete::before {
+      @apply text-red-600;
+      counter-increment: unset;
+      content: '-';
+    }
+  }
+
+  .line {
+    @apply px-4 border-l-4 border-l-transparent;
+  }
+
+  .line.highlight {
+    @apply border-l-yellow-600 bg-yellow-600/25;
+  }
+
+  .line.insert {
+    @apply border-l-green-600 bg-green-600/25;
+  }
+
+  .line.delete {
+    @apply border-l-red-600 bg-red-600/25;
+  }
+}
