@@ -25,10 +25,14 @@ div[data-rehype-pretty-code-fragment] {
 
     .line.insert::before {
       @apply text-green-600;
+      counter-increment: unset;
+      content: '+';
     }
 
     .line.delete::before {
       @apply text-red-600;
+      counter-increment: unset;
+      content: '-';
     }
   }
 
