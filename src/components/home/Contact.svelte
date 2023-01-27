@@ -1,6 +1,5 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
-  const inputStyle = "focus:border-orange-500 focus:dark:border-teal-600";
   const myEmail = "viethung07081999@gmail.com";
   let success: boolean | undefined;
   let loading = false;
@@ -39,8 +38,7 @@
     You can fill out the form below and directly email me at
     <a
       href={`mailto:${myEmail}`}
-      class="font-medium text-transparent bg-gradient-to-r bg-clip-text 
-      from-red-500 to-yellow-500 dark:from-sky-500 dark:to-green-500"
+      class="font-medium text-transparent text-orange-500 dark:text-teal-500"
     >
       {myEmail}
     </a>
@@ -59,7 +57,6 @@
       autocomplete="off"
       placeholder="Name*"
       type="text"
-      class={inputStyle}
       required
       bind:value={name}
     />
@@ -68,16 +65,13 @@
       autocomplete="off"
       placeholder="Email*"
       type="email"
-      class={inputStyle}
       required
       bind:value={email}
     />
     <textarea
       name="message"
       placeholder="Message*"
-      type="email"
       rows={5}
-      class={inputStyle}
       required
       bind:value={message}
     />
@@ -104,9 +98,9 @@
   </form>
 </div>
 
-<style>
+<style lang="postcss">
   input,
   textarea {
-    @apply border-slate-500/30 border-2 placeholder:opacity-40 rounded-md bg-transparent py-2 px-4 focus:outline-none w-full;
+    @apply border-slate-500/30 border-2 placeholder:opacity-40 rounded-md bg-transparent py-2 px-4 focus:outline-none w-full focus:border-orange-500 focus:dark:border-teal-600;
   }
 </style>

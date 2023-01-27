@@ -1,13 +1,7 @@
 ---
 title: Visualizing sorting algorithms
 date: 2022-09-02
-slug: visualizing-sorting-algoriithms
 ---
-
-import SortingVisualizer from "../interactives/SortingVisualizer.svelte";
-import CodeBlock from "@components/common/CodeBlock.svelte";
-
-<SortingVisualizer client:visible />
 
 ---
 
@@ -56,7 +50,7 @@ They can be defined with the `function*` keyword.
 
 Let's take a look a example below
 
-<CodeBlock title="foo.js" showLineNumbers client:visible>
+
 ```js
 function* foo() {
   console.log("To the foo land...");
@@ -74,18 +68,9 @@ console.log(fooGen.next()) // Exit at line 3
 console.log(fooGen.next()) // Exit at line 5
 console.log(fooGen.next()) // Exit at line 6
 ```
-</CodeBlock>
 
 And here's the output
 
-```json
-To the foo land...
-{ done: false, value: "Hello" }
-Welcome back...
-{ done: false, value: "World" }
-Bye bye!
-{ done: true, value: undefined }
-```
 
 When calling a generator function, it does not execute immediately, 
 but rather return a special **Generator** object. 
@@ -102,54 +87,10 @@ of the array during the sorting procedure.
 
 First, let take a look at very simple bubble sort function
 
-<CodeBlock title="bubbleSort.ts">
-```ts
-function bubbleSort(arr: numbers[]) {
-  const n = arr.length;
-  for (let i = 0; i < n; i++) {
-    let swapped = false;
-    for (let j = 0; j < n - i - 1; j++) {
-      // Compare and swap
-      if (items[j].value > items[j + 1].value) {
-        const temp = items[j];
-        items[j] = items[j + 1];
-        items[j + 1] = temp;
-        swapped = true;
-      }
-    }
-    if (!swapped) break;
-  }
-}
-```
-</CodeBlock>
-
 To pause the execution, we can place a `yield` statement 
 inside the nested `for` loop just before the `if` statemnent. 
 By doing that, we can explore the state of arrray in every iteration.
 In addition, we place another `yield` statement at the end since we also need
 the final sorted array when the algorithm finishes execution.
-
-<CodeBlock title="bubbleSort.ts" client:visible highlight={[1, 7, 17]}>
-```ts
-function* bubbleSort(arr: numbers[]) {
-  const n = arr.length;
-  for (let i = 0; i < n; i++) {
-    let swapped = false;
-    for (let j = 0; j < n - i - 1; j++) {
-      // Compare and swap
-      yield arr;
-      if (items[j].value > items[j + 1].value) {
-        const temp = items[j];
-        items[j] = items[j + 1];
-        items[j + 1] = temp;
-        swapped = true;
-      }
-    }
-    if (!swapped) break;
-  }
-  yield arr;
-}
-```
-</CodeBlock>
 
 ### Integrate with Svelte components

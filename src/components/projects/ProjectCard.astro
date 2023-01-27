@@ -1,15 +1,15 @@
 ---
-import type { MarkdownInstance } from "astro";
 import Icon from "astro-icon";
-import type { ProjectFrontMatter } from "src/types";
+import type { CollectionEntry } from "astro:content";
 export interface Props {
-  project: MarkdownInstance<ProjectFrontMatter>;
+  project: CollectionEntry<"projects">;
 }
 
 const {
-  frontmatter: { imageURL, title, github, demo },
-  Content
+  data: { title, imageURL, github, demo },
 } = Astro.props.project;
+
+const { Content } = await Astro.props.project.render();
 
 const linkStyles =
   "hover:text-orange-500 hover:dark:text-teal-500 transition-colors";
@@ -17,20 +17,14 @@ const imgStyles =
   "transition-all duration-300 w-full aspect-[16/9] rounded-lg hover:shadow-lg hover:shadow-orange-500 hover:dark:shadow-teal-500";
 
 // A very weird hack to get the image
-const images = import.meta.glob("../../content/images/projects/*");
-const image = !imageURL
-  ? undefined
-  : ((await images[imageURL]()) as Record<string, any>);
+import { Image } from "@astrojs/image/components";
+
 ---
 
 <div class="flex flex-col">
   <a href={demo || github}>
     {
-      image ? (
-        <img {...image.default} class={imgStyles} alt={title} />
-      ) : (
-        <div class={imgStyles} />
-      )
+      imageURL ? <Image alt={title} src={`/assets/projects/${imageURL}`} width={300} aspectRatio={16/9} class={imgStyles} /> : <div class={imgStyles} />
     }
   </a>
   <div class="flex items-center justify-between pt-6 pb-2">

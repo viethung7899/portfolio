@@ -3,21 +3,18 @@ import TableOfContent from "@components/blogs/TableOfContent.svelte";
 import H2 from "@components/common/H2.astro";
 import H3 from "@components/common/H3.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import dayjs from "dayjs";
-import type { PostFrontMatter } from "src/utils/frontmatter";
-const posts = await Astro.glob<PostFrontMatter>('../../content/posts/**/*.mdx');
-const post = posts.find(post => post.frontmatter.slug === Astro.params.slug);
+import { getEntryBySlug } from "astro:content";
+
+// Fetch post
+const post = await getEntryBySlug("posts", Astro.params.slug || "");
 
 if (!post) {
   return Astro.redirect('/');
 }
 
-const { frontmatter, Content } = post;
-const date = dayjs(frontmatter.date).format("D MMMM YYYY");
+const { data: {title, date} } = post;
+const {Content, headings} = await post.render();
 
-// Syntax highlight styles
-import "../../styles/syntax-highlight.scss";
-import "../../styles/code-block.scss";
 ---
 
 <style is:global>
@@ -26,18 +23,24 @@ import "../../styles/code-block.scss";
   }
 </style>
 
-<BaseLayout title={frontmatter.title}>
+<BaseLayout title={title}>
   <main
     class="flex flex-1 px-4 w-full max-w-screen-lg mx-auto gap-4 items-start py-24 scroll-smooth"
   >
     <article class="flex flex-col flex-1 mx-auto gap-4">
-      <h1 class="text-4xl font-bold">{frontmatter.title}</h1>
-      <h5 class="text-black/50 dark:text-white/50">{date}</h5>
+      <h1 class="text-4xl font-bold">{title}</h1>
+      <h5 class="text-black/50 dark:text-white/50">{date.toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })}</h5>
       <div class="flex gap-4">
         <div
-          class="flex-1 prose max-w-none prose-orange prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal prose-code:before:content-none prose-code:after:content-none 
-          prose-pre:m-0 prose-pre:px-0 prose-pre:border-2 prose-pre:border-orange-500 prose-pre:dark:border-teal-500
-          prose-pre:bg-stone-100 prose-pre:dark:bg-stone-900"
+          class="flex-1 prose max-w-none prose-orange 
+          prose-headings:scroll-mt-24 dark:prose-invert dark:prose-teal 
+          prose-code:before:content-none prose-code:after:content-none 
+          prose-pre:border-2 prose-pre:border-orange-500 prose-pre:dark:border-teal-500
+          prose-pre:bg-stone-100 prose-pre:dark:bg-stone-900 prose-pre:overflow-scroll prose-pre:max-w-full"
         >
           <Content components={{
             h2: H2,
@@ -51,7 +54,7 @@ import "../../styles/code-block.scss";
     >
       <TableOfContent
         client:load
-        headings={post.getHeadings().filter((heading) => heading.depth <= 3)}
+        headings={headings.filter((heading) => heading.depth <= 3)}
       />
     </aside>
   </main>

@@ -1,6 +1,6 @@
 ---
 title: Wordle Solid
-imageURL: "../../content/images/projects/wordle.png"
+imageURL: "wordle.png"
 github: https://github.com/viethung7899/wordle-solid
 demo: https://wordle-solid.vercel.app
 important: true

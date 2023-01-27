@@ -1,11 +1,9 @@
 ---
 import ProjectCard from "@components/projects/ProjectCard.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import type { ProjectFrontMatter } from "src/types";
+import { getCollection } from 'astro:content';
 
-const projects = await Astro.glob<ProjectFrontMatter>(
-  "../content/projects/*.md"
-);
+const projects = await getCollection('projects');
 ---
 
 <BaseLayout title="Viet Hung Nguyen | Projects">
@@ -15,9 +13,9 @@ const projects = await Astro.glob<ProjectFrontMatter>(
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6"
     >
       {
-        projects.map((project) => {
-          return <ProjectCard project={project} />;
-        })
+        projects.map((project) => (
+          <ProjectCard project={project} />
+        ))
       }
     </div>
   </main>

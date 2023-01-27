@@ -15,11 +15,11 @@
     >{heading.text}</a
   >
 {/each}
-<p
+<!-- <p
   class="text-xs pt-4 cursor-pointer hover:text-orange-500 hover:dark:text-teal-500"
   on:click|preventDefault={() => {
     document.body.scrollIntoView();
   }}
 >
   Back to top
-</p>
+</p> -->
