@@ -53,6 +53,7 @@
       value={import.meta.env.PUBLIC_WEB3_FORMS_KEY}
     />
     <input
+      class="text-input"
       name="name"
       autocomplete="off"
       placeholder="Name*"
@@ -61,6 +62,7 @@
       bind:value={name}
     />
     <input
+      class="text-input"
       name="email"
       autocomplete="off"
       placeholder="Email*"
@@ -69,6 +71,7 @@
       bind:value={email}
     />
     <textarea
+      class="text-input"
       name="message"
       placeholder="Message*"
       rows={5}
@@ -76,11 +79,7 @@
       bind:value={message}
     />
     <div class="flex items-center gap-4">
-      <button
-        class="p-2 rounded-md text-white bg-orange-500 hover:enabled:bg-orange-600 dark:bg-teal-600 hover:dark:enabled:bg-teal-700 transition disabled:bg-opacity-50"
-        disabled={loading}
-        type="submit"
-      >
+      <button class="btn-filled" disabled={loading} type="submit">
         {loading ? "Sending..." : "Send Message"}
       </button>
       {#if success}
@@ -97,10 +96,3 @@
     </div>
   </form>
 </div>
-
-<style lang="postcss">
-  input,
-  textarea {
-    @apply border-slate-500/30 border-2 placeholder:opacity-40 rounded-md bg-transparent py-2 px-4 focus:outline-none w-full focus:border-orange-500 focus:dark:border-teal-600;
-  }
-</style>

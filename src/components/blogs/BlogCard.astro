@@ -12,7 +12,7 @@ const { data: {title, date}, slug } = Astro.props.post;
 >
 <a
     href={`/blogs/${slug}`}
-    class="text-xl font-bold hover:text-orange-500 hover:dark:text-teal-500 transition"
+    class="text-xl font-bold link transition"
     >{title}
   </a> 
   <p>{date.toLocaleDateString("en-us", {

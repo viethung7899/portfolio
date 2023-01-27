@@ -7,12 +7,10 @@
 <a
   href={path}
   class={`
+    link
     font-bold
     hover:underline
     hover:underline-offset-4
-    hover:text-orange-500
-    hover:dark:text-teal-500
-    transition
     ${isMobile ? '' : 'hidden sm:block'}`}
   on:mousedown|preventDefault
 >

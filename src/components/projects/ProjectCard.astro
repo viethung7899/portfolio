@@ -11,8 +11,6 @@ const {
 
 const { Content } = await Astro.props.project.render();
 
-const linkStyles =
-  "hover:text-orange-500 hover:dark:text-teal-500 transition-colors";
 const imgStyles =
   "transition-all duration-300 w-full aspect-[16/9] rounded-lg hover:shadow-lg hover:shadow-orange-500 hover:dark:shadow-teal-500";
 
@@ -28,18 +26,18 @@ import { Image } from "@astrojs/image/components";
     }
   </a>
   <div class="flex items-center justify-between pt-6 pb-2">
-    <a href={demo} class={`text-xl font-bold ${linkStyles}`}>{title}</a>
+    <a href={demo} class={`text-xl font-bold link`}>{title}</a>
     <div class="gap-4 flex text-xl">
       {
         github && (
-          <a href={github} class={linkStyles} target="_blank">
+          <a href={github} class='link' target="_blank">
             <Icon class="w-6 h-6" name="fa-solid:code" />
           </a>
         )
       }
       {
         demo && (
-          <a href={demo} class={linkStyles} target="_blank">
+          <a href={demo} class='link' target="_blank">
             <Icon class="w-6 h-6" name="fa-solid:window-maximize" />
           </a>
         )
