@@ -1,0 +1,33 @@
+.blog h2 {
+  @apply text-2xl font-bold mb-6 scroll-mt-24;
+}
+
+.blog h3 {
+  @apply text-xl font-bold mb-6 scroll-mt-24;
+}
+
+.blog p {
+  @apply text-black/80 dark:text-white/80 mb-6;
+}
+
+.blog a {
+  @apply underline accent;
+}
+
+.blog ul, .blog ol {
+  @apply mb-3;
+}
+
+.blog ul > li {
+  @apply text-black/80 dark:text-white/80 my-1 ml-4;
+  list-style: outside;
+}
+
+.blog hr {
+  @apply mb-6;
+}
+
+.blog pre {
+  @apply p-2 rounded-lg;
+}
+
