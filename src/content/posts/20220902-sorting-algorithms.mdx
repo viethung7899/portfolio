@@ -3,7 +3,9 @@ title: Visualizing sorting algorithms
 date: 2022-09-02
 ---
 
----
+import SortingVisualizer from "@interactives/sorting-visualizer/SortingVisualizer.svelte";
+
+<SortingVisualizer client:load />
 
 ## Motivation
 
@@ -51,17 +53,14 @@ They can be defined with the `function*` keyword.
 Let's take a look a example below
 
 
-```js
+```js filename="foo.js"
 function* foo() {
   console.log("To the foo land...");
   yield "Hello";
-
-console.log("Welcome back...")
-yield "World";
-
-console.log("Bye bye!");
+  console.log("Welcome back...")
+  yield "World";
+  console.log("Bye bye!");
 }
-
 
 const fooGen = foo();
 console.log(fooGen.next()) // Exit at line 3
@@ -69,7 +68,17 @@ console.log(fooGen.next()) // Exit at line 5
 console.log(fooGen.next()) // Exit at line 6
 ```
 
+
 And here's the output
+
+```json
+To the foo land...
+{ done: false, value: "Hello" }
+Welcome back...
+{ done: false, value: "World" }
+Bye bye!
+{ done: true, value: undefined }
+```
 
 
 When calling a generator function, it does not execute immediately, 
