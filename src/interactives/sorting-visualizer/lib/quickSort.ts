@@ -53,4 +53,3 @@ function* quickSort(items: Item[]): SortGenerator {
 };
 
 export default quickSort;
-

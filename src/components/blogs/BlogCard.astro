@@ -1,19 +1,23 @@
 ---
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import type { PostFrontMatter } from "src/types";
-export type Props = PostFrontMatter;
-const { title, date, slug } = Astro.props;
-dayjs.extend(relativeTime);
+import type { CollectionEntry } from 'astro:content';
+export interface Props {
+  post: CollectionEntry<"posts">;
+};
+
+const { data: {title, date}, slug } = Astro.props.post;
 ---
 
 <div
   class="border rounded-md border-slate-500/50 p-4 hover:shadow-lg hover:shadow-orange-500 hover:dark:shadow-teal-500 transition-shadow duration-300"
 >
-  <a
+<a
     href={`/blogs/${slug}`}
-    class="text-xl font-bold hover:text-orange-500 hover:dark:text-teal-500 transition"
+    class="text-xl font-bold link transition"
     >{title}
-  </a>
-  <p class="py-2">{dayjs(date).fromNow()}</p>
+  </a> 
+  <p>{date.toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })}</p>
 </div>

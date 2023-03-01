@@ -21,7 +21,7 @@
   ];
 </script>
 
-<nav class="sticky top-0 bg-white/50 dark:bg-gray-900/50 backdrop-blur-lg flex flex-col items-center border-b-2 border-slate-500/25">
+<nav class="sticky top-0 bg-white/50 dark:bg-gray-900/50 backdrop-blur-lg flex flex-col items-center border-b-2 border-slate-500/25 z-50">
   <div class="flex flex-row items-center justify-between p-4 w-full max-w-screen-lg">
     <button
       class="block sm:hidden"
@@ -30,12 +30,12 @@
     >
       <Icon
         icon={show ? 'fa6-solid:xmark' : 'fa6-solid:bars'}
-        class="w-6 h-6 hover:text-orange-400 hover:dark:text-teal-500"
+        class="w-6 h-6 link"
       />
     </button>
     <a
       href="/"
-      class="uppercase font-medium hover:text-orange-500 hover:dark:text-teal-500 transition-colors"
+      class="uppercase font-medium link"
       >Viet Hung Nguyen</a
     >
     <div class="flex items-center gap-4">

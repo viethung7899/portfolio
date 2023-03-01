@@ -1,7 +1,5 @@
 ---
 import Icon from "astro-icon";
-const aStyle =
-  "w-6 h-6 hover:text-orange-500 hover:dark:text-teal-600 transition";
 import {Image} from "@astrojs/image/components";
 ---
 
@@ -25,15 +23,15 @@ import {Image} from "@astrojs/image/components";
     <p>I'm currently looking for a role as a developer.</p>
     <div class="flex items-center space-x-4 py-2">
       <button
-        class="p-2 rounded-lg text-white bg-orange-500 dark:bg-teal-600 hover:show-md hover:dark:bg-teal-700 transition inline-flex gap-2 items-center"
+        class="btn-filled transition inline-flex gap-2 items-center"
       >
         <Icon class="w-4 h-4" name="fa-solid:download" /> Resumé
       </button>
       <a href="https://github.com/viethung7899" target="_blank">
-        <Icon class={aStyle} name="fa-brands:github" />
+        <Icon class="w-6 h-6 link" name="fa-brands:github" />
       </a>
       <a href="https://www.linkedin.com/in/viet-hung-nguyen-58a3131ab/" target="_blank">
-        <Icon class={aStyle} name="fa-brands:linkedin" />
+        <Icon class="w-6 h-6 link" name="fa-brands:linkedin" />
       </a>
     </div>
   </div>

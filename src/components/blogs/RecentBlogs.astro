@@ -1,8 +1,10 @@
 ---
-import type { PostFrontMatter } from "src/types";
+import { getCollection } from "astro:content";
 import BlogCard from "../blogs/BlogCard.astro";
 import Link from "../common/UnderlineLink.astro";
-const posts = await Astro.glob<PostFrontMatter>("../../content/posts/*.mdx");
+
+const posts = await getCollection("posts").then(posts => posts.reverse().slice(0, 4));
+
 ---
 
 <div class="py-12">
@@ -12,10 +14,6 @@ const posts = await Astro.glob<PostFrontMatter>("../../content/posts/*.mdx");
     <Link path="/blogs" title="View all blogs" />
   </p>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-    {
-      posts.slice(0, 4).map((post) => {
-        return <BlogCard {...post.frontmatter} />;
-      })
-    }
+    {posts.map(post => <BlogCard post={post} />)}
   </div>
 </div>

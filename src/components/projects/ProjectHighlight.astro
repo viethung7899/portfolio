@@ -1,11 +1,9 @@
 ---
-import type { ProjectFrontMatter } from "src/types";
+import { getCollection } from "astro:content";
 import Link from "../common/UnderlineLink.astro";
 import ProjectCard from "./ProjectCard.astro";
 
-const projects = await Astro.glob<ProjectFrontMatter>(
-  "../../content/projects/*.md"
-);
+const projects = await getCollection("projects").then(projects => projects.reverse().slice(0, 4));
 ---
 
 <div class="py-12 flex flex-col gap-4">
@@ -18,11 +16,7 @@ const projects = await Astro.glob<ProjectFrontMatter>(
     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12 mt-6"
   >
     {
-      projects
-        .filter((p) => p.frontmatter.important)
-        .map((project) => {
-          return <ProjectCard project={project} />;
-        })
+      projects.map((project) => <ProjectCard project={project} />)
     }
   </div>
 </div>

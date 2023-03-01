@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Item } from "../lib/sort";
+  import type {Item} from "./lib"
 
   export let item: Item;
 </script>

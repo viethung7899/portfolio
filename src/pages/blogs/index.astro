@@ -1,8 +1,10 @@
 ---
 import BlogCard from "@components/blogs/BlogCard.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import type { PostFrontMatter } from "src/types";
-const posts = await Astro.glob<PostFrontMatter>("../../content/posts/*.mdx");
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+posts.reverse();
 ---
 
 <BaseLayout title="Viet Hung Nguyen | Blogs">
@@ -14,7 +16,7 @@ const posts = await Astro.glob<PostFrontMatter>("../../content/posts/*.mdx");
     <div class="space-y-6 my-6 max-w-screen-sm">
       {
         posts.map((post) => {
-          return <BlogCard {...post.frontmatter} />;
+          return <BlogCard post={post} />;
         })
       }
     </div>
