@@ -1,0 +1,41 @@
+div[data-rehype-pretty-code-fragment] {
+  @apply bg-slate-800 rounded-lg overflow-hidden mb-6;
+
+  div[data-rehype-pretty-code-title] {
+    @apply px-4 py-2 text-white bg-slate-500/50 font-mono font-bold;
+  }
+
+  pre {
+    @apply overflow-x-auto;
+  }
+
+  code {
+    display: grid;
+    @apply py-2 px-4;
+  }
+
+  code[data-line-numbers] {
+    counter-reset: line;
+    @apply px-0;
+  }
+   
+  code[data-line-numbers] > .line::before {
+    counter-increment: line;
+    content: counter(line);
+   
+    /* Other styling */
+    @apply inline-block w-8 mr-4 text-right text-gray-500/70;
+  }
+
+  .line {
+    @apply border-l-4 border-transparent;
+  }
+
+  .line.highlighted {
+    @apply border-l-orange-600 bg-orange-600/30 dark:border-l-teal-600 dark:bg-teal-600/30;
+
+    &::before {
+      @apply text-orange-400 dark:text-teal-400 font-bold;
+    }
+  }
+}

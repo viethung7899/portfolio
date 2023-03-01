@@ -27,12 +27,5 @@
 
 .blog hr {
   @apply mb-6;
-}
-
-.blog pre {
-  @apply p-4 rounded-lg mb-6;
-}
-
-.blog hr {
   opacity: 50%;
 }
