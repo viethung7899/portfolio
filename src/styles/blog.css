@@ -28,6 +28,9 @@
 }
 
 .blog pre {
-  @apply p-2 rounded-lg;
+  @apply p-4 rounded-lg mb-6;
 }
 
+.blog hr {
+  opacity: 50%;
+}
