@@ -1,3 +1,5 @@
+@import url(./base.css);
+
 .blog h2 {
   @apply text-2xl font-bold mb-6 scroll-mt-24;
 }
@@ -11,7 +13,7 @@
 }
 
 .blog a {
-  @apply underline accent;
+  @apply underline;
 }
 
 .blog ul, .blog ol {
