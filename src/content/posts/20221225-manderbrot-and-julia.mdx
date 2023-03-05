@@ -1,0 +1,31 @@
+---
+title: Visualizing Mandelbrot and Julia Sets
+date: 2022-12-25
+---
+
+**Note**: This post requires you to have a basic understanding of complex numbers.
+If you don't know what complex numbers are, you can read about them [here](https://www.mathsisfun.com/numbers/complex-numbers.html).
+
+## Introduction
+
+I love conding, and I also have a passion for mathematics.
+I've always wanted to combine my love of coding and my knowledge of mathematics
+to create interesting but also educational visualization, something similars to the works of
+ [3Blue1Brown](https://www.youtube.com/@3blue1brown) and [The Coding Train](https://www.youtube.com/@thecodingtrain).
+
+I've always been fascinated by fractals. The Mandelbrot and Julia sets are
+two of the most famous fractals, and the formuation also easy to understand. They are great entry points
+for people who want to code their own fractal visualizations. However, there are some challenges
+when rendering fractals in real time, and I'll be explaining how to overcome along the coding process.
+
+For the visualization tool, I decide to choose [PIXI.js](https://www.pixijs.com/), a 2D rendering engine
+for the web that supports WebGL. It's very easy to use, and also very fast. Along that, I'll be using its React wrapper
+called [react-pixi](https://reactpixi.org/) to make the work more easier.
+
+## What is Mandelbrot set?
+
+The Mandelbrot set is a set of complex numbers that are bounded under the iteration of the function:
+
+$$z_{n+1} = z_n^2 + c$$
+
+where $z_0 = 0$ and $c$ is a complex number.

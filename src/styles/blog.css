@@ -13,7 +13,7 @@
 }
 
 .blog a {
-  @apply underline;
+  @apply underline accent;
 }
 
 .blog ul, .blog ol {

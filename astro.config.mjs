@@ -6,7 +6,10 @@ import svelte from "@astrojs/svelte";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/serverless";
 
+import remarkMath from 'remark-math'
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeKatex from 'rehype-katex';
+
 
 const prettyCodeOptions = {
   theme: 'one-dark-pro',
@@ -33,7 +36,13 @@ const prettyCodeOptions = {
 export default defineConfig({
   integrations: [
     mdx({
-      rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+      rehypePlugins: [
+        [rehypePrettyCode, prettyCodeOptions],
+        [rehypeKatex],
+      ],
+      remarkPlugins: [
+        [remarkMath]
+      ],
       syntaxHighlight: false,
       smartypants: true,
       gfm: true,
