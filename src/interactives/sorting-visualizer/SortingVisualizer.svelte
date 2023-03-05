@@ -66,17 +66,17 @@
       max="100"
       step="1"
       bind:value={count}
-      class="count rounded-full appearance-none w-full h-1 bg-slate-500/25 disabled:opacity-50"
+      class="range"
       disabled={playing || isSorting}
     />
     <label for="algos" class="flex">Sorting algorithm</label>
-    <select id="algos" disabled={playing || isSorting} bind:value={algoName}>
+    <select id="algos" disabled={playing || isSorting} bind:value={algoName} class="select select-bordered">
       {#each Object.keys(algorithms) as name}
         <option value={name}>{name}</option>
       {/each}
     </select>
     <label for="speed" class="flex">Speed</label>
-    <select id="speed" bind:value={speed}>
+    <select id="speed" bind:value={speed} class="select select-bordered">
       {#each speeds as speed}
         <option value={speed.value}>{speed.name}</option>
       {/each}
@@ -93,19 +93,16 @@
   </div>
   <div class="flex gap-2 w-full justify-end mt-4">
     <button
-      class="
-      border-2
-      border-orange-500 text-orange-500 hover:enabled:bg-orange-500/30
-      dark:border-teal-500 dark:text-teal-500 dark:hover:enabled:bg-teal-500/30"
+      class="btn"
       on:click={() => reset(count)}
       disabled={isSorting}
     >
       Randomize
     </button>
     {#if playing}
-      <button class="fill" on:click={() => (playing = false)}>Pause</button>
+      <button class="btn btn-warning" on:click={() => (playing = false)}>Pause</button>
     {:else}
-      <button class="fill" disabled={isSorted} on:click={play}
+      <button class="btn btn-success" disabled={isSorted} on:click={play}
         >{isSorting ? "Resume" : "Sort"}</button
       >
     {/if}

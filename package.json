@@ -22,6 +22,7 @@
     "astro": "^2.0.1",
     "astro-icon": "^0.8.0",
     "rehype-katex": "^6.0.2",
+    "daisyui": "^2.51.3",
     "rehype-pretty-code": "^0.9.4",
     "remark-math": "^5.1.1",
     "remark-mdx-math-enhanced": "^0.0.1-beta.3",

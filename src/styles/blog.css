@@ -9,11 +9,11 @@
 }
 
 .blog p {
-  @apply text-black/80 dark:text-white/80 mb-6;
+  @apply mb-6;
 }
 
 .blog a {
-  @apply underline accent;
+  @apply link link-hover link-primary;
 }
 
 .blog ul, .blog ol {
@@ -21,11 +21,10 @@
 }
 
 .blog ul > li {
-  @apply text-black/80 dark:text-white/80 my-1 ml-4;
+  @apply my-1 ml-4;
   list-style: outside;
 }
 
 .blog hr {
-  @apply mb-6;
-  opacity: 50%;
+  @apply mb-6 border-neutral;
 }
