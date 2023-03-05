@@ -12,7 +12,7 @@ import {Image} from "@astrojs/image/components";
 <div class="flex py-10 items-center gap-6 justify-between h-screen">
   <div class="flex flex-col space-y-2">
     <p class="font-bold text-5xl">
-      Hello! I am <span class="text-orange-500 dark:text-teal-500">Viet.</span>
+      Hello! I am <span class="text-primary">Viet.</span>
     </p>
     <p class="py-2">
       I'm an international student at <span>Simon Fraser University</span>. I
@@ -23,24 +23,24 @@ import {Image} from "@astrojs/image/components";
     <p>I'm currently looking for a role as a developer.</p>
     <div class="flex items-center space-x-4 py-2">
       <button
-        class="btn-filled transition inline-flex gap-2 items-center"
+        class="btn btn-primary inline-flex gap-2"
       >
         <Icon class="w-4 h-4" name="fa-solid:download" /> Resumé
       </button>
       <a href="https://github.com/viethung7899" target="_blank">
-        <Icon class="w-6 h-6 link" name="fa-brands:github" />
+        <Icon class="w-6 h-6 hover:text-primary" name="fa-brands:github" />
       </a>
       <a href="https://www.linkedin.com/in/viet-hung-nguyen-58a3131ab/" target="_blank">
-        <Icon class="w-6 h-6 link" name="fa-brands:linkedin" />
+        <Icon class="w-6 h-6 hover:text-primary" name="fa-brands:linkedin" />
       </a>
     </div>
   </div>
 
   <Image
     alt="My photo"
-    class="hidden md:block rounded-xl shadow-xl shadow-orange-500 dark:shadow-teal-500"
+    class="hidden md:block rounded-xl shadow-xl shadow-primary"
     src="/assets/profile.jpg"
-    width={350}
-    aspectRatio={2/3}
+    width={400}
+    height={600}
   />
 </div>

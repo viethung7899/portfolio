@@ -34,11 +34,11 @@
 
 <div class="py-12">
   <h2 class="font-bold text-3xl mb-4">Contact me</h2>
-  <p class="mb-4 text-black/50 dark:text-white/50">
+  <p class="mb-4">
     You can fill out the form below and directly email me at
     <a
       href={`mailto:${myEmail}`}
-      class="font-medium text-transparent text-orange-500 dark:text-teal-500"
+      class="font-medium text-primary"
     >
       {myEmail}
     </a>
@@ -53,7 +53,7 @@
       value={import.meta.env.PUBLIC_WEB3_FORMS_KEY}
     />
     <input
-      class="text-input"
+      class="input input-bordered w-full"
       name="name"
       autocomplete="off"
       placeholder="Name*"
@@ -62,7 +62,7 @@
       bind:value={name}
     />
     <input
-      class="text-input"
+      class="input input-bordered w-full"
       name="email"
       autocomplete="off"
       placeholder="Email*"
@@ -71,7 +71,7 @@
       bind:value={email}
     />
     <textarea
-      class="text-input"
+      class="textarea input-bordered w-full"
       name="message"
       placeholder="Message*"
       rows={5}
@@ -79,17 +79,17 @@
       bind:value={message}
     />
     <div class="flex items-center gap-4">
-      <button class="btn-filled" disabled={loading} type="submit">
+      <button class="btn btn-primary" disabled={loading} type="submit">
         {loading ? "Sending..." : "Send Message"}
       </button>
       {#if success}
         <span class="flex items-center gap-2"
-          ><Icon icon="fa6-solid:check" class="w-4 h-4 text-green-600" /> Thank you
+          ><Icon icon="fa6-solid:check" class="w-4 h-4 text-success" /> Thank you
           for your feedback.</span
         >
       {:else if success === false}
         <span class="flex items-center gap-2"
-          ><Icon icon="fa6-solid:xmark" class="w-4 h-4 text-red-600" /> Please try
+          ><Icon icon="fa6-solid:xmark" class="w-4 h-4 text-error" /> Please try
           again later.</span
         >
       {/if}

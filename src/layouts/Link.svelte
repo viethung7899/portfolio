@@ -8,9 +8,9 @@
   href={path}
   class={`
     link
+    link-hover
     font-bold
-    hover:underline
-    hover:underline-offset-4
+    hover:text-primary
     ${isMobile ? '' : 'hidden sm:block'}`}
   on:mousedown|preventDefault
 >
