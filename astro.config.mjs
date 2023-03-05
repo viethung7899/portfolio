@@ -3,12 +3,13 @@ import { defineConfig } from "astro/config";
 import image from "@astrojs/image";
 import mdx from "@astrojs/mdx";
 import svelte from "@astrojs/svelte";
+import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/serverless";
 
-import remarkMath from 'remark-math'
-import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeKatex from 'rehype-katex';
+import remarkMath from "remark-math"
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeKatex from "rehype-katex";
 
 
 const prettyCodeOptions = {
@@ -55,7 +56,8 @@ export default defineConfig({
     }),
     image({
       serviceEntryPoint: "@astrojs/image/sharp"
-    })
+    }),
+    react()
   ],
   output: "server",
   adapter: vercel({})
