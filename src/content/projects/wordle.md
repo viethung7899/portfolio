@@ -1,6 +1,6 @@
 ---
 title: Wordle Solid
-imageURL: "wordle.png"
+imageURL: https://drive.google.com/uc?export=view&id=1reefHM7vh5BesrzwIFVyPbAzWAWG5UZb
 github: https://github.com/viethung7899/wordle-solid
 demo: https://wordle-solid.vercel.app
 important: true

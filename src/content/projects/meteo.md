@@ -1,6 +1,6 @@
 ---
 title: Meteo
-imageURL: "meteo.png"
+imageURL: https://drive.google.com/uc?export=view&id=15ug65SrhpOxIj39wNSFXoxaUsrT_m3Ng
 github: https://github.com/viethung7899/meteo
 demo: https://meteo-gradient.vercel.app
 important: true
