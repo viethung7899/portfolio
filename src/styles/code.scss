@@ -1,16 +1,20 @@
 div[data-rehype-pretty-code-fragment] {
-  @apply rounded-lg overflow-hidden mb-6 border border-neutral;
+  @apply rounded-lg overflow-hidden mb-6 text-sm;
+
+  * {
+    @apply bg-transparent;
+  }
 
   div[data-rehype-pretty-code-title] {
     @apply px-4 py-2 font-mono font-bold bg-primary text-primary-content;
   }
 
   pre {
-    @apply overflow-x-auto;
+    @apply overflow-x-auto bg-neutral;
   }
 
   .line {
-    @apply px-4 text-white font-mono;
+    @apply px-4 font-mono;
   }
 
   code {

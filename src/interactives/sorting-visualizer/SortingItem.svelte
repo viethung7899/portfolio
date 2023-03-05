@@ -15,34 +15,18 @@
 
 <style>
   .none {
-    @apply bg-orange-500/50;
-  }
-
-  :global(.dark) .none {
-    @apply bg-teal-500/50;
+    @apply bg-primary/50;
   }
 
   .selected {
-    @apply bg-orange-500/50 outline outline-[1.5px] outline-orange-500;
-  }
-
-  :global(.dark) .selected {
-    @apply bg-teal-500/50 outline-teal-500;
+    @apply bg-primary/50 outline outline-[1.5px] outline-primary;
   }
 
   .sorted {
-    @apply bg-orange-500;
-  }
-
-  :global(.dark) .sorted {
-    @apply bg-teal-500;
+    @apply bg-primary;
   }
 
   .pivot {
-    @apply bg-orange-500/50 outline outline-[1.5px] outline-blue-600;
-  }
-
-  :global(.dark) .pivot {
-    @apply bg-teal-500/50 outline-yellow-600;
+    @apply bg-primary/50 outline outline-[1.5px] outline-accent;
   }
 </style>
