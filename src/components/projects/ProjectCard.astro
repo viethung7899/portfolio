@@ -11,6 +11,8 @@ const {
 } = Astro.props.project;
 
 const { Content } = await Astro.props.project.render();
+
+import "@styles/project.scss";
 ---
 
 <div class="card card-compact card-bordered border-neutral hover:shadow-lg hover:shadow-primary">
@@ -47,12 +49,3 @@ const { Content } = await Astro.props.project.render();
   </div>
 </div>
 
-<style>
-  .image {
-    @apply transition-all duration-300 w-full aspect-[16/9] rounded-lg;
-  }
-
-  .description a {
-    @apply link;
-  }
-</style>
