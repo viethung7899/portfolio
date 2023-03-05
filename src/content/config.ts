@@ -11,9 +11,9 @@ const postCollection = defineCollection({
 const projectCollection = defineCollection({
   schema: z.object({
     title: z.string(),
+    imageURL: z.string(),
     github: z.string(),
     demo: z.string().optional(),
-    imageURL: z.string().optional()
   })
 });
 

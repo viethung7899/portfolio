@@ -1,4 +1,5 @@
 ---
+import { Image } from "@astrojs/image/components";
 import Icon from "astro-icon";
 import type { CollectionEntry } from "astro:content";
 export interface Props {
@@ -6,38 +7,35 @@ export interface Props {
 }
 
 const {
-  data: { title, imageURL, github, demo },
+  data: { title, imageURL, github, demo }
 } = Astro.props.project;
 
 const { Content } = await Astro.props.project.render();
-
-const imgStyles =
-  "transition-all duration-300 w-full aspect-[16/9] rounded-lg hover:shadow-lg hover:shadow-orange-500 hover:dark:shadow-teal-500";
-
-// A very weird hack to get the image
-import { Image } from "@astrojs/image/components";
-
 ---
 
 <div class="flex flex-col">
   <a href={demo || github}>
-    {
-      imageURL ? <Image alt={title} src={`/assets/projects/${imageURL}`} width={300} aspectRatio={16/9} class={imgStyles} /> : <div class={imgStyles} />
-    }
+    <Image
+      alt={title}
+      src={imageURL}
+      width={512}
+      height={288}
+      class="image"
+    />
   </a>
   <div class="flex items-center justify-between pt-6 pb-2">
     <a href={demo} class={`text-xl font-bold link`}>{title}</a>
     <div class="gap-4 flex text-xl">
       {
         github && (
-          <a href={github} class='link' target="_blank">
+          <a href={github} class="link" target="_blank">
             <Icon class="w-6 h-6" name="fa-solid:code" />
           </a>
         )
       }
       {
         demo && (
-          <a href={demo} class='link' target="_blank">
+          <a href={demo} class="link" target="_blank">
             <Icon class="w-6 h-6" name="fa-solid:window-maximize" />
           </a>
         )
@@ -48,3 +46,17 @@ import { Image } from "@astrojs/image/components";
     <Content />
   </div>
 </div>
+
+<style>
+  .image {
+    @apply transition-all duration-300 w-full aspect-[16/9] rounded-lg;
+  }
+
+  .image:hover {
+    @apply shadow-lg shadow-orange-500;
+  }
+
+  :global(.dark) .image:hover {
+    @apply shadow-teal-500;
+  }
+</style>
