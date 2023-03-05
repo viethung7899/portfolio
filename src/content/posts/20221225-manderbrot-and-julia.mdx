@@ -18,14 +18,49 @@ two of the most famous fractals, and the formuation also easy to understand. The
 for people who want to code their own fractal visualizations. However, there are some challenges
 when rendering fractals in real time, and I'll be explaining how to overcome along the coding process.
 
-For the visualization tool, I decide to choose [PIXI.js](https://www.pixijs.com/), a 2D rendering engine
-for the web that supports WebGL. It's very easy to use, and also very fast. Along that, I'll be using its React wrapper
-called [react-pixi](https://reactpixi.org/) to make the work more easier.
+For the visualization tool, I decide to choose [PIXI.js](https://www.pixijs.com/), a powerful 2D rendering engine
+for the web that supports WebGL.
 
 ## What is Mandelbrot set?
 
-The Mandelbrot set is a set of complex numbers that are bounded under the iteration of the function:
+The Mandelbrot set is a fascinating fractal discovered by Benoit Mandelbrot in 1980. 
+To generate the set, we need series of complex numbers starting from $0$ and recursively apply the function $$f(z) = z^2 + c$$, where $$c$$ is a compelx constant.
 
-$$z_{n+1} = z_n^2 + c$$
+In genral, we have a series of complex numbers 
 
-where $z_0 = 0$ and $c$ is a complex number.
+$$
+0, f(0), f(f(0)), f(f(f(0))), \dots
+$$
+
+This series will eventually converge to a point, oscillate, or diverge to infinity and depends on the choice of constant $$c$$.
+If the series *diverges to infinity*, then the point $$c$$ is **not** in the Mandelbrot set. On the other cases, $c$ is in the set.
+
+## Visualizing the Mandelbrot set
+
+To visualize the Mandelbrot set, we need to generate a grid of complex numbers, and then apply the function $$f$$ to each of them. 
+
+The Meanderbrot set has a very interesting property. It is bounded by a circle of radius 2 centered at the origin. This means that if the absolute value of the complex number is greater than 2, then the series will diverge to infinity.
+This is a very important property that we can use to speed up the rendering process.
+
+Here's the pseudocode for the algorithm, given a pixels array and a maximum iteration number, we would paint the pixel white if the point is in the set, and black otherwise.
+
+```python
+def mandelbrot(pixels, max_iter=100):
+  for pixel in pixels:
+    c = pixel_to_complex(pixel)
+    z = 0
+    for i in range(max_iter):
+      z = z ^ 2 + c
+      if abs(z) > 2:
+        pixel.color = black
+    pixel.color = white
+```
+
+However, this algorithm is very slow. The reason is that we have to render each pixel individually, and the number of pixels is very large. 
+To speed up the process, we can use the GPU to render the pixels in parallel. This is where WebGL comes in.
+
+## Rendering with PIXIjs and WebGL
+
+As mentioned before, I choose to use PIXI.js to render the visualization, since it is powerful 2D graphic engine that supports WebGL.
+Along with that, I also use [react-pixi](https://www.pixijs.com/) as React wrapper to incorporate the visualization into my Astro blog.
+
