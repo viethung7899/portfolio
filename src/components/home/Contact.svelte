@@ -53,7 +53,7 @@
       value={import.meta.env.PUBLIC_WEB3_FORMS_KEY}
     />
     <input
-      class="input input-bordered w-full"
+      class="input input-bordered w-full focus:input-primary"
       name="name"
       autocomplete="off"
       placeholder="Name*"
@@ -62,7 +62,7 @@
       bind:value={name}
     />
     <input
-      class="input input-bordered w-full"
+      class="input input-bordered w-full focus:input-primary"
       name="email"
       autocomplete="off"
       placeholder="Email*"
@@ -71,7 +71,7 @@
       bind:value={email}
     />
     <textarea
-      class="textarea input-bordered w-full"
+      class="textarea textarea-bordered w-full focus:textarea-primary"
       name="message"
       placeholder="Message*"
       rows={5}

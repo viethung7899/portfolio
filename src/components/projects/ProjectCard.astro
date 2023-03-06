@@ -15,7 +15,7 @@ const { Content } = await Astro.props.project.render();
 import "@styles/project.scss";
 ---
 
-<div class="card card-compact card-bordered border-neutral hover:shadow-lg hover:shadow-primary">
+<div class="card card-compact card-bordered border-slate-500/50 hover:shadow-lg hover:shadow-primary">
   <figure>
     <a href={demo || github}>
       <Image alt={title} src={imageURL} width={512} height={288} class="" />
