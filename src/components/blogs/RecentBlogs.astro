@@ -9,9 +9,9 @@ const posts = await getCollection("posts").then(posts => posts.reverse().slice(0
 
 <div class="py-12">
   <h2 class="text-3xl font-bold mb-4">Recent Blogs</h2>
-  <p class="text-black/50 dark:text-white/50">
+  <p>
     A records of my learning journey into coding.
-    <Link path="/blogs" title="View all blogs" />
+    <a href="/blogs" class="link hover:link-primary">View all blogs ↗︎</a>
   </p>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
     {posts.map(post => <BlogCard post={post} />)}

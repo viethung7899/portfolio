@@ -4,6 +4,6 @@ const slug = Astro.props.id;
 ---
 <h3 class="group" id={slug}>
   <slot />
-  <a class="hidden group-hover:inline-block link" href={`#${slug}`}>
+  <a class="hidden group-hover:inline-block link-primary" href={`#${slug}`}>
   <Icon name="fa-solid:link" class="w-4 h-4" />
 </a></h3>

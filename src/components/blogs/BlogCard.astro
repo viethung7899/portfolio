@@ -1,23 +1,28 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 export interface Props {
   post: CollectionEntry<"posts">;
-};
+}
 
-const { data: {title, date}, slug } = Astro.props.post;
+const {
+  data: { title, date },
+  slug
+} = Astro.props.post;
 ---
 
-<div
-  class="border rounded-md border-slate-500/50 p-4 hover:shadow-lg hover:shadow-orange-500 hover:dark:shadow-teal-500 transition-shadow duration-300"
->
-<a
-    href={`/blogs/${slug}`}
-    class="text-xl font-bold link transition"
-    >{title}
-  </a> 
-  <p>{date.toLocaleDateString("en-us", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })}</p>
+<div class="card card-compact card-bordered border-slate-500/50 hover:shadow-lg hover:shadow-secondary">
+  <div class="card-body">
+    <a href={`/blogs/${slug}`} class="card-title link link-hover hover:link-secondary"
+      >{title}
+    </a>
+    <p>
+      {
+        date.toLocaleDateString("en-us", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        })
+      }
+    </p>
+  </div>
 </div>

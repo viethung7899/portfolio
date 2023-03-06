@@ -10,18 +10,13 @@
 {#each headings as heading}
   <a
     href={`#${heading.slug}`}
-    class={`${heading.depth <= 2 ? "text-md" : "text-sm ml-4"} link`}
+    class={`${heading.depth <= 2 ? "text-md" : "text-sm ml-4"} hover:link-primary`}
     >{heading.text}</a
   >
 {/each}
-<p
-  class="text-xs pt-4 link"
-  on:click|preventDefault={() => {
-    document.body.scrollIntoView();
-  }}
-  on:keydown|preventDefault={() => {
-    document.body.scrollIntoView();
-  }}
+<a
+  class="text-xs pt-4 hover:link-primary"
+  href="#top"
 >
   Back to top
-</p>
+</a>

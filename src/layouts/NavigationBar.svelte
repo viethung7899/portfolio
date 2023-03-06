@@ -21,7 +21,7 @@
   ];
 </script>
 
-<nav class="sticky top-0 bg-white/50 dark:bg-gray-900/50 backdrop-blur-lg flex flex-col items-center border-b-2 border-slate-500/25 z-50">
+<nav class="sticky top-0 backdrop-blur-lg bg-base-200 flex flex-col items-center z-50">
   <div class="flex flex-row items-center justify-between p-4 w-full max-w-screen-lg">
     <button
       class="block sm:hidden"
@@ -35,7 +35,7 @@
     </button>
     <a
       href="/"
-      class="uppercase font-medium link"
+      class="uppercase font-medium hover:text-primary"
       >Viet Hung Nguyen</a
     >
     <div class="flex items-center gap-4">
