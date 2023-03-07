@@ -3,9 +3,12 @@ title: Visualizing Mandelbrot and Julia Sets
 date: 2022-12-25
 ---
 
-import {Mandelbrot} from "@interactives/fractals/Mandelbrot.tsx"
+import MobileWrapper from "@interactives/MobileWrapper.svelte";
+import Mandelbrot from "@interactives/fractals/Mandelbrot.svelte";
 
-<Mandelbrot />
+<MobileWrapper>
+  <Mandelbrot client:load />
+</MobileWrapper>
 
 **Note**: This post requires you to have a basic understanding of complex numbers.
 If you don't know what complex numbers are, you can read about them [here](https://www.mathsisfun.com/numbers/complex-numbers.html).
@@ -15,7 +18,7 @@ If you don't know what complex numbers are, you can read about them [here](https
 I love conding, and I also have a passion for mathematics.
 I've always wanted to combine my love of coding and my knowledge of mathematics
 to create interesting but also educational visualization, something similars to the works of
- [3Blue1Brown](https://www.youtube.com/@3blue1brown) and [The Coding Train](https://www.youtube.com/@thecodingtrain).
+[3Blue1Brown](https://www.youtube.com/@3blue1brown) and [The Coding Train](https://www.youtube.com/@thecodingtrain).
 
 I've always been fascinated by fractals. The Mandelbrot and Julia sets are
 two of the most famous fractals, and the formuation also easy to understand. They are great entry points
@@ -27,21 +30,21 @@ for the web that supports WebGL.
 
 ## What is Mandelbrot set?
 
-The Mandelbrot set is a fascinating fractal discovered by Benoit Mandelbrot in 1980. 
+The Mandelbrot set is a fascinating fractal discovered by Benoit Mandelbrot in 1980.
 To generate the set, we need series of complex numbers starting from $0$ and recursively apply the function $$f(z) = z^2 + c$$, where $$c$$ is a compelx constant.
 
-In genral, we have a series of complex numbers 
+In genral, we have a series of complex numbers
 
 $$
 0, f(0), f(f(0)), f(f(f(0))), \dots
 $$
 
 This series will eventually converge to a point, oscillate, or diverge to infinity and depends on the choice of constant $$c$$.
-If the series *diverges to infinity*, then the point $$c$$ is **not** in the Mandelbrot set. On the other cases, $c$ is in the set.
+If the series _diverges to infinity_, then the point $$c$$ is **not** in the Mandelbrot set. On the other cases, $c$ is in the set.
 
 ## Visualizing the Mandelbrot set
 
-To visualize the Mandelbrot set, we need to generate a grid of complex numbers, and then apply the function $$f$$ to each of them. 
+To visualize the Mandelbrot set, we need to generate a grid of complex numbers, and then apply the function $$f$$ to each of them.
 
 The Meanderbrot set has a very interesting property. It is bounded by a circle of radius 2 centered at the origin. This means that if the absolute value of the complex number is greater than 2, then the series will diverge to infinity.
 This is a very important property that we can use to speed up the rendering process.
@@ -60,11 +63,10 @@ def mandelbrot(pixels, max_iter=100):
     pixel.color = white
 ```
 
-However, this algorithm is very slow. The reason is that we have to render each pixel individually, and the number of pixels is very large. 
+However, this algorithm is very slow. The reason is that we have to render each pixel individually, and the number of pixels is very large.
 To speed up the process, we can use the GPU to render the pixels in parallel. This is where WebGL comes in.
 
 ## Rendering with PIXIjs and WebGL
 
 As mentioned before, I choose to use PIXI.js to render the visualization, since it is powerful 2D graphic engine that supports WebGL.
 Along with that, I also use [react-pixi](https://www.pixijs.com/) as React wrapper to incorporate the visualization into my Astro blog.
-
