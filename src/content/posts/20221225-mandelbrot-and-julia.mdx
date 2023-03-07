@@ -66,7 +66,273 @@ def mandelbrot(pixels, max_iter=100):
 However, this algorithm is very slow. The reason is that we have to render each pixel individually, and the number of pixels is very large.
 To speed up the process, we can use the GPU to render the pixels in parallel. This is where WebGL comes in.
 
-## Rendering with PIXIjs and WebGL
+## Rendering with PIXI.js and WebGL
 
 As mentioned before, I choose to use PIXI.js to render the visualization, since it is powerful 2D graphic engine that supports WebGL.
-Along with that, I also use [react-pixi](https://www.pixijs.com/) as React wrapper to incorporate the visualization into my Astro blog.
+I intended to use some wrapper such as [react-pixi](https://pixijs.io/pixi-react/) or [svelte-pixi](https://svelte-pixi.com/). However, I want my canvas to be responsive based on
+the window size, and neither of them cannot provide me that ability.
+
+### Set up the canvas
+
+First, I create a container `div` element width a flexible dimension and a `canvas` element inside the container.
+For the next step, I bind the width of the container and the canvas element to the `width` and `canvas` variables with the `bind` directive.
+
+```svelte title="Mandelbrot.svelte"
+<script>
+  ...
+  let width: number;
+  let canvas: HTMLCanvasElement;
+  ...
+</script>
+
+<div class="w-full" bind:width={width}> {/* container */}
+  <canvas bind:this={canvas}>
+</div>
+```
+
+Then, I use Svelte `onMount` function to initialize an PIXI application when all the components render on the screen.
+I also use reactive statements to update the canvas size when the window size changes as hightlight in the snippet below.
+
+```svelte title="Mandelbrot.svelte" {20-22}
+<script>
+  ...
+  let width: number;
+  let canvas: HTMLCanvasElement;
+  let app: PIXI.Application;
+  ...
+  const ASPECT_RATIO = 4 / 3;
+
+  onMount(() => {
+    app = new PIXI.Application({
+      view: canvas,
+      width,
+      height: width / ASPECT_RATIO,
+      antialias: true,
+      transparent: true,
+      resolution: 1,
+    });
+  });
+
+  $: {
+    app?.renderer?.resize(width, width / ASPECT_RATIO);
+  }
+</script>
+
+...
+```
+
+Now, we have a canvas that is responsive to the window size. However, the canvas is still empty. We need to add some content to it.
+We need to create a `PIXI.Container` object and add it to the application stage.
+
+```svelte title="Mandelbrot.svelte" {6,19,20}
+<script>
+  ...
+  let width: number;
+  let canvas: HTMLCanvasElement;
+  let app: PIXI.Application;
+  let container = new PIXI.Container();
+  ...
+  const ASPECT_RATIO = 4 / 3;
+
+  onMount(() => {
+    app = new PIXI.Application({
+      view: canvas,
+      width,
+      height: width / ASPECT_RATIO,
+      antialias: true,
+      transparent: true,
+      resolution: 1,
+    });
+    app.stage.addChild(container);
+    container.filterArea = app.renderer.screen;
+  });
+  ...
+</script>
+```
+
+The setup is done. Now, we can starting coding the visualization.
+
+### Mandelbrot shaders
+
+In order to render the Mandelbrot set, we need to create a shader programs, one for the vertex shader and one for the fragment shader.
+We will discuss how to create the shaders later. For now, let's assume that we have a vertex shader file `base.vert` and a fragment shader file `mandelbrot.vert`.
+Let's use them in the program.
+
+First, we needs to imports the shaders program with the query params `?raw` to get the raw text of the shader files.
+We these *uniform variables*
+  - `iterations` that controls the maximum number of iterations.
+  - `zoom` that controls the zoom level.
+  - `translaet` that controls the offset of the viewport.
+We can add the shaders and update the shaders with reactive statements
+
+```svelte title="Mandelbrot.svelte" {6,19,20}
+<script>
+  ...
+  import baseVert from '.lib/base.vert?raw';
+  import mandelbrotFrag from '.lib/mandelbrot.frag?raw';
+  ...
+  let container = new PIXI.Container();
+  let iterations = 100;
+  let zoom = 1;
+  let translate = [0, 0];
+  ...
+
+  $: {
+    const filter = new PIXI.Filter(baseVert, mandelbrotFrag, {
+      iterations,
+      zoom,
+      translate: new Float32Array(translate), // Array in uniforms must be Float32Array
+    });
+    container.filters = [new PIXI.Filter(undefined, shader)];
+  }
+</script>
+```
+
+Now, we need to program the shaders.
+
+```glsl title="base.vert" showLineNumbers
+attribute vec2 aVertexPosition;
+
+uniform mat3 projectionMatrix;
+varying vec2 vTextureCoord;
+varying vec2 uv;
+
+uniform vec4 inputSize;
+uniform vec4 outputFrame;
+
+uniform vec2 translate;
+uniform float zoom;
+
+vec4 filterVertexPosition(void)
+{
+  vec2 position = aVertexPosition * max(outputFrame.zw, vec2(0.)) + outputFrame.xy;
+  
+  return vec4((projectionMatrix * vec3(position,1.)).xy, 0., 1.);
+}
+
+vec2 filterTextureCoord(void)
+{
+  return aVertexPosition*(outputFrame.zw*inputSize.zw);
+}
+
+vec2 transform(in vec2 normalized) {
+  vec2 p = normalized - vec2(0.5, 0.5);
+  
+  float ratio = inputSize.x / inputSize.y;
+  if (ratio > 1.) {
+    p.x *= ratio;
+  } else {
+    p.y /= ratio;
+  }
+  p *= 3.;
+
+  p /= zoom;
+  p += translate;
+
+  return p;
+}
+
+void main(void)
+{
+  gl_Position=filterVertexPosition();
+  vTextureCoord=filterTextureCoord();
+  uv = transform(vTextureCoord);
+}
+```
+
+The code snippet below is for the vertex shader, and it's pretty hard to understand. Here, I want you focus more the variables `vTextureCoord` and `uv`, and the function `transform`.
+After line 45, `vTextureCoord` now represents the coordinate system on the canvas, where the top left corner is $(0, 0)$ and the bottom right corner is $(1, 1)$. Like the image below
+
+<div class="w-[50%] aspect-[4/3] border-2 border-primary mx-auto my-6 relative bg-base-300">
+  <div class="tooltip tooltip-open tooltip-left absolute top-0 left-0" data-tip="(0, 0)"></div>
+  <div class="tooltip tooltip-open tooltip-right absolute top-0 right-0" data-tip="(1, 0)"></div>
+  <div class="tooltip tooltip-open tooltip-left absolute bottom-0 left-0" data-tip="(0, 1)"></div>
+  <div class="tooltip tooltip-open tooltip-right absolute bottom-0 right-0" data-tip="(1, 1)"></div>
+</div>
+
+After line 46, we `transform` the coordinate system of `vTextureCoord` and store in `uv` so that now the origin is in the middle of the canvas, 
+and the longer side of the canvas (the width in this case) is 6 units long, ranging from -3 to 3.
+
+<div class="w-[50%] aspect-[4/3] border-2 border-primary mx-auto my-6 relative bg-base-300 flex">
+  <div class="w-full border border-primary my-auto mx-auto relative">
+    <div class="tooltip tooltip-open tooltip-left absolute top-0 left-0" data-tip="(-3, 0)"></div>
+    <div class="tooltip tooltip-open tooltip-top absolute top-0 left-[50%]" data-tip="(0, 0)"></div>
+    <div class="tooltip tooltip-open tooltip-right absolute top-0 right-0" data-tip="(3, 0)"></div>
+  </div>
+</div>
+
+Now, we can use `uv` to pass to the fragement shader. Using the pseudocode mentioned before. We can write the fragment shader as below.
+
+```glsl title="mandelbrot.frag"
+precision mediump float;
+
+varying vec2 uv;
+uniform float iterations;
+
+const int MAX_ITERATION = 512;
+
+void main() {
+  vec2 z = vec2(0.0);
+  float p = 0.0;
+  float color = 1.0; // initial is white
+  for (int i = 0; i < MAX_ITERATION; i++) {
+    // z = z^2 + c
+    z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + uv;
+    p++;
+    if (length(z) > 2.0 || p > iterations) {
+      color = 0.0; // not in the set, color black
+      break;
+    }
+  }
+  // gl_FragColor represents the color of the pixel
+  gl_FragColor = vec4(vec3(color), 1.);
+}
+```
+
+Phew, now we have a working Mandelbrot set. However, the image only contains black and white (binary mode).
+Let's modify the fragment shader to see Mandelbrot set in grayscale color. 
+The variable `p` counts how many iterations it takes for a point to escape the set, and we divide it by `maxIteration` to get a value between 0 and 1.
+The `sqrt` is to make the color appeare more smoothly.
+
+```glsl title="mandelbrot.frag" {19}
+precision mediump float;
+
+varying vec2 uv;
+uniform float iterations;
+
+const float MAX_ITERATION = 512.;
+
+void main() {
+  vec2 z = vec2(0.0);
+  float iter = 0.0;
+  while (iter < iterations) {
+    // z = z^2 + c
+    z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + uv;
+    iter++;
+    if (length(z) > 2.0) {
+      break;
+    }
+  }
+  float color = sqrt(p / iterations);
+  gl_FragColor = vec4(vec3(color), 1.);
+}
+```
+
+Now, we can see the Mandelbrot set in grayscale color. However, the image is still not very interesting. 
+Let's make a color function that takes the value of `iter` and `z` from last iteration.
+
+```glsl
+vec3 smooth(in vec2 z, in float iter) {
+  if (iter < iterations - 1.) {
+    float v = log(iter + 1.5 - log(log2(length(z)))) / 3.4;
+    if (v < 1.) {
+      return vec3(pow(v, 4.), pow(v, 2.5), v);
+    } else {
+      v = max(1.0, 2.0 - v);
+      return vec3(v, pow(v, 1.5), pow(v, 3.0));
+    }
+  } else return vec3(0.0);
+}
+```
+
+Now, we have the get the image of Mandelbrot set similar to the one in [Wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg).
