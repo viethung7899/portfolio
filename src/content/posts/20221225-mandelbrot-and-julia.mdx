@@ -1,14 +1,17 @@
 ---
-title: Visualizing Mandelbrot and Julia Sets
+title: Visualizing Mandelbrot set
 date: 2022-12-25
 ---
 
 import MobileWrapper from "@interactives/MobileWrapper.svelte";
 import Mandelbrot from "@interactives/fractals/Mandelbrot.svelte";
+import Julia from "@interactives/fractals/Julia.svelte";
 
 <MobileWrapper>
   <Mandelbrot client:load />
 </MobileWrapper>
+
+---
 
 **Note**: This post requires you to have a basic understanding of complex numbers.
 If you don't know what complex numbers are, you can read about them [here](https://www.mathsisfun.com/numbers/complex-numbers.html).
@@ -20,13 +23,13 @@ I've always wanted to combine my love of coding and my knowledge of mathematics
 to create interesting but also educational visualization, something similars to the works of
 [3Blue1Brown](https://www.youtube.com/@3blue1brown) and [The Coding Train](https://www.youtube.com/@thecodingtrain).
 
-I've always been fascinated by fractals. The Mandelbrot and Julia sets are
-two of the most famous fractals, and the formuation also easy to understand. They are great entry points
+I've always been fascinated by fractals. They are geometric entities with infinie amount of roughness. They have fractional dimensions (not 1D, 2D, or 3D). 
+Among of them, the Mandelbrot set is one of the well-known fractals. Since the generation process is simple and straightforward, it is an great entry point
 for people who want to code their own fractal visualizations. However, there are some challenges
 when rendering fractals in real time, and I'll be explaining how to overcome along the coding process.
 
 For the visualization tool, I decide to choose [PIXI.js](https://www.pixijs.com/), a powerful 2D rendering engine
-for the web that supports WebGL.
+for the web that supports WebGL. More importantly, we will create some shaders and laverage the GPU to render the fractal.
 
 ## What is Mandelbrot set?
 
@@ -52,15 +55,15 @@ This is a very important property that we can use to speed up the rendering proc
 Here's the pseudocode for the algorithm, given a pixels array and a maximum iteration number, we would paint the pixel white if the point is in the set, and black otherwise.
 
 ```python
-def mandelbrot(pixels, max_iter=100):
-  for pixel in pixels:
-    c = pixel_to_complex(pixel)
+def mandelbrot(complex_plane, max_iter=100):
+  for point in complex_plane:
+    c = complex_point(pixel)
     z = 0
     for i in range(max_iter):
       z = z ^ 2 + c
       if abs(z) > 2:
-        pixel.color = black
-    pixel.color = white
+        point.color = black
+    point.color = white
 ```
 
 However, this algorithm is very slow. The reason is that we have to render each pixel individually, and the number of pixels is very large.
@@ -162,7 +165,7 @@ First, we needs to imports the shaders program with the query params `?raw` to g
 We these *uniform variables*
   - `iterations` that controls the maximum number of iterations.
   - `zoom` that controls the zoom level.
-  - `translaet` that controls the offset of the viewport.
+  - `translate` that controls the offset of the viewport.
 We can add the shaders and update the shaders with reactive statements
 
 ```svelte title="Mandelbrot.svelte" {6,19,20}
@@ -244,85 +247,80 @@ The code snippet below is for the vertex shader, and it's pretty hard to underst
 After line 45, `vTextureCoord` now represents the coordinate system on the canvas, where the top left corner is $(0, 0)$ and the bottom right corner is $(1, 1)$. Like the image below
 
 <div class="w-[50%] aspect-[4/3] border-2 border-primary mx-auto my-6 relative bg-base-300">
-  <div class="tooltip tooltip-open tooltip-left absolute top-0 left-0" data-tip="(0, 0)"></div>
-  <div class="tooltip tooltip-open tooltip-right absolute top-0 right-0" data-tip="(1, 0)"></div>
-  <div class="tooltip tooltip-open tooltip-left absolute bottom-0 left-0" data-tip="(0, 1)"></div>
-  <div class="tooltip tooltip-open tooltip-right absolute bottom-0 right-0" data-tip="(1, 1)"></div>
+  <div class="tooltip tooltip-open tooltip-secondary tooltip-left absolute top-0 left-0" data-tip="(0, 0)"></div>
+  <div class="tooltip tooltip-open tooltip-secondary tooltip-right absolute top-0 right-0" data-tip="(1, 0)"></div>
+  <div class="tooltip tooltip-open tooltip-secondary tooltip-left absolute bottom-0 left-0" data-tip="(0, 1)"></div>
+  <div class="tooltip tooltip-open tooltip-secondary tooltip-right absolute bottom-0 right-0" data-tip="(1, 1)"></div>
 </div>
 
 After line 46, we `transform` the coordinate system of `vTextureCoord` and store in `uv` so that now the origin is in the middle of the canvas, 
-and the longer side of the canvas (the width in this case) is 6 units long, ranging from -3 to 3.
+and the shorter side of the canvas (the height in this case) is 6 units long, ranging from -3 to 3.
 
-<div class="w-[50%] aspect-[4/3] border-2 border-primary mx-auto my-6 relative bg-base-300 flex">
-  <div class="w-full border border-primary my-auto mx-auto relative">
-    <div class="tooltip tooltip-open tooltip-left absolute top-0 left-0" data-tip="(-3, 0)"></div>
-    <div class="tooltip tooltip-open tooltip-top absolute top-0 left-[50%]" data-tip="(0, 0)"></div>
-    <div class="tooltip tooltip-open tooltip-right absolute top-0 right-0" data-tip="(3, 0)"></div>
+<div class="w-[50%] aspect-[4/3] border-2 border-primary mx-auto my-12 relative bg-base-300 flex flex-col">
+  <div class="h-full border border-primary my-auto mx-auto relative">
+    <div class="tooltip tooltip-open tooltip-secondary tooltip-top absolute top-0" data-tip="(3, 0)"></div>
+    <div class="tooltip tooltip-open tooltip-secondary tooltip-right absolute top-[50%]" data-tip="(0, 0)"></div>
+    <div class="tooltip tooltip-open tooltip-secondary tooltip-bottom absolute bottom-0" data-tip="(-3, 0)"></div>
   </div>
 </div>
 
-Now, we can use `uv` to pass to the fragement shader. Using the pseudocode mentioned before. We can write the fragment shader as below.
+Now, we can pass `uv` to the fragement shader and use as the point in the complex plane. Using the pseudocode mentioned before, we can write the fragment shader as below.
+Futhermore, let's assume there is a function called `color` to color the point based on the last values of `z` and number of iterations.
 
-```glsl title="mandelbrot.frag"
+```glsl title="mandelbrot.frag" {11,15}
 precision mediump float;
 
 varying vec2 uv;
 uniform float iterations;
 
-const int MAX_ITERATION = 512;
+const float MAX_ITERATION = 128.;
 
-void main() {
-  vec2 z = vec2(0.0);
-  float p = 0.0;
-  float color = 1.0; // initial is white
-  for (int i = 0; i < MAX_ITERATION; i++) {
-    // z = z^2 + c
-    z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + uv;
-    p++;
-    if (length(z) > 2.0 || p > iterations) {
-      color = 0.0; // not in the set, color black
-      break;
-    }
-  }
-  // gl_FragColor represents the color of the pixel
-  gl_FragColor = vec4(vec3(color), 1.);
-}
-```
-
-Phew, now we have a working Mandelbrot set. However, the image only contains black and white (binary mode).
-Let's modify the fragment shader to see Mandelbrot set in grayscale color. 
-The variable `p` counts how many iterations it takes for a point to escape the set, and we divide it by `maxIteration` to get a value between 0 and 1.
-The `sqrt` is to make the color appeare more smoothly.
-
-```glsl title="mandelbrot.frag" {19}
-precision mediump float;
-
-varying vec2 uv;
-uniform float iterations;
-
-const float MAX_ITERATION = 512.;
+...
 
 void main() {
   vec2 z = vec2(0.0);
   float iter = 0.0;
-  while (iter < iterations) {
-    // z = z^2 + c
+  for (float i = 0.0; i < MAX_ITERATION; i++) {
+    iter = i;
     z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + uv;
-    iter++;
-    if (length(z) > 2.0) {
+    if (length(z) > 2.0 || iter > iterations) {
       break;
     }
   }
-  float color = sqrt(p / iterations);
-  gl_FragColor = vec4(vec3(color), 1.);
+  gl_FragColor = vec4(color(z, iter), 1.);
 }
 ```
 
-Now, we can see the Mandelbrot set in grayscale color. However, the image is still not very interesting. 
-Let's make a color function that takes the value of `iter` and `z` from last iteration.
+Now, let's implement the `color` function. Let's consider the easiest way to color the point, which is to color it white if it's in the set, and black if it's not. 
+You can select the **Binary** display mode to see the result.
 
 ```glsl
-vec3 smooth(in vec2 z, in float iter) {
+vec3 color(vec2 z, float iter) {
+  if (iter < iterations) return vec3(0.0);
+  else return vec3(1.0);
+}
+```
+
+However, only black and white is not enough. Let's add some color in between, with some few rules.
+
+- If the point can not escape the circle of radius 2, color it black
+- If the point already outside of circle of raduis 2, color ot black.
+- Any colors between black and white will indicates how many iterations it takes to escape the set.
+
+And now, we have a new version of color function. You can switch to the **Hollow** mode to see the result.
+
+```glsl
+vec3 color(vec2 z, float iter) {
+  if (iter < iterations - 1.) return vec3(sqrt(iter / iterations));
+  else return vec3(0.0);
+}
+```
+
+Now, we can see the Mandelbrot set in grayscale color. However, the image is not visually appeal. 
+Let's make a newer version of `color` function to add some color to it.
+
+```glsl
+vec3 color(in vec2 z, in float iter) {
   if (iter < iterations - 1.) {
     float v = log(iter + 1.5 - log(log2(length(z)))) / 3.4;
     if (v < 1.) {
@@ -335,4 +333,45 @@ vec3 smooth(in vec2 z, in float iter) {
 }
 ```
 
-Now, we have the get the image of Mandelbrot set similar to the one in [Wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg).
+Now, we have the get the image of Mandelbrot set fairly similar to the one in [Wikipedia](https://upload.wikimedia.org/wikipedia/commons/2/21/Mandel_zoom_00_mandelbrot_set.jpg).
+
+## Bonus: The Julia Set
+
+<MobileWrapper>
+  <Julia client:load />
+</MobileWrapper>
+
+The Julia set is a fractal is the fractal that use the same recursive function $f(z) = z^2 + c$ as the Mandelbrot set.
+However, the inttrative process to generate Julia is quiet different from the Julia set. 
+Instead of starting with initial $z_0 = 0$ and plotting the constant $c$, we would start with arbritary $c$ and plot the initial value $z_0$.
+This leads to different choice of constant $c$ resulting in different Julia set.
+
+For the rendering, we gonna use the same vertex shader as the Mandelbrot set. However, the shader is little different as we need to pass `constant` uniform to the shader.
+
+```glsl title="julia.frag" {4, 11, 16}
+precision mediump float;
+
+varying vec2 uv;
+uniform vec2 constant;
+uniform float iterations;
+
+...
+
+void main() {
+  // z_0 is the plotting point
+  vec2 z = uv;
+  float iter = 0.0;
+  for (float i = 0.0; i < MAX_ITERATION; i++) {
+    iter = i;
+    // f(z) = z^2 + c
+    z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + constant;
+    if (length(z) > 2.0 || iter > iterations) {
+      break;
+    }
+  }
+  gl_FragColor = vec4(color(z, iter), 1.);
+}
+```
+
+That's it. Now we can very beautiful visualization of the Mandelbrot and Julia set. We have cover so many topics in this article, from mathemttics to computer graphics.
+I hope you enjoy this article and learn something new. Happy coding!
