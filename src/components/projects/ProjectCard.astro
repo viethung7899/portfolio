@@ -29,14 +29,14 @@ import "@styles/project.scss";
       <div class="gap-4 flex text-xl">
         {
           github && (
-            <a href={github} class="hover:link-secondary" target="_blank">
+            <a href={github} class="hover:link-secondary tooltip" target="_blank" data-tip="View source">
               <Icon class="w-6 h-6" name="fa-solid:code" />
             </a>
           )
         }
         {
           demo && (
-            <a href={demo} class="hover:link-secondary" target="_blank">
+            <a href={demo} class="hover:link-secondary tooltip" target="_blank" data-tip="Visit site">
               <Icon class="w-6 h-6" name="fa-solid:window-maximize" />
             </a>
           )

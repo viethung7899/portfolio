@@ -3,9 +3,12 @@ title: Visualizing sorting algorithms
 date: 2022-09-02
 ---
 
-import SortingVisualizer from "@interactives/sorting-visualizer/SortingVisualizer.svelte";
+import MobileWrapper from "@interactives/MobileWrapper.svelte"
+import SortingVisualizer from "@interactives/sorting-visualizer/SortingVisualizer.svelte"
 
-<SortingVisualizer client:load />
+<MobileWrapper>
+  <SortingVisualizer client:visible />
+</MobileWrapper>
 
 ## Motivation
 

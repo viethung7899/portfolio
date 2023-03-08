@@ -3,10 +3,14 @@ import { defineConfig } from "astro/config";
 import image from "@astrojs/image";
 import mdx from "@astrojs/mdx";
 import svelte from "@astrojs/svelte";
+import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/serverless";
 
-import rehypePrettyCode from 'rehype-pretty-code';
+import remarkMath from "remark-math"
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeKatex from "rehype-katex";
+
 
 const prettyCodeOptions = {
   theme: 'one-dark-pro',
@@ -33,7 +37,13 @@ const prettyCodeOptions = {
 export default defineConfig({
   integrations: [
     mdx({
-      rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+      rehypePlugins: [
+        [rehypePrettyCode, prettyCodeOptions],
+        [rehypeKatex],
+      ],
+      remarkPlugins: [
+        [remarkMath]
+      ],
       syntaxHighlight: false,
       smartypants: true,
       gfm: true,
@@ -46,7 +56,8 @@ export default defineConfig({
     }),
     image({
       serviceEntryPoint: "@astrojs/image/sharp"
-    })
+    }),
+    react()
   ],
   output: "server",
   adapter: vercel({})
