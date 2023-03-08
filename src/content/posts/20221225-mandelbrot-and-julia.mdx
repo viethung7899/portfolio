@@ -8,7 +8,7 @@ import Mandelbrot from "@interactives/fractals/Mandelbrot.svelte";
 import Julia from "@interactives/fractals/Julia.svelte";
 
 <MobileWrapper>
-  <Mandelbrot client:load />
+  <Mandelbrot client:visible />
 </MobileWrapper>
 
 ---
@@ -338,7 +338,7 @@ Now, we have the get the image of Mandelbrot set fairly similar to the one in [W
 ## Bonus: The Julia Set
 
 <MobileWrapper>
-  <Julia client:load />
+  <Julia client:visible />
 </MobileWrapper>
 
 The Julia set is a fractal is the fractal that use the same recursive function $f(z) = z^2 + c$ as the Mandelbrot set.

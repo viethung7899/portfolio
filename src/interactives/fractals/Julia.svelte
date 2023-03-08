@@ -30,10 +30,18 @@
   const displayComplex = (x: number, y: number) => {
     const rx = +x.toFixed(3);
     const ry = +y.toFixed(3);
-    if (rx == 0 && ry == 0) return "0";
-    const real = rx != 0 ? rx : "";
-    const img = ry == 0 ? "" : ry > 0 ? `+${ry}` : ry;
-    return `c = ${real}${img}i`;
+    if (rx == 0) {
+      if (ry == 0) return "0";
+      if (ry == 1) return "i";
+      if (ry == -1) return "-i";
+      return `${ry}i`;
+    }
+    let img = "";
+    if (ry == 1) img = "i";
+    if (ry == -1) img = "-i";
+    if (ry > 0) img = `+${ry}i`;
+    if (ry < 0) img = `${ry}i`;
+    return `c = ${rx}${img}`;
   };
 
   $: uniforms = {
@@ -65,12 +73,12 @@
 </script>
 
 <div class="w-full mb-6" bind:clientWidth={width}>
-  <span class="mb-4"
-    >Plotting {@html katex.renderToString(
+  <p class="text-primary text-lg text-center">
+    {@html katex.renderToString(
       displayComplex(constant.x, constant.y),
       { displayMode: false }
-    )}</span
-  >
+    )}
+  </p>
   <canvas
     bind:this={view}
     class="rounded-md border border-primary"
