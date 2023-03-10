@@ -14,7 +14,6 @@
   "devDependencies": {
     "@astrojs/image": "^0.13.0",
     "@astrojs/mdx": "^0.15.0",
-    "@astrojs/react": "^2.0.2",
     "@astrojs/svelte": "^2.0.0",
     "@astrojs/tailwind": "^3.0.0",
     "@iconify/svelte": "^3.0.1",

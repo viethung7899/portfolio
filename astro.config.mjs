@@ -3,7 +3,6 @@ import { defineConfig } from "astro/config";
 import image from "@astrojs/image";
 import mdx from "@astrojs/mdx";
 import svelte from "@astrojs/svelte";
-import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel/serverless";
 
@@ -57,7 +56,6 @@ export default defineConfig({
     image({
       serviceEntryPoint: "@astrojs/image/sharp"
     }),
-    react()
   ],
   output: "server",
   adapter: vercel({})
