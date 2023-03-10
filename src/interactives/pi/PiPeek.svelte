@@ -5,7 +5,7 @@
   let index: number;
 
   $: empty = number.length <= 0;
-  $: isValid = /\d+$/.test(number);
+  $: isValid = /^\d+$/.test(number);
 
   $: message = empty
     ? "Type a sequence of digits"
