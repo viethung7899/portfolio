@@ -1,0 +1,28 @@
+---
+title: Sodoku and Algorithm X
+date: 2022-10-15
+---
+
+import SodokuSolver from '@interactives/sodoku/SodokuSolver.svelte'
+import MobileWrapper from '@interactives/MobileWrapper.svelte'
+
+<MobileWrapper>
+  <SodokuSolver client:visible />
+</MobileWrapper>
+
+---
+
+## Introduction
+
+A few year ago, I implemented a Sodoku solver using Python. 
+However, the solver only works in the CLI mode and only supports one simple algorithm, backtracking.
+Website is the best tool to visualizing yourr idea, so my goal today is to make a soduku solver
+and animating the solving process with different algorithms. Like any visualization I did before, 
+it will be embedded in this blog post.
+
+Also, I want to attempt to use the Algorithm X and Dancing Link by Donald Knuth to solve the Sodoku. 
+I have read the paper and the book, but I have never implemented it. So this is a good chance to
+do it.
+
+## Algorithm X
+
