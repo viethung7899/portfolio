@@ -4,21 +4,21 @@ date: 2023-03-14
 ---
 
 Happy $\pi$ day everybody! I'm going to show you how to use serverless functions to build an API for find digits in $$\pi$$.
-It may not the most useful use case for the serverless functions, but it's a fun one. 
-More importantly, you can see the API in action with an embedded $\pi$ finder in my blog below. 
+It may not the most useful use case for the serverless functions, but it's a fun one.
+More importantly, you can see the API in action with an embedded $\pi$ finder in my blog below.
 Just type in any sequences in the form to find their positions among the first **one million** digits in $\pi$.
 
-import PiPeek from "@interactives/pi/PiPeek.svelte"
+import PiPeek from "@interactives/pi/PiPeek.svelte";
 
 <PiPeek client:only="svelte" />
 
 ## Why serveless function?
 
-Some of you may think why don't let the client side do the calculation. 
+Some of you may think why don't let the client side do the calculation.
 Well, it could be a good idea, but that solution could not sccale well.
 In order to that, we first need to load a file containing the $\pi$ digits into the client side.
 It could work for a small number of digits like 1000 or 10000 digits because the file size is relatively small.
-However, as the number of digits increases, the file size also increases. 
+However, as the number of digits increases, the file size also increases.
 Letting our browswer to load such a large file and consume the memory space is not a good idea.
 
 Another approach is to offload the work to the server side by writing a simple API to query the digits.
@@ -26,35 +26,71 @@ This approach is much better than the previous one, and more flexibile with scal
 Hosting one simple API with on a separate server is maybe to much for a small project.
 Since this site is deployed in Vercel, we can could levarage and implement our API with their [serverless functions](https://vercel.com/docs/concepts/functions/serverless-functions).
 
+## Before we start
+
+Before we start, we need to have a file containing the digits of $\pi$. I have a file called `pi-million.txt` containing the first million digits of $\pi$.
+Also, make sure you have a Vercel account and have installed the Vercel CLI in your machine.
+To test the API locally, we need to run the command `vercel dev` in the root directory of our project.
+
 ## How to implement the API
 
-First, we need to create a folder called `api` in the root directory of our project. 
+First, we need to create a folder called `api` in the root directory of our project.
 Our API endpoint will be `api/pi-peek/[number]`, where `[number]` is any query number.
 So, we need to create a file called `pi-peek/[number].ts` in the `api` folder.
 Also, we need to have a file contained the digits of $\pi$ and called `pi-million.txt` in the `api/pi-peek` folder.
 
-
 ```ts title="[number].ts"
-import { NowRequest, NowResponse } from "@vercel/node";
-import fs from "fs";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { readFileSync } from "fs";
 import path from "path";
 
-// Load the digits of pi from the file
-const pi = fs.readFileSync(path.join(__dirname, "pi-million.txt"), "utf8");
+const FILE = "pi-million.txt";
+const PATH = path.join(process.cwd(), "api", "pi-peek", FILE);
+const RANGE = 5;
 
-// The API endpoint
-export default handler = (request: VercelRequest, response: VercelResponse) => {
-  const number = request.query.number as string
-  const index = pi.indexOf(number)
-  const beforeIndex = index - 10
-  const before = pi.slice(beforeIndex < 0 ? 0 : beforeIndex, index)
-  const after = pi.slice(index + number.length, index + number.length + 10)
+const pi = readFileSync(PATH, "utf-8");
+
+export default function handler(
+  request: VercelRequest,
+  response: VercelResponse
+) {
+  const number = request.query.number as string;
+  const index = pi.indexOf(number);
+  if (index < 0) {
+    response.status(200).send({
+      index: -1,
+      before: "",
+      between: "",
+      after: pi.slice(0, RANGE)
+    });
+    return;
+  }
+
   response.status(200).send({
     index: index == 0 ? index : index - 1,
-    before,
-    middle: number,
-    after
-  })
+    before: pi.slice(index - RANGE < 0 ? 0 : index - RANGE, index),
+    between: number,
+    after: pi.slice(index + number.length, index + number.length + RANGE)
+  });
 }
 ```
 
+Now, we can connect the API to our client side just by calling the endpoint with the query number.
+
+```ts
+type Response = {
+  index: number
+  before: string
+  middle: string
+  after: string
+}
+
+const peek = async (number: string) => {
+  const response = await fetch(`/api/pi-peek/${number}`)
+  return await response.json() as Response
+}
+```
+
+Now, it's your choice to build the UI can connect to the API. 
+In this case, I choose to use Svelte to build the UI.
+You can see the result in the embedded $\pi$ finder in my blog above.

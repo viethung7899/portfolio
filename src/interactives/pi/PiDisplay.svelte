@@ -28,7 +28,7 @@
     } else {
       timer = setTimeout(async () => {
         promise = fetchNumber(query);
-      }, 100);
+      }, 500);
     }
   }
 
@@ -37,25 +37,26 @@
   });
 </script>
 
-<span class="text-[72px] overflow-scroll">
+<span class="text-[48px] md:text-[72px] overflow-scroll">
   {#await promise}
     <span>Peeking π...</span>
   {:then data}
     {#if !data}
       <span>Peeking π...</span>
     {:else}
-      <span>{data.before}</span><span class="highlight">{data.between}</span
-      ><span>{data.after}</span>
+      <span>{data.before}</span>
+      <span class="highlight">{data.between}</span>
+      <span>{data.after}</span>
     {/if}
   {/await}
 </span>
 
 <style lang="scss">
   span > span {
-    @apply opacity-50 m-0 p-0;
+    @apply text-neutral m-0 p-0;
 
     &.highlight {
-      @apply opacity-100 text-primary;
+      @apply text-secondary;
     }
   }
 </style>
