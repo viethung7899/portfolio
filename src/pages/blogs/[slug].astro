@@ -37,7 +37,8 @@ const { Content, headings } = await post.render();
           date.toLocaleDateString("en-us", {
             year: "numeric",
             month: "long",
-            day: "numeric"
+            day: "numeric",
+            timeZone: "UTC"
           })
         }
       </h5>
