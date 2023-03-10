@@ -168,7 +168,7 @@ We these *uniform variables*
   - `translate` that controls the offset of the viewport.
 We can add the shaders and update the shaders with reactive statements
 
-```svelte title="Mandelbrot.svelte" {6,19,20}
+```svelte title="Mandelbrot.svelte" {12-19}
 <script>
   ...
   import baseVert from '.lib/base.vert?raw';
@@ -186,7 +186,7 @@ We can add the shaders and update the shaders with reactive statements
       zoom,
       translate: new Float32Array(translate), // Array in uniforms must be Float32Array
     });
-    container.filters = [new PIXI.Filter(undefined, shader)];
+    container.filters = [filter];
   }
 </script>
 ```
