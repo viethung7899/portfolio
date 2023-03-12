@@ -1,20 +1,20 @@
 ---
-title: Sodoku and Algorithm X
+title: Sudoku and Algorithm X
 date: 2022-10-15
 ---
 
-import SodokuSolver from '@interactives/sodoku/SodokuSolver.svelte'
+import SudokuSolver from '@interactives/sudoku/SudokuSolver.svelte'
 import MobileWrapper from '@interactives/MobileWrapper.svelte'
 
 <MobileWrapper>
-  <SodokuSolver client:visible />
+  <SudokuSolver client:visible />
 </MobileWrapper>
 
 ---
 
 ## Introduction
 
-A few year ago, I implemented a Sodoku solver using Python. 
+A few year ago, I implemented a sudoku solver using Python. 
 However, the solver only works in the CLI mode and only supports one simple algorithm, backtracking.
 Website is the best tool to visualizing yourr idea, so my goal today is to make a soduku solver
 and animating the solving process with different algorithms. Like any visualization I did before, 
