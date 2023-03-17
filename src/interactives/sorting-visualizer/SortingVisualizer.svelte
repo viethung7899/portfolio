@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { sleep } from "@interactives/common/utils";
   import {
     algorithms,
     type Item,
@@ -20,9 +21,7 @@
     { name: "Very Fast", value: 40 }
   ];
   let speed = speeds[0].value;
-  $: sleep = () => {
-    return new Promise((resolve) => setTimeout(resolve, speed));
-  };
+  $: pause = () => sleep(speed);
   
   let playing = false;
   let algoName: Algorithm = "Quicksort";
@@ -44,7 +43,7 @@
         playing = false;
       } else {
         items = state.value;
-        await sleep();
+        await pause();
       }
     }
   };
