@@ -4,6 +4,7 @@
   export let value: number;
   export let position: Position;
   export let onChange: (value: number) => void;
+  export let canModify = false;
 </script>
 
 <input
@@ -11,6 +12,7 @@
   w-12 h-12 p-2 cursor-pointer text-xl 
   focus:outline-none text-center
   focus:bg-primary/30`}
+  class:modify={canModify}
   class:top={position[0] % 3 === 0}
   class:left={position[1] % 3 === 0}
   class:right={position[1] === 8}
@@ -42,6 +44,10 @@
   /* Firefox */
   input[type="number"] {
     -moz-appearance: textfield;
+  }
+
+  .modify {
+    @apply text-primary font-bold;
   }
 
   .top {
