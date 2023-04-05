@@ -2,7 +2,16 @@
   "name": "portfolio",
   "version": "1.0.0",
   "description": "The monorepo for my portfolio",
+  "type": "module",
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "Viet-Hung Nguyen",
+  "license": "ISC",
+  "dependencies": {
+    "turbo": "^1.8.8"
+  },
+  "packageManager": "pnpm@7.21.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

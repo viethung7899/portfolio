@@ -1,6 +1,6 @@
 <script>
   import Julia from "./components/Julia.svelte";
-  import Mandelbrot from "./Mandelbrot.svelte";
+  import Mandelbrot from "./components/Mandelbrot.svelte";
 
 
 </script>

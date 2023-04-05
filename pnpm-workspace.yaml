@@ -1,2 +1,6 @@
 workspace:
   - apps/*
+  - packages/*
+packages:
+  - apps/*
+  - packages/*
