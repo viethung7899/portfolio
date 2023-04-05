@@ -2,7 +2,6 @@
 module.exports = {
   content: [
     "./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,css,scss}",
-    "../../packages/ui-*/src/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,css,scss}"
   ],
   theme: {
     extend: {}

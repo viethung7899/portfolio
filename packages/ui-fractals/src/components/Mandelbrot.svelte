@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Application, Container, Filter } from "pixi.js";
   import { onMount } from "svelte";
-  import base from "./lib/base.vert?raw";
-  import mandelbrot from "./lib/mandelbrot.frag?raw";
+  import base from "../lib/base.vert?raw";
+  import mandelbrot from "../lib/mandelbrot.frag?raw";
 
   const ASPECT_RATIO = 4 / 3;
   const DISPLAY_MODES = ["Binary", "Grayscale", "Hallow", "Beautiful"]
@@ -47,7 +47,7 @@
 <div class="w-full mb-6" bind:clientWidth={width}>
   <canvas bind:this={view} class="rounded-md border border-primary" />
 </div>
-<div class="w-full mb-6 grid grid-cols-2 gap-4 items-center">
+<div class="mb-4 grid sm:grid-cols-2 gap-4 items-center">
   <label for="iterations">
     Iterations: <strong class="text-primary">{iterations}</strong>
   </label>
@@ -61,7 +61,7 @@
     class="range range-sm range-primary"
   />
   <label for="display">
-    Display mode: {displayMode}
+    Display mode
   </label>
   <select
     class="select select-bordered" 

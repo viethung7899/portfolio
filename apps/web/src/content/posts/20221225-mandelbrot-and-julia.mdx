@@ -3,9 +3,8 @@ title: Visualizing Mandelbrot set
 date: 2022-12-25
 ---
 
-import MobileWrapper from "@interactives/MobileWrapper.svelte";
-import Mandelbrot from "@interactives/fractals/Mandelbrot.svelte";
-import Julia from "@interactives/fractals/Julia.svelte";
+import MobileWrapper from "@components/common/MobileWrapper.svelte";
+import { Mandelbrot, Julia } from "@ui/fractals";
 
 <MobileWrapper>
   <Mandelbrot client:visible />
