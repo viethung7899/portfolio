@@ -1,0 +1,230 @@
+---
+title: Visualizing sorting algorithms
+date: 2022-09-02
+---
+
+import MobileWrapper from "@interactives/MobileWrapper.svelte"
+import SortingVisualizer from "@interactives/sorting-visualizer/SortingVisualizer.svelte"
+
+<MobileWrapper>
+  <SortingVisualizer client:visible />
+</MobileWrapper>
+
+## Motivation
+
+Sorting problem are classic introductory topic for any first-year computer science.
+The algorithms are little bit intimidated at the first place, but they introduce a veriey
+of interesting concepts to guide students to think like programmers for better problem solving.
+
+My goal here is to create a tool to visualize sorting algorithms.
+I hope a clear visualization can aid student to understand these algorithms. There are a lot of
+website for visualizing algorithms. In fact, I already made a website for that purpose. Most of them
+are just standalone websites. However, my challenge is to integrate the visulization within the blog post.
+
+As mention on the [previous blog](/blogs/how-i-built-my-portfolio-with-astro),
+I use the MDX format compose the blog posts.
+MDX allow us to inject the JSX elements inside the markdown files.
+For the implementation, I choose Svelte to embed interactivity within the blog post
+because its simplicity.
+
+---
+
+## Features
+
+The [visualizer](#sorting-visualizer) supports these features below
+
+- Set the number of elements in the array (from 10 to 100 elements)
+- Choose your algorithms
+  - Bubble sort
+  - Selection sort
+  - Insertion sort
+  - Merge sort
+  - Quicksort
+  - Heap sort
+- Change the sorting speed (even when the animation is running)
+- Play, pause and resume the animation
+
+---
+
+## Implementation
+
+### Render with Svelte components
+
+First, we create a type to represent the state of each item in the array.
+Each item has a `value` and a `status` to indicate the state of the item
+when the algorithm is running.
+
+```ts title="types.ts"
+export type Item = {
+  value: number;
+  status: "none" | "selected" | "sorted" | "pivot";
+}
+```
+
+
+Now, we can a Svelte component represent each item in the array.
+As you can see, I use simple div elements to represent the items, where the height of the div
+is determined by the `value` property of the item. Meanwhile, the `status` property is used to determine
+the rendering style of the item.
+
+```svelte
+<script lang="ts">
+  import type { Item } from "./types";
+
+  export let item: Item;
+</script>
+
+<div
+  class="flex-1 rounded-sm"
+  style:height={`${item.value}%`}
+  class:none={item.status === "none"}
+  class:selected={item.status === "selected"}
+  class:sorted={item.status === "sorted"}
+  class:pivot={item.status === "pivot"}
+/>
+
+{/* More styling below */}
+```
+
+### Generator functions
+
+Generartor functions are functions that can **stop midway** and **resume** to where it stopped.
+They can be defined with the `function*{:js}` keyword.
+
+Let's take a look a example below
+
+
+```js showLineNumbers title="generator.js" {3,5}
+function* foo() {
+  console.log("To the foo land...");
+  yield "Hello";
+  console.log("Welcome back...")
+  yield "World";
+  console.log("Bye bye!");
+}
+
+const fooGen = foo();
+console.log(fooGen.next()) // Exit at line 3
+console.log(fooGen.next()) // Exit at line 5
+console.log(fooGen.next()) // Exit at line 6
+```
+
+
+And here's the output
+
+```json
+To the foo land...
+{ done: false, value: "Hello" }
+Welcome back...
+{ done: false, value: "World" }
+Bye bye!
+{ done: true, value: undefined }
+```
+
+
+When calling a generator function, it does not execute immediately, 
+but rather return a special **Generator** object. 
+The object has a method called `next(){:ts}`, which starts the execution of
+the function until reaching the `yield{:ts}` statements, then returns an object with two proprties: 
+- `done{:ts}`: a boolean to indicate the whether the function finish its execution
+- a `value{:ts}` specified after the stopping `yield{:ts}` statement
+
+Because of generator functions can pause during their execution, 
+they can be a perfect tool to visualize sorting algorithms since we need the state
+of the array during the sorting procedure.
+
+### Lazy sorting functions
+
+First, let take a look at very simple bubble sort function
+
+Suppose we have a simple bubble sort implementation in TypeScript
+
+```ts showLineNumbers title="bubbleSort.ts"
+export function bubbleSort(items: Item[]) {
+  const n = items.length;
+  for (let i = 0; i < n; i++) {
+    let swapped = false;
+    for (let j = 0; j < n - i - 1; j++) {
+      // Compare and swap
+      if (items[j].value > items[j + 1].value) {
+        const temp = items[j];
+        items[j] = items[j + 1];
+        items[j + 1] = temp;
+        swapped = true;
+      }
+    }
+    if (!swapped) break;
+  }
+}
+```
+
+To better show the algorithm execution, we need to pause the algorithm when it picks items, swaps, unpicks items, or indicate a sorted item.
+We can do that by directly change the state of the diresed item and 
+place the `yeild` statement after the change to capture the state of the sorting array.
+
+```ts showLineNumbers title="bubbleSort.ts" {9-11, 18, 23-24, 27-30}
+import type { Item } from "./types";
+
+export function* bubbleSort(items: Item[]) {
+  const n = items.length;
+  for (let i = 0; i < n; i++) {
+    let swapped = false;
+    for (let j = 0; j < n - i - 1; j++) {
+      // Pick elements
+      items[j].status = "selected";
+      items[j + 1].status = "selected";
+      yield items;
+
+      // Compare and swap
+      if (items[j].value > items[j + 1].value) {
+        const temp = items[j];
+        items[j] = items[j + 1];
+        items[j + 1] = temp;
+        yield items;
+        swapped = true;
+      }
+
+      // Unpick elements
+      items[j].status = "none";
+      items[j + 1].status = "none";
+    }
+    if (!swapped) break;
+    else {
+      items[n - i - 1].status = "sorted"
+      yield items;
+    }
+  }
+  items.forEach(item => item.status = "sorted");
+  yield items;
+}
+```
+
+### Animating algorithm
+
+Now, we can use the generator function to animate the sorting algorithm.
+We can use the `next(){:ts}` method of the generator function to get the next state of the array.
+Here's the implementation for the `play(){:ts}` function
+
+```ts {8}
+const play = async () => {
+    playing = true;
+    while (playing) {
+      state = generator.next();
+      if (state.done) {
+        playing = false;
+      } else {
+        items = state.value;
+        await sleep();
+      }
+    }
+  };
+```
+
+The magic of Svelte is that it will automatically update the DOM when the any dependent value is reassigned, as highlighted above.
+So, we can simply use `items{:ts}` to render the array.
+
+```svelte
+{#each items as item}
+  <SortingItem item={item} />
+{/each}
+```

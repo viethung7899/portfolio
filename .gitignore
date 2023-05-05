@@ -23,6 +23,3 @@ pnpm-debug.log*
 
 # Astro
 .astro
-
-# Turborepo
-.turbo
