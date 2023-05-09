@@ -1,73 +1,51 @@
-export class DancingNode {
-  left: DancingNode = this;
-  right: DancingNode = this;
-  up: DancingNode = this;
-  down: DancingNode = this;
-  column: DancingNode = this;
-  size: number = 0;
-  name: string;
-  rowId: number;
+import type DancingColumn from "./DancingColumn";
 
-  constructor(name: string = "", rowId: number = -1, column?: DancingNode) {
-    this.name = name;
-    this.rowId = rowId;
-    if (column) this.column = column; 
+export type NodeAction = (node: DancingNode) => void;
+
+export default class DancingNode {
+  public left: DancingNode;
+  public right: DancingNode;
+  public up: DancingNode;
+  public down: DancingNode;
+
+  public constructor(
+    public header?: DancingColumn,
+    public rowIndex?: number
+  ) {
+    this.left = this;
+    this.right = this;
+    this.up = this;
+    this.down = this;
+    header?.addNode(this);
   }
 
-  addDown(node: DancingNode) {
-    node.down = this.down;
-    node.down.up = node;
-    node.up = this;
-    this.down = node;
-    return node;
+  public appendToRow(node: DancingNode) {
+    this.left.right = node;
+    node.right = this;
+    node.left = this.left;
+    this.left = node;
   }
 
-  addRight(node: DancingNode) {
-    node.right = this.right;
-    node.right.up = node;
-    node.left = this;
-    this.right = node;
-    return node;
+  public appendToColumn(node: DancingNode) {
+    this.up.down = node;
+    node.down = this;
+    node.up = this.up;
+    this.up = node;
   }
 
-  unlinkLR() {
-    this.left.right = this.right;
-    this.right.left = this.left;
-  }
-
-  relinkLR() {
-    this.left.right = this;
-    this.right.left = this;
-  }
-
-  unlinkUD() {
-    this.up.down = this.down;
+  public unlinkColumn() {
     this.down.up = this.up;
+    this.up.down = this.down;
   }
 
-  relinkUD() {
-    this.up.down = this;
+  public relinkColumn() {
     this.down.up = this;
+    this.up.down = this;
   }
 
-  cover() {
-    this.unlinkLR();
-    for (let i = this.down; i !== this; i = i.down) {
-      for (let j = i.right; j !== i; j = j.right) {
-        j.unlinkUD();
-        j.column.size--;
-      }
+  public loop(action: NodeAction, direction: "up" | "down" | "left" | "right") {
+    for (let node = this[direction]; node !== this; node = node[direction]) {
+      action(node);
     }
   }
-
-  uncover() {
-    for (let i = this.up; i !== this; i = i.up) {
-      for (let j = i.left; j !== i; j = j.left) {
-        j.column.size++;
-        j.relinkUD();
-      }
-    }
-    this.relinkLR();
-  }
-
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { sleep } from "@interactives/common/utils";
   import Square from "./components/Square.svelte";
-  import backtracking from "./lib/backtracking";
+  import { type AlgorithmName, algorithms } from "./lib";
   import Sudoku from "./lib/sudoku";
   import type { SudokuSolvingGenerator, SudokuSolvingState } from "./lib/types";
 
@@ -14,9 +14,12 @@
   let playing = false;
   let hasSolution: boolean | undefined;
 
+  // Algorithm
+  let algoName: AlgorithmName = "Backtracking";
+
   const solve = async () => {
     playing = true;
-    if (!generator) generator = backtracking(sudoku);
+    if (!generator) generator = algorithms[algoName](sudoku);
     while (playing) {
       state = generator.next();
       if (state.done) {
@@ -29,6 +32,7 @@
     }
   };
 
+  $: isSolving = state && !state.done;
   $: isSolved = state?.done;
 </script>
 
@@ -50,6 +54,15 @@
   </div>
 </div>
 <div class="flex my-6 items-center justify-center gap-3">
+  <select
+    class="select select-bordered"
+    disabled={playing || isSolving}
+    bind:value={algoName}
+  >
+    {#each Object.keys(algorithms) as name}
+      <option value={name}>{name}</option>
+    {/each}
+  </select>
   <button
     class="btn btn-primary btn-outline"
     disabled={playing}
@@ -79,5 +92,5 @@
   {/if}
 </div>
 {#if hasSolution === false}
-<div class="text-error text-center">No solution found</div>
+  <div class="text-error text-center">No solution found</div>
 {/if}

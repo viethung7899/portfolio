@@ -1,0 +1,14 @@
+---
+import MobileWrapper from "@interactives/MobileWrapper.svelte";
+import SudokuSolver from "@interactives/sudoku/SudokuSolver.svelte";
+import BaseLayout from "@layouts/BaseLayout.astro";
+
+---
+
+<BaseLayout title="Demo">
+  <main class="max-w-screen-lg mx-auto px-4 flex-1">
+    <MobileWrapper>
+      <SudokuSolver client:visible />
+    </MobileWrapper>
+  </main>
+</BaseLayout>
