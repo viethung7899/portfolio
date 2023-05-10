@@ -1,6 +1,6 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import {
     currentTime,
     duration,
@@ -41,18 +41,24 @@
     ctx.clearRect(0, 0, width, height);
     const length = $frequencyData.length;
     const w = canvas.width / length;
+    const hsl = getComputedStyle(canvas).getPropertyValue("--s")
+    ctx.fillStyle = `hsl(${hsl})`
     for (let i = 0; i < length; i++) {
       const h = $frequencyData[i];
-      ctx.fillStyle = "white";
       ctx.fillRect(i * w, height - h, w, h);
     }
   }
+
+  onDestroy(() => {
+    if ($isPlaying) pause();
+  })
 </script>
 
-<div class="min-w-[500px] bg-slate-800 rounded-xl">
+<div class="min-w-[500px] bg-primary/25 rounded-xl">
   <canvas class="w-full" bind:this={canvas} />
   <div class="pb-4">
-    <input
+    <div class="-translate-y-2">
+      <input
       type="range"
       class="range range-primary range-xs"
       min={0}
@@ -62,15 +68,16 @@
         seek(e.currentTarget.valueAsNumber);
       }}
     />
-    <div class="px-2">
-      <div class="w-full flex justify-between font-mono">
-        <span>{timestamp($currentTime)}</span>
-        <span>{timestamp($duration)}</span>
-      </div>
-      <h3 class="text-2xl font-bold py-2" class:not-available={!fileName}>
+    <div class="w-full flex justify-between font-mono px-4">
+      <span>{timestamp($currentTime)}</span>
+      <span>{timestamp($duration)}</span>
+    </div>
+  </div>
+    <div class="p-4">
+      <h3 class="text-2xl font-bold" class:not-available={!fileName}>
         {fileName || "Upload audio file..."}
       </h3>
-      <div class="w-full flex justify-center">
+      <div class="w-full flex justify-center pt-4">
         <button
           class="btn btn-primary rounded-full aspect-square"
           on:click={toggle}
@@ -86,10 +93,11 @@
   </div>
 </div>
 
-<label class="btn btn-primary gap-2" for="audio-file">
-  <Icon class="w-4 h-4" icon="fa6-solid:upload" /> Upload file
-</label>
-<input
+<div class="my-4">
+  <label class="btn btn-primary gap-2" for="audio-file">
+    <Icon class="w-4 h-4" icon="fa6-solid:upload" /> Upload file
+  </label>
+  <input
   type="file"
   accept="audio/*"
   id="audio-file"
@@ -102,6 +110,7 @@
     loadAudioFile(file);
   }}
 />
+</div>
 
 <style>
   .not-available {
