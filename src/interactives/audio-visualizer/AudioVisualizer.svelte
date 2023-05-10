@@ -1,32 +1,67 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
-  import { loadAudioFile, currentTime, duration, play, pause } from "./audio";
-  let playing = false;
+  import { onMount } from "svelte";
+  import {
+    currentTime,
+    duration,
+    frequencyData,
+    isPlaying,
+    loadAudioFile,
+    pause,
+    play,
+    seek
+  } from "./audio";
   let fileName: string | null = null;
 
   const timestamp = (time: number) => {
-    const round = Math.round(time)
-    const minutes = Math.floor(round / 60)
-    const seconds = round % 60
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`
-  }
+    const round = Math.round(time);
+    const minutes = Math.floor(round / 60);
+    const seconds = round % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
 
   const toggle = () => {
-    playing = !playing
-    if (playing) play()
-    else pause()
+    $isPlaying = !$isPlaying;
+    if ($isPlaying) play();
+    else pause();
+  };
+
+  let canvas: HTMLCanvasElement;
+  let ctx: CanvasRenderingContext2D | null;
+
+  onMount(() => {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.width / 1.5;
+    ctx = canvas.getContext("2d");
+  });
+
+  $: {
+    if (!ctx) break $;
+    const { width, height } = canvas;
+    ctx.clearRect(0, 0, width, height);
+    const length = $frequencyData.length;
+    const w = canvas.width / length;
+    for (let i = 0; i < length; i++) {
+      const h = $frequencyData[i];
+      ctx.fillStyle = "white";
+      ctx.fillRect(i * w, height - h, w, h);
+    }
   }
 </script>
 
 <div class="min-w-[500px] bg-slate-800 rounded-xl">
-  <canvas class="w-full" />
+  <canvas class="w-full" bind:this={canvas} />
   <div class="pb-4">
-    <input 
-      type="range" 
+    <input
+      type="range"
       class="range range-primary range-xs"
       min={0}
       max={$duration}
-      value={$currentTime} />
+      value={$currentTime}
+      on:change={(e) => {
+        seek(e.currentTarget.valueAsNumber);
+      }}
+    />
     <div class="px-2">
       <div class="w-full flex justify-between font-mono">
         <span>{timestamp($currentTime)}</span>
@@ -43,7 +78,7 @@
         >
           <Icon
             class="w-6 h-6"
-            icon={!playing ? "fa6-solid:play" : "fa6-solid:pause"}
+            icon={!$isPlaying ? "fa6-solid:play" : "fa6-solid:pause"}
           />
         </button>
       </div>
@@ -62,9 +97,9 @@
   on:change={async (e) => {
     const files = e.currentTarget.files;
     if (!files || files.length === 0) return;
-    const file = files[0]
-    fileName = file.name
-    await loadAudioFile(files[0]);
+    const file = files[0];
+    fileName = file.name;
+    loadAudioFile(file);
   }}
 />
 
