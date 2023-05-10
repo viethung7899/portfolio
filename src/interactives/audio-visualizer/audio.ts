@@ -1,68 +1,72 @@
-import {writable} from 'svelte/store'
+import { writable } from 'svelte/store';
 
-export const rawData = writable<number[]>([])
+export const frequencyData = writable<number[]>([])
 export const currentTime = writable(0)
 export const duration = writable(0)
+export const isPlaying = writable(false)
 
+const FFT_SIZE = 256
+
+let audio: HTMLAudioElement;
 let context: AudioContext;
-let audioBuffer: AudioBuffer;
-let source: AudioBufferSourceNode;
-let animationFrame: number;
+let timeAnimationFrame = 0;
+let source: MediaElementAudioSourceNode;
+let analyser: AnalyserNode;
+let dataArray: Uint8Array;
 
-const update = () => {
-  currentTime.set(context.currentTime)
-  animationFrame = requestAnimationFrame(update)
+const updateTime = () => {
+  currentTime.set(audio.currentTime)
+  analyser.getByteFrequencyData(dataArray)
+  frequencyData.set(Array.from(dataArray))
+  timeAnimationFrame = requestAnimationFrame(updateTime)
+}
+
+const diminishFrequencyData = () => {
+  frequencyData.update(data => data.map(d => d * 0.9))
+  timeAnimationFrame = requestAnimationFrame(diminishFrequencyData)
 }
 
 export const loadAudioFile = async (file: File) => {
-  const buffer = await file.arrayBuffer()
-  context = new AudioContext()
-  audioBuffer = await context.decodeAudioData(buffer)
+  audio = new Audio(URL.createObjectURL(file))
+  audio.setAttribute("preload", "metadata")
+  audio.addEventListener('loadedmetadata', () => {
+    duration.set(audio.duration)
+  })
+  audio.addEventListener("ended", () => {
+    pause()
+    seek(0)
+  })
+  audio.load()
   currentTime.set(0)
-  duration.set(audioBuffer.duration)
-  
-  source = context.createBufferSource()
-  source.buffer = audioBuffer
+  duration.set(audio.duration)
 
-  source.connect(context.destination)
-
-}
-
-export const play = () => {
-  source.start()
-  animationFrame = requestAnimationFrame(update)
-}
-
-export const pause = () => {
-  source.stop()
-  cancelAnimationFrame(animationFrame)
-}
-
-export const startFromFile = async () => {
-  const res = await fetch('/StarWars60.wav')
-  const byteArray = await res.arrayBuffer()
-
+  // Set up audio context
   context = new AudioContext()
-  const audioBuffer = await context.decodeAudioData(byteArray)
-
-  const source = context.createBufferSource()
-  source.buffer = audioBuffer
-
-  const analyser = context.createAnalyser()
-  analyser.fftSize = 512
+  source = context.createMediaElementSource(audio)
+  analyser = context.createAnalyser()
+  analyser.fftSize = FFT_SIZE
 
   source.connect(analyser)
   analyser.connect(context.destination)
-  source.start()
+}
 
-  const bufferLength = analyser.frequencyBinCount
-  const dataArray = new Uint8Array(bufferLength)
+export const play = () => {
+  audio.play()
+  isPlaying.set(true)
+  dataArray = new Uint8Array(analyser.frequencyBinCount)
+  cancelAnimationFrame(timeAnimationFrame)
+  timeAnimationFrame = requestAnimationFrame(updateTime)
+}
 
-  const update = () => {
-    analyser.getByteFrequencyData(dataArray)
-    rawData.set(Array.from(dataArray))
-    requestAnimationFrame(update)
-  }
+export const pause = () => {
+  audio.pause()
+  isPlaying.set(false)
+  cancelAnimationFrame(timeAnimationFrame)
+  timeAnimationFrame = requestAnimationFrame(diminishFrequencyData)
+}
 
-  requestAnimationFrame(update)
+export const seek = (time: number) => {
+  audio.pause()
+  currentTime.set(time)
+  audio.currentTime = time
 }
