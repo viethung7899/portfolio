@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import AudioController from "./AudioController.svelte";
-  import {waveformData} from "./audio"
+  import {currentTime, duration, waveformData} from "./audio"
+  import { baseContentHSL, secondaryHSL } from "@layouts/themeStore";
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null;
@@ -19,9 +20,10 @@
     if ($waveformData.length <= 0) break $;
     const length = $waveformData.length;
     const w = canvas.width / length;
-    const hsl = getComputedStyle(canvas).getPropertyValue("--s");
-    ctx.fillStyle = `hsl(${hsl})`;
+    const progress = $currentTime / $duration
     for (let i = 0; i < length; i++) {
+      const color = (i / length >= progress) ? $baseContentHSL : $secondaryHSL;
+      ctx.fillStyle = `hsl(${color})`;
       const h = $waveformData[i] * height / 2;
       ctx.fillRect(i * w, height / 2 - h / 2, w, h);
     }
@@ -33,5 +35,3 @@
 <AudioController>
   <canvas class="w-full" bind:this={canvas}>
 </AudioController>
-
-<div>{JSON.stringify($waveformData)}</div>
