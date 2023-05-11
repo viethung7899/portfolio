@@ -4,6 +4,7 @@ export const frequencyData = writable<number[]>([])
 export const currentTime = writable(0)
 export const duration = writable(0)
 export const isPlaying = writable(false)
+export const fileName = writable("")
 
 const FFT_SIZE = 256
 
@@ -27,6 +28,7 @@ const diminishFrequencyData = () => {
 }
 
 export const loadAudioFile = async (file: File) => {
+  fileName.set(file.name)
   audio = new Audio(URL.createObjectURL(file))
   audio.setAttribute("preload", "metadata")
   audio.addEventListener('loadedmetadata', () => {
@@ -70,3 +72,10 @@ export const seek = (time: number) => {
   currentTime.set(time)
   audio.currentTime = time
 }
+
+export const timestamp = (time: number) => {
+  const round = Math.round(time);
+  const minutes = Math.floor(round / 60);
+  const seconds = round % 60;
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
