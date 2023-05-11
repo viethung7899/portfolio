@@ -1,17 +1,18 @@
 import { writable } from 'svelte/store';
 
 export const frequencyData = writable<number[]>([])
+export const waveformData = writable<number[]>([])
 export const currentTime = writable(0)
 export const duration = writable(0)
 export const isPlaying = writable(false)
 export const fileName = writable("")
 
 const FFT_SIZE = 256
+const SAMPLES = 60;
 
 let audio: HTMLAudioElement;
 let context: AudioContext;
 let timeAnimationFrame = 0;
-let source: MediaElementAudioSourceNode;
 let analyser: AnalyserNode;
 let dataArray: Uint8Array;
 
@@ -27,24 +28,42 @@ const diminishFrequencyData = () => {
   timeAnimationFrame = requestAnimationFrame(diminishFrequencyData)
 }
 
+const processAudioFile = async (file: File) => {
+  const url = URL.createObjectURL(file)
+  const result = await fetch(url)
+  const arrayBuffer = await result.arrayBuffer()
+  const context = new AudioContext()
+  const audioBuffer = await context.decodeAudioData(arrayBuffer)
+  currentTime.set(0)
+  duration.set(audioBuffer.duration)
+
+  const channelData = audioBuffer.getChannelData(0)
+  const blockSize = Math.floor(channelData.length / SAMPLES)
+  const sampledChannelData: number[] = []
+  for (let i = 0; i < SAMPLES; i++) {
+    let start = i * blockSize
+    let sum = 0
+    for (let j = 0; j < blockSize; j++) {
+      sum += Math.abs(channelData[start + j])
+    }
+    sampledChannelData.push(sum / blockSize)
+  }
+  const multiplier = 1 / Math.max(...sampledChannelData)
+  waveformData.set(sampledChannelData.map(d => d * multiplier))
+}
+
 export const loadAudioFile = async (file: File) => {
   fileName.set(file.name)
+  await processAudioFile(file)
   audio = new Audio(URL.createObjectURL(file))
-  audio.setAttribute("preload", "metadata")
-  audio.addEventListener('loadedmetadata', () => {
-    duration.set(audio.duration)
-  })
   audio.addEventListener("ended", () => {
     pause()
     seek(0)
   })
-  audio.load()
-  currentTime.set(0)
-  duration.set(audio.duration)
 
   // Set up audio context
   context = new AudioContext()
-  source = context.createMediaElementSource(audio)
+  const source = context.createMediaElementSource(audio)
   analyser = context.createAnalyser()
   analyser.fftSize = FFT_SIZE
 
