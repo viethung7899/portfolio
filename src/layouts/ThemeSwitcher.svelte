@@ -1,13 +1,15 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
   import { onMount } from "svelte";
+  import { setTheme } from "./themeStore"
 
-  let theme = localStorage.getItem("theme") || "light";
+  $: theme = localStorage.getItem("theme") || "light";
   let isMounted = false;
 
   const toggle = () => {
     if (theme === "light") theme = "dark";
     else theme = "light";
+    setTheme();
   };
 
   onMount(() => {
@@ -22,6 +24,7 @@
         document.documentElement.setAttribute("data-theme", "emerald");
       }
       localStorage.setItem("theme", theme);
+      setTheme();
     }
   }
 </script>
