@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import AudioController from "./AudioController.svelte";
   import { frequencyData, loadAudioFile } from "./audio";
+  import { secondaryHSL } from "@layouts/themeStore";
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null;
@@ -19,8 +20,7 @@
     ctx.clearRect(0, 0, width, height);
     const length = $frequencyData.length;
     const w = canvas.width / length;
-    const hsl = getComputedStyle(canvas).getPropertyValue("--s");
-    ctx.fillStyle = `hsl(${hsl})`;
+    ctx.fillStyle = `hsl(${$secondaryHSL})`;
     for (let i = 0; i < length; i++) {
       const h = $frequencyData[i];
       ctx.fillRect(i * w, height - h, w, h);

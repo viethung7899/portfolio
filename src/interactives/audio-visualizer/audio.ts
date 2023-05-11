@@ -8,7 +8,7 @@ export const isPlaying = writable(false)
 export const fileName = writable("")
 
 const FFT_SIZE = 256
-const SAMPLES = 60;
+const SAMPLES = 256;
 
 let audio: HTMLAudioElement;
 let context: AudioContext;

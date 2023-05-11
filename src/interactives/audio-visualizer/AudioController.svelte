@@ -40,6 +40,7 @@
         min={0}
         max={$duration}
         value={$currentTime}
+        step={0.01}
         on:change={(e) => {
           seek(e.currentTarget.valueAsNumber);
         }}
