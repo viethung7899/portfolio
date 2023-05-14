@@ -32,7 +32,7 @@
     on:click={$toggle}
     disabled={!$fileName}
   >
-    <Icon class="w-6 h-6" icon={"fa6-solid:play"} />
+    <Icon class="w-6 h-6" icon={$isPlaying ? "fa6-solid:pause" : "fa6-solid:play"} />
   </button>
   <div class="flex-grow flex gap-4 items-center">
     <span class="font-mono">{timestamp($currentTime)}</span>
