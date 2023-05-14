@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { Readable, derived, writable } from 'svelte/store';
 
 export const frequencyData = writable<number[]>([])
 export const waveformData = writable<number[]>([])
@@ -10,14 +10,14 @@ export const fileName = writable("")
 const FFT_SIZE = 256
 const SAMPLES = 256;
 
-let audio: HTMLAudioElement;
-let context: AudioContext;
-let timeAnimationFrame = 0;
-let analyser: AnalyserNode;
-let dataArray: Uint8Array;
+let timeAnimationFrame = 0
+
+let audio: HTMLAudioElement
+let analyser: AnalyserNode
 
 const updateTime = () => {
   currentTime.set(audio.currentTime)
+  const dataArray = new Uint8Array(analyser.frequencyBinCount)
   analyser.getByteFrequencyData(dataArray)
   frequencyData.set(Array.from(dataArray))
   timeAnimationFrame = requestAnimationFrame(updateTime)
@@ -28,53 +28,60 @@ const diminishFrequencyData = () => {
   timeAnimationFrame = requestAnimationFrame(diminishFrequencyData)
 }
 
-const processAudioFile = async (file: File) => {
-  const url = URL.createObjectURL(file)
-  const result = await fetch(url)
-  const arrayBuffer = await result.arrayBuffer()
-  const context = new AudioContext()
-  const audioBuffer = await context.decodeAudioData(arrayBuffer)
-  currentTime.set(0)
-  duration.set(audioBuffer.duration)
-
-  const channelData = audioBuffer.getChannelData(0)
-  const blockSize = Math.floor(channelData.length / SAMPLES)
-  const sampledChannelData: number[] = []
+const samplingData = (data: Float32Array, samples: number) => {
+  const sampled: number[] = []
+  const blockSize = Math.floor(data.length / SAMPLES)
   for (let i = 0; i < SAMPLES; i++) {
     let start = i * blockSize
     let sum = 0
     for (let j = 0; j < blockSize; j++) {
-      sum += Math.abs(channelData[start + j])
+      sum += Math.abs(data[start + j])
     }
-    sampledChannelData.push(sum / blockSize)
+    sampled.push(sum / blockSize)
   }
+  return sampled
+}
+
+const extractWaveformData = async (file: File) => {
+  const arrayBuffer = await file.arrayBuffer()
+  const context = new AudioContext()
+  const audioBuffer = await context.decodeAudioData(arrayBuffer)
+
+  const channelData = audioBuffer.getChannelData(0)
+  const sampledChannelData = samplingData(channelData, SAMPLES)
   const multiplier = 1 / Math.max(...sampledChannelData)
   waveformData.set(sampledChannelData.map(d => d * multiplier))
 }
 
+const setupAnalyzer = (audio: HTMLAudioElement) => {
+  const context = new AudioContext()
+  const source = context.createMediaElementSource(audio)
+  const analyser = context.createAnalyser()
+  analyser.fftSize = FFT_SIZE
+  source.connect(analyser)
+  return analyser
+}
+
 export const loadAudioFile = async (file: File) => {
   fileName.set(file.name)
-  await processAudioFile(file)
   audio = new Audio(URL.createObjectURL(file))
-  audio.addEventListener("ended", () => {
+  audio.preload = "metadata"
+  currentTime.set(0)
+  audio.onloadedmetadata = () => {
+    duration.set(audio.duration)
+  }
+  audio.onended = () => {
     pause()
     seek(0)
-  })
-
-  // Set up audio context
-  context = new AudioContext()
-  const source = context.createMediaElementSource(audio)
-  analyser = context.createAnalyser()
-  analyser.fftSize = FFT_SIZE
-
-  source.connect(analyser)
-  analyser.connect(context.destination)
+  }
+  
+  await extractWaveformData(file)
+  analyser = setupAnalyzer(audio)
 }
 
 export const play = () => {
   audio.play()
   isPlaying.set(true)
-  dataArray = new Uint8Array(analyser.frequencyBinCount)
   cancelAnimationFrame(timeAnimationFrame)
   timeAnimationFrame = requestAnimationFrame(updateTime)
 }
@@ -86,15 +93,10 @@ export const pause = () => {
   timeAnimationFrame = requestAnimationFrame(diminishFrequencyData)
 }
 
+export const toggle: Readable<() => void> = derived(isPlaying, ($isPlaying) => $isPlaying ? pause : play)
+
 export const seek = (time: number) => {
   audio.pause()
   currentTime.set(time)
   audio.currentTime = time
 }
-
-export const timestamp = (time: number) => {
-  const round = Math.round(time);
-  const minutes = Math.floor(round / 60);
-  const seconds = round % 60;
-  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-};

@@ -1,0 +1,229 @@
+---
+title: Visualizing audio waveform and frequency spectrum
+date: 2023-05-12
+---
+
+import AudioPlayer from "@interactives/audio-visualizer/AudioPlayer.svelte";
+
+<AudioPlayer client:load />
+
+## Introduction
+
+When coming across different websties and YouTube videos, I see countless ways of visualizing audio
+to spice up the music listening experience. I have always been curious about how I can code it for myself.
+In this article, I will show you how to visualize audio waveform and frequency spectrum with Web Audio API,
+HTML5 Canvas and Svelte. As you can see in my iterative demo, I also code my own audio player with Svelte.
+However, I will not go into details about the audio player in this article.
+
+## What is Web Audio API?
+
+Web Audio API is a high-level JavaScript API for processing and synthesizing audio in web applications.
+We'll use it to load and decode audio file, and extract audio data from it. Then, the extreacted audio data
+will be used for visualization.
+
+## Two types of audio visualization
+
+There are two types of audio visualization that I will cover in this article: waveform and frequency spectrum.
+
+- Waveform is the amplitude of the audio signal over time. It is static and only depnends on the audio source.
+- Frequency spectrum is the amplitude of the audio signal over frequency. It is dynamic and changes as music plays.
+
+### States and functions
+
+We will use Svelte to build the visualizer. First, we need to set up the stores for the visualizer.
+These states will be public and shared across different components for the visualizer.
+
+```ts
+import { writable } from "svelte/store";
+
+export const frequencyData = writable<number[]>([]);
+export const waveformData = writable<number[]>([]);
+export const currentTime = writable(0);
+export const duration = writable(0);
+export const isPlaying = writable(false);
+```
+
+Also, we also need to keep track of private states.
+
+```ts
+let audio: HTMLAudioElement;
+let context: AudioContext;
+let timeAnimationFrame = 0;
+let analyser: AnalyserNode;
+```
+
+Along with these states, we also need to define some public functions to intracting with the visualizer the states.
+I want users to upload their own audio files for the demo, so the audio source comes from the `File` object.
+
+```ts
+export const play = (): void => {};
+export const pause = (): void => {};
+export const seek = (time: number): void => {};
+export const loadAudio = async (file: File): void => {};
+```
+
+## Building the audio controller
+
+The controller has four functions: `play`, `pause`, `seek` and `loadAudio`. The `loadAudio` function
+will be called when the user uploads an audio file. The `play` and `pause` functions will be called
+when the user clicks the play and pause button. The `seek` function will be called when the user
+drags the progress bar.
+
+```ts
+export const loadAudio = async (file: File) => {
+  // Create audio element
+  audio = new Audio(URL.createObjectURL(file));
+  audio.preload = "metadata";
+  currentTime.set(0);
+  audio.onloadedmetadata = () => {
+    duration.set(audio.duration);
+  };
+  audio.onended = () => {
+    pause();
+    seek(0);
+  };
+};
+
+export const play = () => {
+  audio.play();
+  isPlaying.set(true);
+};
+
+export const pause = () => {
+  audio.pause();
+  isPlaying.set(false);
+};
+
+export const seek = (time: number) => {
+  audio.currentTime = time;
+  currentTime.set(time);
+};
+```
+
+## Building the waveform visualizer
+
+### Extract audio data
+
+Let's start with the waveform visualizer. First, we need to extract the audio data from the audio source.
+We will create the new async function `extractWaveformData` to extract the audio data from the audio source.
+
+```ts
+const SAMPLES = 128;
+
+const samplingData = (data: Float32Array, samples: number) => {
+  const sampled: number[] = [];
+  const blockSize = Math.floor(data.length / SAMPLES);
+  for (let i = 0; i < SAMPLES; i++) {
+    let start = i * blockSize;
+    let sum = 0;
+    for (let j = 0; j < blockSize; j++) {
+      sum += Math.abs(data[start + j]);
+    }
+    sampled.push(sum / blockSize);
+  }
+  return sampled;
+};
+
+const extractWaveformData = async (file: File) => {
+  const context = new AudioContext();
+  const buffer = await file.arrayBuffer();
+  const audioBuffer = await context.decodeAudioData(buffer);
+
+  const channelData = audioBuffer.getChannelData(0);
+  const sampledChannelData = samplingData(channelData, SAMPLES);
+  const multiplier = 1 / Math.max(...sampledChannelData);
+  waveformData.set(sampledChannelData.map((d) => d * multiplier));
+};
+```
+
+After decoding the audio file, we will get the `AudioBuffer` object. The `AudioBuffer` object contains
+the audio data. The `AudioBuffer` object has the `getChannelData` function to get the audio data for each channel.
+In this case, we only need the first channel. The extracted channel data is a massive `Float32Array` object, so we need to sample it
+to reduce the size with the `simpleData`. In this case, I reduce the divide the data into 128 blocks and take the average of each block.
+Now, we can append the function `extractWaveformData` at the end of the `loadAudio` function.
+
+```ts {5}
+export const loadAudio = async (file: File) => {
+  /* Load audio code */
+  ...
+
+  await extractWaveformData(file);
+}
+```
+
+### Visualize the waveform
+
+Now, we have the audio data. We can start visualizing the waveform. We will create a new component
+`Waveform` to visualize the waveform. The component will take the waveform data as the input.
+
+```svelte
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { drawWaveform } from "./utils";
+  import { waveformData } from "./audio";
+
+  let canvas: HTMLCanvasElement;
+  let ctx: CanvasRenderingContext2D;
+
+  onMount(() => {
+    ctx = canvas.getContext("2d");
+  });
+
+  $: {
+    if (!ctx) break $;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawWaveform(ctx, $waveform);
+  }
+</script>
+
+<canvas bind:this={canvas}></canvas>
+```
+
+Then, we will create the `drawWaveform` function to draw the waveform on the canvas as a **histogram**.
+
+```ts
+export const drawWaveform = (ctx: CanvasRenderingContext2D, waveform: number[]) => {
+  const {width, height} = ctx.canvas;
+  const step = width / waveform.length;
+  ctx.fillStyle = "white" // Color of ypur choice;
+  for (let i = 0; i < waveform.length; i++) {
+    const h = waveform[i] * height / 2;
+    ctx.fillRect(i * w, height / 2 - h / 2, w, h);
+  }
+};
+```
+
+To show the progress of the audio, let's include the progress to the `drawWaveform` function.
+
+```ts {1,4,6,7}
+export const drawWaveform = (ctx: CanvasRenderingContext2D, waveform: number[], progress: number) => {
+  const {width, height} = ctx.canvas;
+  const w = width / waveform.length;
+  ctx.fillStyle = "red" // your color choice to fill the sound already plyed
+  for (let i = 0; i < waveform.length; i++) {
+    const p = i / waveform.length;
+    if (p > progress) ctx.fillStyle = "white" // your color choice to fill the sound not yet played
+    const h = waveform[i] * height / 2;
+    ctx.fillRect(i * w, height / 2 - h / 2, w, h);
+  }
+};
+```
+
+```svelte {2, 10}
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { drawWaveform, currentTime, duration } from "./utils";
+  import { waveformData } from "./audio";
+
+  /* More code */
+
+  $: {
+    if (!ctx) break $;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawWaveform(ctx, $waveform, $currentTime / $duration);
+  }
+</script>
+
+<canvas bind:this={canvas}></canvas>
+```
+
