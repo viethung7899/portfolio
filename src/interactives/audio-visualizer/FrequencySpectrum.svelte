@@ -1,21 +1,20 @@
 <script lang="ts">
-  import Icon from "@iconify/svelte";
-  import { onMount } from "svelte";
-  import AudioController from "./AudioPlayer.svelte";
-  import { frequencyData, loadAudioFile } from "./audio";
   import { secondaryHSL } from "@layouts/themeStore";
+  import { onMount } from "svelte";
+  import AudioUploadPrompt from "./AudioUploadPrompt.svelte";
+  import { fileName, frequencyData } from "./audio";
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null;
 
   onMount(() => {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.width / 1.5;
     ctx = canvas.getContext("2d");
   });
 
   $: {
     if (!ctx) break $;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.width / 1.5;
     const { width, height } = canvas;
     ctx.clearRect(0, 0, width, height);
     const length = $frequencyData.length;
@@ -28,4 +27,10 @@
   }
 </script>
 
-<canvas class="w-full" bind:this={canvas} />
+<AudioUploadPrompt />
+<canvas
+  class={`w-full border border-secondary mb-4 rounded-lg aspect-[3/2] ${
+    $fileName ? "" : "hidden"
+  }`}
+  bind:this={canvas}
+/>

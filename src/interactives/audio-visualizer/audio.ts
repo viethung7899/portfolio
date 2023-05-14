@@ -59,6 +59,7 @@ const setupAnalyzer = (audio: HTMLAudioElement) => {
   const analyser = context.createAnalyser()
   analyser.fftSize = FFT_SIZE
   source.connect(analyser)
+  analyser.connect(context.destination)
   return analyser
 }
 

@@ -15,52 +15,11 @@ In this article, I will show you how to visualize audio waveform and frequency s
 HTML5 Canvas and Svelte. As you can see in my iterative demo, I also code my own audio player with Svelte.
 However, I will not go into details about the audio player in this article.
 
-## What is Web Audio API?
-
-Web Audio API is a high-level JavaScript API for processing and synthesizing audio in web applications.
-We'll use it to load and decode audio file, and extract audio data from it. Then, the extreacted audio data
-will be used for visualization.
-
-## Two types of audio visualization
-
 There are two types of audio visualization that I will cover in this article: waveform and frequency spectrum.
 
 - Waveform is the amplitude of the audio signal over time. It is static and only depnends on the audio source.
 - Frequency spectrum is the amplitude of the audio signal over frequency. It is dynamic and changes as music plays.
 
-### States and functions
-
-We will use Svelte to build the visualizer. First, we need to set up the stores for the visualizer.
-These states will be public and shared across different components for the visualizer.
-
-```ts
-import { writable } from "svelte/store";
-
-export const frequencyData = writable<number[]>([]);
-export const waveformData = writable<number[]>([]);
-export const currentTime = writable(0);
-export const duration = writable(0);
-export const isPlaying = writable(false);
-```
-
-Also, we also need to keep track of private states.
-
-```ts
-let audio: HTMLAudioElement;
-let context: AudioContext;
-let timeAnimationFrame = 0;
-let analyser: AnalyserNode;
-```
-
-Along with these states, we also need to define some public functions to intracting with the visualizer the states.
-I want users to upload their own audio files for the demo, so the audio source comes from the `File` object.
-
-```ts
-export const play = (): void => {};
-export const pause = (): void => {};
-export const seek = (time: number): void => {};
-export const loadAudio = async (file: File): void => {};
-```
 
 ## Building the audio controller
 
@@ -70,6 +29,14 @@ when the user clicks the play and pause button. The `seek` function will be call
 drags the progress bar.
 
 ```ts
+import { writable } from "svelte/store";
+
+export const currentTime = writable(0);
+export const duration = writable(0);
+export const isPlaying = writable(false);
+
+let audio: HTMLAudioElement;
+
 export const loadAudio = async (file: File) => {
   // Create audio element
   audio = new Audio(URL.createObjectURL(file));
@@ -102,6 +69,10 @@ export const seek = (time: number) => {
 
 ## Building the waveform visualizer
 
+import Waveform from "@interactives/audio-visualizer/Waveform.svelte";
+
+<Waveform client:load />
+
 ### Extract audio data
 
 Let's start with the waveform visualizer. First, we need to extract the audio data from the audio source.
@@ -109,6 +80,7 @@ We will create the new async function `extractWaveformData` to extract the audio
 
 ```ts
 const SAMPLES = 128;
+const waveformData = writable<number[]>([]);
 
 const samplingData = (data: Float32Array, samples: number) => {
   const sampled: number[] = [];
@@ -140,12 +112,13 @@ After decoding the audio file, we will get the `AudioBuffer` object. The `AudioB
 the audio data. The `AudioBuffer` object has the `getChannelData` function to get the audio data for each channel.
 In this case, we only need the first channel. The extracted channel data is a massive `Float32Array` object, so we need to sample it
 to reduce the size with the `simpleData`. In this case, I reduce the divide the data into 128 blocks and take the average of each block.
+In addition, the sampled data is normalized between 0 and 1.
+
 Now, we can append the function `extractWaveformData` at the end of the `loadAudio` function.
 
-```ts {5}
+```ts {4}
 export const loadAudio = async (file: File) => {
   /* Load audio code */
-  ...
 
   await extractWaveformData(file);
 }
@@ -179,7 +152,8 @@ Now, we have the audio data. We can start visualizing the waveform. We will crea
 <canvas bind:this={canvas}></canvas>
 ```
 
-Then, we will create the `drawWaveform` function to draw the waveform on the canvas as a **histogram**.
+Then, we will create the `drawWaveform` function to draw the waveform on the canvas as a **histogram**. To make the waveform
+looks more appealing, we will scale the waveform to fit the canvas height and center each bin vertically.
 
 ```ts
 export const drawWaveform = (ctx: CanvasRenderingContext2D, waveform: number[]) => {
@@ -227,3 +201,135 @@ export const drawWaveform = (ctx: CanvasRenderingContext2D, waveform: number[], 
 <canvas bind:this={canvas}></canvas>
 ```
 
+## Building the frequency spectrum visualizer
+
+import FrequencySpectrum from "@interactives/audio-visualizer/FrequencySpectrum.svelte";
+
+<FrequencySpectrum client:load />
+
+### Set up the analyser
+
+Let's create a function `setupAnalyzer` that receives an audio element and return an `AnalyserNode` object. The `AnalyserNode` object
+will analyze the audio data by using Fast Fourier transform, transform the audio data into the frequency domain. 
+Note that the size for the Fast Fourier transform should be a power of 2, and the number of frequency bands of analyzed data will be half of the size. 
+As you can see below, I pick the size to be 256. which means that the receiving data contains 128 frequency bands.
+
+```ts
+const FFT_SIZE = 256
+let analyser: AnalyserNode
+
+const setupAnalyzer = (audio: HTMLAudioElement) => {
+  const context = new AudioContext()
+  const source = context.createMediaElementSource(audio)
+  analyser = context.createAnalyser()
+  analyser.fftSize = FFT_SIZE
+  source.connect(analyser)
+  analyser.connect(context.destination)
+  return analyser
+}
+```
+
+Like before, we will call the `setupAnalyzer` function in the `loadAudio` function.
+
+```ts {5}
+export const loadAudio = async (file: File) => {
+  /* Load audio code */
+
+  await extractWaveformData(file);
+  setupAnalyzer(audio);
+}
+```
+
+### Extract frequency spectrum data and update functions
+
+Now, we have the `AnalyserNode` object. We can extract the frequency spectrum data from the `AnalyserNode` object.
+
+```ts
+const extractFrequencySpectrumData = (analyser: AnalyserNode) => {
+  const data = new Uint8Array(analyser.frequencyBinCount)
+  analyser.getByteFrequencyData(data)
+  return data
+}
+```
+
+Next, we will create two update functions. One will run when the music is playing by extracting data from the analyzer,
+and the other will run when the music is paused with expenotial decay.
+These function will continuously update an writable store with the frequency spectrum data.
+
+```ts
+let animationFrameId = 0
+const spectrumData = writable<number[]>([])
+const DECAY_FACTOR = 0.9
+
+const updatePlaying = () => {
+  const data = extractFrequencySpectrumData(analyser)
+  spectrumData.set(Array.from(data))
+  animationFrameId = requestAnimationFrame(animatePlaying)
+}
+
+const updatePaused = () => {
+  spectrumData.update(data => data.map(d => d * DECAY_FACTOR))
+  animationFrameId = requestAnimationFrame(animatePlaying)
+}
+```
+
+Then, we will call the `animatePlaying` function when the music is playing and call the `animatePaused` function when the music is paused.
+
+```ts {4-5, 11-12}
+export const play = () => {
+  audio.play();
+  isPlaying.set(true);
+  cancelAnimationFrame(animationFrameId)
+  updatePlaying()
+};
+
+export const pause = () => {
+  audio.pause();
+  isPlaying.set(false);
+  cancelAnimationFrame(animationFrameId)
+  updatePaused()
+};
+```
+
+### Visualize the frequency spectrum
+
+Let's create a new component `FrequencySpectrum` to visualize the frequency spectrum.
+Surpirngly, the component is very similar to the `Waveform` component. 
+We will animate the canvas with a reactive statement, which reruns every time the `spectrumData` store is updated.
+
+```svelte
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { drawFrequencySpectrum } from "./utils";
+  import { spectrumData } from "./audio";
+
+  let canvas: HTMLCanvasElement;
+  let ctx: CanvasRenderingContext2D;
+
+  onMount(() => {
+    ctx = canvas.getContext("2d");
+  });
+
+  $: {
+    if (!ctx) break $;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawFrequencySpectrum(ctx, $spectrumData);
+  }
+</script>
+
+<canvas bind:this={canvas}></canvas>
+```
+
+Then, we will create the `drawFrequencySpectrum` function to draw the frequency spectrum on the canvas as a **histogram**.
+
+```ts
+export const drawFrequencySpectrum = (ctx: CanvasRenderingContext2D, spectrumData: number[]) => {
+  const {width, height} = ctx.canvas;
+  const step = width / spectrumData.length;
+  ctx.fillStyle = "white" // Color of ypur choice;
+  for (let i = 0; i < spectrumData.length; i++) {
+    const h = spectrumData[i] * height / 255;
+    ctx.fillRect(i * w, height - h, w, h);
+  }
+};
+```
