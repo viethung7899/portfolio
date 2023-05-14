@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import AudioController from "./AudioController.svelte";
+  import AudioController from "./AudioPlayer.svelte";
   import {currentTime, duration, waveformData} from "./audio"
   import { baseContentHSL, secondaryHSL } from "@layouts/themeStore";
 
@@ -32,6 +32,5 @@
 
 </script>
 
-<AudioController>
-  <canvas class="w-full" bind:this={canvas}>
-</AudioController>
+
+<canvas class="w-full" bind:this={canvas} />

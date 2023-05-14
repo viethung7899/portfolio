@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from "@iconify/svelte";
   import { onMount } from "svelte";
-  import AudioController from "./AudioController.svelte";
+  import AudioController from "./AudioPlayer.svelte";
   import { frequencyData, loadAudioFile } from "./audio";
   import { secondaryHSL } from "@layouts/themeStore";
 
@@ -28,23 +28,4 @@
   }
 </script>
 
-<AudioController>
-  <canvas class="w-full" bind:this={canvas} />
-</AudioController>
-
-<div class="my-4">
-  <label class="btn btn-primary gap-2" for="audio-file">
-    <Icon class="w-4 h-4" icon="fa6-solid:upload" /> Upload file
-  </label>
-  <input
-    type="file"
-    accept="audio/*"
-    id="audio-file"
-    class="hidden"
-    on:change={async (e) => {
-      const files = e.currentTarget.files;
-      if (!files || files.length === 0) return;
-      loadAudioFile(files[0]);
-    }}
-  />
-</div>
+<canvas class="w-full" bind:this={canvas} />
