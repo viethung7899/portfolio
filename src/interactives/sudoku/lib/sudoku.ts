@@ -1,122 +1,70 @@
-export const BOX_SIZE = 3;
-export const SIZE = BOX_SIZE * BOX_SIZE;
-export type Position = [number, number];
-export type Cell = {
-  value: number;
-  canModify: boolean;
-}
+import { writable } from "svelte/store";
+import { Cell } from "./cell";
+import { DIMENSION, SIZE } from "./constants";
 
-export default class Sudoku {
-  private _board: Cell[][];
+export class Sudoku {
+  #board: Cell[][];
 
   constructor() {
-    this._board = new Array(SIZE);
-    for (let i = 0; i < SIZE; i++) {
-      this._board[i] = new Array(SIZE);
-      for (let j = 0; j < SIZE; j++) {
-        this._board[i][j] = {
-          value: 0,
-          canModify: true,
-        };
+    this.#board = [];
+    for (let i = 0; i < DIMENSION; i++) {
+      this.#board[i] = [];
+      for (let j = 0; j < DIMENSION; j++) {
+        this.#board[i][j] = new Cell();
       }
     }
-  }
-
-  public reset() {
-    for (let i = 0; i < SIZE; i++) {
-      for (let j = 0; j < SIZE; j++) {
-        this._board[i][j] = {
-          value: 0,
-          canModify: true,
-        };
-      }
-    }
-    return this;
   }
 
   get board() {
-    return this._board;
+    return this.#board;
   }
 
-  setCell([row, col]: Position, value: number, canModify = true) {
-    this._board[row][col].value = value;
-    if (value !== 0) this._board[row][col].canModify = canModify;
-  }
-
-  isValid([row, col]: Position, value: number) {
-    // Check if the value is valid in the row
-    for (let i = 0; i < SIZE; i++) {
-      if (i === row || this._board[i][col].value === 0) continue;
-      if (this._board[row][col].value === value) return false;
-    }
-
-    // Check if the value is valid in the column
-    for (let i = 0; i < SIZE; i++) {
-      if (i === col || this._board[row][i].value === 0) continue;
-      if (this._board[row][col].value === value) return false;
-    }
-
-    // Check if the value is valid in the box
-    const boxRow = Math.floor(row / 3) * 3;
-    const boxCol = Math.floor(col / 3) * 3;
-    for (let i = boxRow; i < boxRow + 3; i++) {
-      for (let j = boxCol; j < boxCol + 3; j++) {
-        if (i === row && j === col) continue;
-        if (this._board[i][j].value === 0) continue;
-        if (this._board[i][j].value === value) return false;
-      }
-    }
-    return true;
-  }
-
-  randomize() {
-    this.reset();
-    const count = Math.floor(Math.random() * 10) + 30;
-    let i = 0;
-    while (i < count) {
-      const row = Math.floor(Math.random() * SIZE);
-      const col = Math.floor(Math.random() * SIZE);
-      const value = Math.floor(Math.random() * SIZE) + 1;
-      if (this.isValid([row, col], value)) {
-        this.setCell([row, col], value);
-        i++;
-      }
-    }
+  setCell(row: number, col: number, value: number) {
+    if (!this.#board[row][col].hasValue(value)) return this;
+    this.#board[row][col].value = value;
+    this.updateRowState(row, col, value);
+    this.updateColState(row, col, value);
+    this.updateBoxState(row, col, value);
     return this;
   }
 
-  getPossibleValues([row, col]: Position) {
-    // Set of possible values
-    const possibleValues = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    // Remove values from the row
-    for (let i = 0; i < SIZE; i++) {
-      if (i === col || this._board[row][i].value === 0) continue;
-      possibleValues.delete(this._board[row][i].value);
-    }
-    // Remove values from the column
-    for (let i = 0; i < SIZE; i++) {
-      if (i === row || this._board[i][col].value === 0) continue;
-      possibleValues.delete(this._board[i][col].value);
-    }
-    // Remove values from the box
-    const boxRow = Math.floor(row / 3) * 3;
-    const boxCol = Math.floor(col / 3) * 3;
-    for (let i = boxRow; i < boxRow + 3; i++) {
-      for (let j = boxCol; j < boxCol + 3; j++) {
-        if (i === row && j === col) continue;
-        if (this._board[i][j].value === 0) continue;
-        possibleValues.delete(this._board[i][j].value);
-      }
-    }
-    return [...possibleValues];
+  unsetCell(row: number, col: number) {
+    const value = this.#board[row][col].value;
+    this.#board[row][col].value = 0;
+    this.updateRowState(row, col, value, true);
+    this.updateColState(row, col, value, true);
+    this.updateBoxState(row, col, value, true);
+    return this;
   }
 
-  getEmptyCell() {
-    for (let i = 0; i < SIZE; i++) {
-      for (let j = 0; j < SIZE; j++) {
-        if (this._board[i][j].value === 0) return [i, j] as Position;
+  private updateRowState(row: number, col: number, value: number, unset: boolean = false) {
+    for (let c = 0; c < DIMENSION; c++) {
+      if (c === col) continue;
+      if (unset) this.#board[row][c].addValue(value);
+      else this.#board[row][c].removeValue(value);
+    }
+  }
+
+  private updateColState(row: number, col: number, value: number, unset: boolean = false) {
+    for (let r = 0; r < DIMENSION; r++) {
+      if (r === row) continue;
+      if (unset) this.#board[r][col].addValue(value);
+      else this.#board[r][col].removeValue(value);
+    }
+  }
+
+  private updateBoxState(row: number, col: number, value: number, unset: boolean = false) {
+    const rowStart = row - row % SIZE;
+    const colStart = col - col % SIZE;
+
+    for (let r = rowStart; r < rowStart + SIZE; r++) {
+      for (let c = colStart; c < colStart + SIZE; c++) {
+        if (r === row && c === col) continue;
+        if (unset) this.#board[r][c].addValue(value);
+        else this.#board[r][c].removeValue(value);
       }
     }
-    return undefined;
   }
 }
+
+export const sudoku = writable(new Sudoku());

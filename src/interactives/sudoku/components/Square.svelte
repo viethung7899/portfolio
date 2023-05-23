@@ -1,53 +1,83 @@
 <script lang="ts">
-  import type { Position } from "../lib/sudoku";
+  import { DIMENSION, SIZE, VALUES } from "../lib/constants";
+  import { sudoku } from "../lib/sudoku";
 
-  export let value: number;
-  export let position: Position;
-  export let onChange: (value: number) => void;
-  export let canModify = false;
+  export let rowIndex: number;
+  export let colIndex: number;
+
+  $: cell = $sudoku.board[rowIndex][colIndex];
+
+  const updateContent = (key: string) => {
+    if (key === "Backspace" || key === "Delete") {
+      sudoku.update((sudoku) => sudoku.unsetCell(rowIndex, colIndex));
+      return;
+    }
+    const value = Number(key);
+    if (isNaN(value) || value === 0) return;
+    sudoku.update((sudoku) =>
+      sudoku.unsetCell(rowIndex, colIndex).setCell(rowIndex, colIndex, value)
+    );
+  };
+
+  const hasValue = (state: number, value: number) => {
+    return (state & (1 << (value - 1))) !== 0;
+  };
 </script>
 
-<input
-  class={`border border-slate-500 bg-transparent
-  w-12 h-12 p-2 cursor-pointer text-xl 
-  focus:outline-none text-center
-  focus:bg-primary/30`}
-  class:modify={canModify}
-  class:top={position[0] % 3 === 0}
-  class:left={position[1] % 3 === 0}
-  class:right={position[1] === 8}
-  class:bottom={position[0] === 8}
-  type="number"
-  value={value > 0 ? value : ""}
-  min="0"
-  max="9"
-  on:input={(ev) => {
-    value = ev.currentTarget.valueAsNumber;
-    if (value > 9) {
-      value = 9;
-    };
-    onChange(value);
-  }}
-/>
+<div
+  class="container w-12 h-12"
+  tabindex="-1"
+  on:keydown={(e) => updateContent(e.key)}
+  class:top={rowIndex % SIZE === 0}
+  class:left={colIndex % SIZE === 0}
+  class:bottom={rowIndex === DIMENSION - 1}
+  class:right={colIndex === DIMENSION - 1}
+>
+  {#if cell.value > 0}
+    <div class="number">{cell.value}</div>
+  {:else}
+    <div
+      class="states opacity-25"
+      style={`grid-template-columns: repeat(${SIZE}, minmax(0, 1fr))`}
+    >
+      {#each VALUES as pvalue}
+        <div class="relative" class:not-show={!hasValue(cell.state, pvalue)}>
+          <p>{pvalue}</p>
+        </div>
+      {/each}
+    </div>
+  {/if}
+</div>
 
 <style>
-  input {
-    @apply box-border;
-  }
-  /* Chrome, Safari, Edge, Opera */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  .container {
+    @apply border border-slate-500 bg-transparent table cursor-pointer;
   }
 
-  /* Firefox */
-  input[type="number"] {
-    -moz-appearance: textfield;
+  .container:focus {
+    @apply bg-primary/25 outline-none;
   }
 
-  .modify {
-    @apply text-primary font-bold;
+  .number {
+    @apply w-full h-full
+    text-center table-cell align-middle 
+    font-bold text-4xl;
+  }
+
+  .states {
+    @apply w-full h-full grid;
+  }
+
+  .states > div > p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+  }
+
+  .not-show {
+    @apply invisible;
   }
 
   .top {
