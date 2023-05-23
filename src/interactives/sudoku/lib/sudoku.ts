@@ -10,7 +10,7 @@ export class Sudoku {
     for (let i = 0; i < DIMENSION; i++) {
       this.#board[i] = [];
       for (let j = 0; j < DIMENSION; j++) {
-        this.#board[i][j] = new Cell();
+        this.#board[i][j] = new Cell(i, j);
       }
     }
   }
@@ -28,13 +28,53 @@ export class Sudoku {
     return this;
   }
 
+  lockCell(row: number, col: number) {
+    this.#board[row][col].isLocked = true;
+    return this;
+  }
+
+  unlockCell(row: number, col: number) {
+    this.#board[row][col].isLocked = false;
+    return this;
+  }
+
   unsetCell(row: number, col: number) {
     const value = this.#board[row][col].value;
     this.#board[row][col].value = 0;
-    this.updateRowState(row, col, value, true);
-    this.updateColState(row, col, value, true);
-    this.updateBoxState(row, col, value, true);
+    this.updateState(row, col, value, true);
+
+    const other: Cell[] = [];
+
+    for (let r = 0; r < DIMENSION; r++) {
+      for (let c = 0; c < DIMENSION; c++) {
+        if (r === row && c === col) continue;
+        if (this.#board[r][c].value !== value) continue;
+        other.push(this.#board[r][c]);
+      }
+    }
+
+    for (const cell of other) this.updateState(cell.rowIndex, cell.colIndex, value);
+
     return this;
+  }
+
+  reset() {
+    const locks = [];
+    for (let r = 0; r < DIMENSION; r++) {
+      for (let c = 0; c < DIMENSION; c++) {
+        if (this.#board[r][c].isLocked) locks.push(this.#board[r][c]);
+        else this.unsetCell(r, c);
+      }
+    }
+    for (const lock of locks)
+      this.updateState(lock.rowIndex, lock.colIndex, lock.value);
+    return this;
+  }
+
+  private updateState(row: number, col: number, value: number, unset: boolean = false) {
+    this.updateRowState(row, col, value, unset);
+    this.updateColState(row, col, value, unset);
+    this.updateBoxState(row, col, value, unset);
   }
 
   private updateRowState(row: number, col: number, value: number, unset: boolean = false) {
@@ -67,4 +107,20 @@ export class Sudoku {
   }
 }
 
+export const randomizeSoduoku = () => {
+  const sudoku = new Sudoku();
+  const count = Math.floor(Math.random() * 10) + 20;
+  for (let i = 0; i < count; i++) {
+    const row = Math.floor(Math.random() * DIMENSION);
+    const col = Math.floor(Math.random() * DIMENSION);
+    if (sudoku.board[row][col].isLocked) continue;
+    const possibleValues = sudoku.board[row][col].possibleValues;
+    if (possibleValues.length === 0) continue;
+    const value = possibleValues[Math.floor(Math.random() * possibleValues.length)];
+    sudoku.setCell(row, col, value).lockCell(row, col);
+  }
+  return sudoku;
+}
+
 export const sudoku = writable(new Sudoku());
+export const showPossibleValues = writable(false);

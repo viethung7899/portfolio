@@ -1,21 +1,27 @@
 <script lang="ts">
   import { DIMENSION, SIZE, VALUES } from "../lib/constants";
-  import { sudoku } from "../lib/sudoku";
+  import { showPossibleValues, sudoku } from "../lib/sudoku";
 
   export let rowIndex: number;
   export let colIndex: number;
 
   $: cell = $sudoku.board[rowIndex][colIndex];
 
-  const updateContent = (key: string) => {
+  $: updateContent = (key: string) => {
     if (key === "Backspace" || key === "Delete") {
-      sudoku.update((sudoku) => sudoku.unsetCell(rowIndex, colIndex));
+      sudoku.update((sudoku) =>
+        sudoku.unsetCell(rowIndex, colIndex)
+        .unlockCell(rowIndex, colIndex)
+      );
       return;
     }
     const value = Number(key);
     if (isNaN(value) || value === 0) return;
     sudoku.update((sudoku) =>
-      sudoku.unsetCell(rowIndex, colIndex).setCell(rowIndex, colIndex, value)
+      sudoku
+      .unsetCell(rowIndex, colIndex)
+      .setCell(rowIndex, colIndex, value)
+      .lockCell(rowIndex, colIndex)
     );
   };
 
@@ -34,11 +40,12 @@
   class:right={colIndex === DIMENSION - 1}
 >
   {#if cell.value > 0}
-    <div class="number">{cell.value}</div>
+    <div class="number" class:lock={cell.isLocked}>{cell.value}</div>
   {:else}
     <div
       class="states opacity-25"
       style={`grid-template-columns: repeat(${SIZE}, minmax(0, 1fr))`}
+      class:not-show={!$showPossibleValues}
     >
       {#each VALUES as pvalue}
         <div class="relative" class:not-show={!hasValue(cell.state, pvalue)}>
@@ -56,6 +63,10 @@
 
   .container:focus {
     @apply bg-primary/25 outline-none;
+  }
+
+  .lock {
+    @apply text-primary;
   }
 
   .number {
