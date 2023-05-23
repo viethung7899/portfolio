@@ -109,7 +109,7 @@ export class Sudoku {
 
 export const randomizeSoduoku = () => {
   const sudoku = new Sudoku();
-  const count = Math.floor(Math.random() * 10) + 20;
+  const count = Math.floor(Math.random() * 10) + 15;
   for (let i = 0; i < count; i++) {
     const row = Math.floor(Math.random() * DIMENSION);
     const col = Math.floor(Math.random() * DIMENSION);

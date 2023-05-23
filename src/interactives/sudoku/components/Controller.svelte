@@ -5,8 +5,13 @@
     SudokuSolvingGenerator,
     SudokuSolvingState
   } from "../lib/solver";
-  import { algorithm } from "../lib/solver";
-  import { randomizeSoduoku, showPossibleValues, sudoku } from "../lib/sudoku";
+  import { algorithm, noSolution, solving } from "../lib/solver";
+  import {
+    Sudoku,
+    randomizeSoduoku,
+    showPossibleValues,
+    sudoku
+  } from "../lib/sudoku";
 
   let hasSolution = false;
   let playing = false;
@@ -31,8 +36,17 @@
       }
     }
   };
-
   $: isSolved = state?.done;
+  $: {
+    solving.set(state !== undefined && !state.done);
+    noSolution.set(!!isSolved && !hasSolution);
+  }
+
+  const reset = () => {
+    state = undefined;
+    generator = undefined;
+    hasSolution = false;
+  };
 </script>
 
 <div class="form-control">
@@ -45,13 +59,10 @@
     />
   </label>
 </div>
-{#if isSolved && !hasSolution}
-  <div class="text-error text-center">No solution found</div>
-{/if}
 <select
   class="select select-bordered"
   bind:value={name}
-  disabled={playing && state && !state.done}
+  disabled={playing || $solving}
 >
   {#each Object.keys(algorithm) as option}
     <option value={option}>{option}</option>
@@ -67,26 +78,32 @@
     disabled={isSolved}
     on:click={solve}
   >
-    {playing ? "Resume" : "Solve"}
+    {$solving ? "Resume" : "Solve"}
   </button>
 {/if}
 <button
   class="btn"
   on:click={() => {
     sudoku.set(randomizeSoduoku());
-    state = undefined;
-    generator = undefined;
-    hasSolution = false;
+    reset();
   }}
   disabled={playing}>Randomize</button
 >
-<button
-  class="btn btn-primary btn-outline"
-  on:click={() => {
-    sudoku.update((sudoku) => sudoku.reset());
-    state = undefined;
-    generator = undefined;
-    hasSolution = false;
-  }}
-  disabled={playing}>Reset</button
->
+<div class="flex gap-4">
+  <button
+    class="btn btn-primary btn-outline flex-1"
+    on:click={() => {
+      sudoku.update((sudoku) => sudoku.reset());
+      reset();
+    }}
+    disabled={playing}>Reset</button
+  >
+  <button
+    class="btn btn-outline flex-1"
+    on:click={() => {
+      sudoku.set(new Sudoku());
+      reset();
+    }}
+    disabled={playing}>Clear</button
+  >
+</div>

@@ -1,5 +1,6 @@
 import { pickRandom } from "@interactives/common/utils";
 import type { Sudoku } from "./sudoku";
+import { writable } from "svelte/store";
 
 export type SudokuSolvingGenerator = Generator<Sudoku, boolean>;
 export type SudokuSolvingState = ReturnType<SudokuSolvingGenerator["next"]>;
@@ -7,7 +8,7 @@ export type SudokuSolvingState = ReturnType<SudokuSolvingGenerator["next"]>;
 function* backtracking(sudoku: Sudoku): SudokuSolvingGenerator {
   const emptyCells = sudoku.board.flat().filter(cell => cell.value === 0);
   if (emptyCells.length === 0) return true;
-  const cell = pickRandom(emptyCells);
+  const cell = emptyCells[0];
   const values = cell.possibleValues;
 
   for (const value of values) {
@@ -45,3 +46,6 @@ export const algorithm = {
 } as const;
 
 export type SudokuAlgorithm = keyof typeof algorithm;
+
+export const solving = writable(false);
+export const noSolution = writable(false);

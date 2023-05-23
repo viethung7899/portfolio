@@ -1,6 +1,7 @@
 <script lang="ts">
   import { DIMENSION, SIZE, VALUES } from "../lib/constants";
   import { showPossibleValues, sudoku } from "../lib/sudoku";
+  import {solving} from "../lib/solver";
 
   export let rowIndex: number;
   export let colIndex: number;
@@ -8,6 +9,7 @@
   $: cell = $sudoku.board[rowIndex][colIndex];
 
   $: updateContent = (key: string) => {
+    if ($solving) return;
     if (key === "Backspace" || key === "Delete") {
       sudoku.update((sudoku) =>
         sudoku.unsetCell(rowIndex, colIndex)
