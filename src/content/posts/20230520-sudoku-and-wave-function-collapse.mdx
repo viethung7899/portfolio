@@ -1,0 +1,43 @@
+---
+title: Sudoku and Wave Function Collapse
+date: 2023-05-20
+---
+
+import Sudoku from '@interactives/sudoku/Sudoku.svelte'
+import MobileWrapper from '@interactives/MobileWrapper.svelte'
+
+<MobileWrapper>
+  <Sudoku client:visible />
+</MobileWrapper>
+
+---
+
+## Introduction
+
+Sudoku, the popular logic-based puzzle, has challenged puzzle enthusiasts for years.
+The objective is to fill a 9x9 grid with digits so that each column, 
+each row, and each of the nine 3x3 subgrids contains all of the digits from 1 to 9. 
+In this blog post, we will explore an intriguing method called the 
+Wave Function Collapse algorithm and its application to solving Sudoku puzzles.
+
+## Wave Function Collapse
+
+The Wave Function Collapse (WFC) algorithm is a computational technique initially developed for procedural generation tasks. 
+However, it has found interesting applications in solving various *constraint satisfaction* problems, including Sudoku puzzles. 
+The algorithm's essence lies in **propagating information** about the possible states of each cell based on the constraints of the puzzle.
+
+### The Algorithm
+
+The WFC algorithm is a recursive backtracking algorithm that operates on a grid of cells.
+Each cell has a set of possible states, and the algorithm attempts to find a valid assignment of states to the cells.
+The algorithm proceeds as follows:
+
+1. Find the cell with the fewest possible states.
+2. For each possible state of the cell, assign the state to the cell and propagate the information to the neighboring cells.
+3. Repeat steps 1 and 2 until the grid is filled or a contradiction is found.
+4. If a contradiction is found, backtrack to the previous state and try a different state for the cell.
+
+The **propagation step** is the most important part of the algorithm.
+It is where the algorithm propagates information about the possible states of each cell to the neighboring cells.
+The propagation step is also where the algorithm can detect contradictions in the grid.
+

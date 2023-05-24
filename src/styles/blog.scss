@@ -20,11 +20,18 @@
 
   ul, ol {
     @apply mb-3;
+
+    li {
+      @apply my-2 ml-8;
+    }
   }
 
   ul > li {
-    @apply my-1 ml-4;
     list-style: outside;
+  }
+
+  ol > li {
+    list-style: decimal;
   }
 
   hr {
